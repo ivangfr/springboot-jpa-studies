@@ -1,6 +1,6 @@
 # jpa-batch
 
-The idea of this module is to study batching (bulk) insert/update/delete of records
+The idea of this module is to study how to insert/update/delete a set of records in batch (bulk)
 
 ## Start the Application
 
@@ -26,12 +26,12 @@ mvn spring-boot:run -Dspring-boot.run.profiles=postgres
 
 - append `&rewriteBatchedStatements=true` to `spring.datasource.url`
 
-- to save entities it is used `saveAll`
+- it is used `saveAll` to save entities
 ```
 <S extends T> List<S> saveAll(Iterable<S> entities);
 ```
 
-- to save entities it is used `deleteInBatch`
+- it is used `deleteInBatch` to delete entities
 ```
 void deleteInBatch(Iterable<T> entities);
 ```

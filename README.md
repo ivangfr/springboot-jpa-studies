@@ -1,17 +1,12 @@
 # springboot-jpa-studies
 
-The idea of this project is to study and jpa associations and jpa batch processing
+The idea of this project is to study `JPA Associations` (one-to-one, one-to-many and many-to-many) and
+`JPA Batch Processing` (i.e, insert/update/delete a set of records in a single command) 
 
 ## Modules
 
-### jpa-associations
-
-The three associations that JPA and Hibernate provide: `one-to-one`, `one-to-many` and `many-to-many`. We will be
-testing two relational databases: [MySQL](https://www.mysql.com) and [PostgreSQL](https://www.postgresql.org).
-
-### jpa-batch
-
-Batch (bulk) insert/update/delete of records
+- [jpa-associations](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations)
+- [jpa-batch](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-batch)
 
 ## Start Environment
 
@@ -32,4 +27,12 @@ docker-compose up -d
 - Wait a little bit until all containers are Up (healthy). You can check their status running
 ```
 docker-compose ps
+```
+
+You should see something like
+```
+      Name                    Command                 State                     Ports              
+---------------------------------------------------------------------------------------------------
+studies-mysql      docker-entrypoint.sh mysqld     Up (healthy)   0.0.0.0:3306->3306/tcp, 33060/tcp
+studies-postgres   docker-entrypoint.sh postgres   Up (healthy)   0.0.0.0:5432->5432/tcp
 ```
