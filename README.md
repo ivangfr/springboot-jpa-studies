@@ -5,8 +5,8 @@ The idea of this project is to study `JPA Associations` (one-to-one, one-to-many
 
 ## Modules
 
-- [jpa-associations](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations)
-- [jpa-batch](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-batch)
+#### [jpa-associations](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations#jpa-associations)
+#### [jpa-batch](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-batch#jpa-batch)
 
 ## Start Environment
 
