@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class WeaponServiceImpl implements WeaponService {
 
-    private WeaponRepository weaponRepository;
+    private final WeaponRepository weaponRepository;
 
     public WeaponServiceImpl(WeaponRepository weaponRepository) {
         this.weaponRepository = weaponRepository;

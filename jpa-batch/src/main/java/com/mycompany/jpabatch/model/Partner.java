@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
@@ -25,7 +26,7 @@ public class Partner {
     private Long id;
 
     @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<VoucherCode> voucherCodes;
+    private Set<VoucherCode> voucherCodes = new LinkedHashSet<>();
 
     @Column(nullable = false)
     private String name;

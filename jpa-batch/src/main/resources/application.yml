@@ -9,18 +9,16 @@ spring:
       hibernate:
         jdbc:
           batch_size: 10
-#          batch_versioned_data: true
-#        order_inserts: true
-#        order_updates: true
   datasource:
     url: jdbc:mysql://${MYSQL_ADDR:localhost}:3306/studiesdb?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
     username: root
     password: secret
 
-logging.level:
-  org.hibernate:
-    SQL: DEBUG
-    type.descriptor.sql.BasicBinder: TRACE
+logging:
+  level:
+    org.hibernate:
+      SQL: DEBUG
+      type.descriptor.sql.BasicBinder: TRACE
 
 ---
 spring:
