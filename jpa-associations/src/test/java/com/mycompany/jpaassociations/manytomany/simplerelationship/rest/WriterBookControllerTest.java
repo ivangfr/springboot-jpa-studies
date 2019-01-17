@@ -10,7 +10,6 @@ import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.Crea
 import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.UpdateBookDto;
 import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.UpdateWriterDto;
 import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.WriterDto;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +32,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@TestPropertySource(properties = "spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@TestPropertySource(properties = {
+        "spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true",
+        "spring.jpa.hibernate.ddl-auto=create-drop"
+})
 class WriterBookControllerTest {
 
     @Autowired

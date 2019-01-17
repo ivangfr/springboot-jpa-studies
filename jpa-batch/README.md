@@ -6,12 +6,13 @@ The idea of this module is to study how to insert/update/delete a set of records
 
 - Start the environment (explained in the main README)
 
-- To start the application, you just need to run the following command in the `/sprinboot-jpa-studies/jpa-batch` folder:
+- To start the application using `MySQL` (default configuration), run the following command in 
+`/sprinboot-jpa-studies/jpa-batch` folder
 ```
 mvn spring-boot:run
 ```
 
-- The default configuration is using `MySQL`. If you want to change to `PostgreSQL` run:
+- If you want to use `PostgreSQL` run the same command, however informing the profile `postgres`
 ```
 mvn spring-boot:run -Dspring-boot.run.profiles=postgres
 ```
@@ -26,17 +27,17 @@ mvn spring-boot:run -Dspring-boot.run.profiles=postgres
 
 - append `&rewriteBatchedStatements=true` to `spring.datasource.url`
 
-- it is used `saveAll` to save entities
+- use `saveAll` to save entities
 ```
 <S extends T> List<S> saveAll(Iterable<S> entities);
 ```
 
-- it is used `deleteInBatch` to delete entities
+- use `deleteInBatch` to delete entities
 ```
 void deleteInBatch(Iterable<T> entities);
 ```
 
-### How to check whether it is working
+### How to check whether it is working or not
 
 #### Enable MySQL logs
 
@@ -192,6 +193,10 @@ HTTP/1.1 200
 ### Execution example using PostgreSQL
 
 TODO
+
+## TODO
+
+- Write a simulation using `Postgres`
 
 ## Reference
 

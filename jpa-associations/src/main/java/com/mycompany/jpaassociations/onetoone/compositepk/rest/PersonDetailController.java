@@ -30,7 +30,6 @@ public class PersonDetailController {
         this.mapperFacade = mapperFacade;
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{personId}")
     public PersonDto getPerson(@PathVariable Long personId) {
         Person person = personService.validateAndGetPerson(personId);
@@ -45,7 +44,6 @@ public class PersonDetailController {
         return mapperFacade.map(person, PersonDto.class);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{personId}/person-details")
     public PersonDto addPersonDetail(@PathVariable Long personId, @Valid @RequestBody CreatePersonDetailDto createPersonDetailDto) {
         Person person = personService.validateAndGetPerson(personId);

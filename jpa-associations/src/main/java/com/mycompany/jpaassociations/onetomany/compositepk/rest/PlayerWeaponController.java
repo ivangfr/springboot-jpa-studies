@@ -38,7 +38,6 @@ public class PlayerWeaponController {
     // ------
     // Player
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{playerId}")
     public PlayerDto getPlayer(@PathVariable Long playerId) {
         Player player = playerService.validateAndGetPlayer(playerId);
@@ -53,7 +52,6 @@ public class PlayerWeaponController {
         return mapperFacade.map(player, PlayerDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{playerId}")
     public PlayerDto deletePlayer(@PathVariable Long playerId) {
         Player player = playerService.validateAndGetPlayer(playerId);
@@ -64,7 +62,6 @@ public class PlayerWeaponController {
     // ------
     // Weapon
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{playerId}/weapons/{weaponId}")
     public WeaponDto getWeapon(@PathVariable Long playerId, @PathVariable Long weaponId) {
         Weapon weapon = weaponService.validateAndGetWeapon(playerId, weaponId);
@@ -86,7 +83,6 @@ public class PlayerWeaponController {
         return mapperFacade.map(weapon, WeaponDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{playerId}/weapons/{weaponId}")
     public WeaponDto removeWeapon(@PathVariable Long playerId, @PathVariable Long weaponId) {
         Weapon weapon = weaponService.validateAndGetWeapon(playerId, weaponId);

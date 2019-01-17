@@ -34,7 +34,6 @@ public class TeamDetailController {
         this.mapperFacade = mapperFacade;
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{teamId}")
     public TeamDto getTeam(@PathVariable Long teamId) {
         Team team = teamService.validateAndGetTeam(teamId);
@@ -49,7 +48,6 @@ public class TeamDetailController {
         return mapperFacade.map(team, TeamDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{teamId}")
     public TeamDto updateTeam(@PathVariable Long teamId, @Valid @RequestBody UpdateTeamDto updateTeamDto) {
         Team team = teamService.validateAndGetTeam(teamId);
@@ -58,7 +56,6 @@ public class TeamDetailController {
         return mapperFacade.map(team, TeamDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{teamId}")
     public TeamDto deleteTeam(@PathVariable Long teamId) {
         Team team = teamService.validateAndGetTeam(teamId);
@@ -76,7 +73,6 @@ public class TeamDetailController {
         return mapperFacade.map(team, TeamDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{teamId}/team-details")
     public TeamDto updateTeamDetail(@PathVariable Long teamId, @Valid @RequestBody UpdateTeamDetailDto updateTeamDetailDto) {
         Team team = teamService.validateAndGetTeam(teamId);
@@ -86,7 +82,6 @@ public class TeamDetailController {
         return mapperFacade.map(team, TeamDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{teamId}/team-details")
     public TeamDto deleteTeamDetail(@PathVariable Long teamId) {
         Team team = teamService.validateAndGetTeam(teamId);

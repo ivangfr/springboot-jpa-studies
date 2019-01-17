@@ -33,8 +33,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@TestPropertySource(properties = "spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@TestPropertySource(properties = {
+        "spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true",
+        "spring.jpa.hibernate.ddl-auto=create-drop"
+})
 class PartnerVoucherCodeControllerTest {
 
     @Autowired
@@ -58,7 +61,7 @@ class PartnerVoucherCodeControllerTest {
         assertNotNull(responseEntity.getBody());
         assertEquals(partner.getId(), responseEntity.getBody().getId());
         assertEquals(partner.getName(), responseEntity.getBody().getName());
-        assertEquals(1L, responseEntity.getBody().getId().longValue());
+        assertEquals(partner.getId(), responseEntity.getBody().getId());
         assertEquals(partner.getName(), responseEntity.getBody().getName());
         assertTrue(responseEntity.getBody().getVoucherCodes().isEmpty());
     }

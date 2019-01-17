@@ -4,11 +4,12 @@ spring:
   application:
     name: jpa-batch
   jpa:
-    hibernate.ddl-auto: create
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     properties:
       hibernate:
-        jdbc:
-          batch_size: 10
+        jdbc.batch_size: 10
   datasource:
     url: jdbc:mysql://${MYSQL_ADDR:localhost}:3306/studiesdb?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
     username: root
@@ -31,4 +32,3 @@ spring:
     url: jdbc:postgresql://${POSTGRES_ADDR:localhost}:5432/studiesdb
     username: root
     password: secret
-

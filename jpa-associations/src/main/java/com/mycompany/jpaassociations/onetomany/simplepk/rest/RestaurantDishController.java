@@ -41,7 +41,6 @@ public class RestaurantDishController {
     //-----------
     // Restaurant
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{restaurantId}")
     public RestaurantDto getRestaurant(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.validateAndGetRestaurant(restaurantId);
@@ -56,7 +55,6 @@ public class RestaurantDishController {
         return mapperFacade.map(restaurant, RestaurantDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{restaurantId}")
     public RestaurantDto updateRestaurant(@PathVariable Long restaurantId, @Valid @RequestBody UpdateRestaurantDto updateRestaurantDto) {
         Restaurant restaurant = restaurantService.validateAndGetRestaurant(restaurantId);
@@ -65,7 +63,6 @@ public class RestaurantDishController {
         return mapperFacade.map(restaurant, RestaurantDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{restaurantId}")
     public RestaurantDto deleteRestaurant(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.validateAndGetRestaurant(restaurantId);
@@ -76,7 +73,6 @@ public class RestaurantDishController {
     //-----
     // Dish
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{restaurantId}/dishes/{dishId}")
     public DishDto getDish(@PathVariable Long restaurantId, @PathVariable Long dishId) {
         Dish dish = dishService.validateAndGetDish(dishId, restaurantId);
@@ -93,7 +89,6 @@ public class RestaurantDishController {
         return mapperFacade.map(dish, DishDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{restaurantId}/dishes/{dishId}")
     public DishDto updateDish(@PathVariable Long restaurantId, @PathVariable Long dishId, @Valid @RequestBody UpdateDishDto updateDishDto) {
         Dish dish = dishService.validateAndGetDish(dishId, restaurantId);
@@ -102,7 +97,6 @@ public class RestaurantDishController {
         return mapperFacade.map(dish, DishDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{restaurantId}/dishes/{dishId}")
     public DishDto deleteDish(@PathVariable Long restaurantId, @PathVariable Long dishId) {
         Dish dish = dishService.validateAndGetDish(dishId, restaurantId);

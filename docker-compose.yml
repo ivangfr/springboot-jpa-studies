@@ -15,11 +15,11 @@ services:
       - MYSQL_PASSWORD=secret
     healthcheck:
       test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
-      start_period: 20s
+      start_period: 10s
 
   studies-postgres:
     container_name: studies-postgres
-    image: postgres:11.0
+    image: postgres:11.1
     restart: unless-stopped
     ports:
       - 5432:5432
@@ -29,4 +29,4 @@ services:
       - POSTGRES_USER=root
     healthcheck:
       test: "pg_isready -U postgres"
-      start_period: 20s
+      start_period: 10s

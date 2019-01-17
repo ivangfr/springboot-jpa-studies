@@ -38,7 +38,6 @@ public class PartnerVoucherCodeController {
         this.mapperFacade = mapperFacade;
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{partnerId}")
     public PartnerDto getPartner(@PathVariable Long partnerId) {
         Partner partner = partnerService.validateAndGetPartner(partnerId);
@@ -53,7 +52,6 @@ public class PartnerVoucherCodeController {
         return mapperFacade.map(partner, PartnerDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{partnerId}")
     public PartnerDto deletePartner(@PathVariable Long partnerId) {
         Partner partner = partnerService.validateAndGetPartner(partnerId);
@@ -74,7 +72,6 @@ public class PartnerVoucherCodeController {
         return voucherCodeService.saveVoucherCodes(voucherCodes).size();
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{partnerId}/softDeleteOldVoucherCodes")
     public int softDeleteOldVoucherCodes(@PathVariable Long partnerId) {
         Partner partner = partnerService.validateAndGetPartner(partnerId);
@@ -87,7 +84,6 @@ public class PartnerVoucherCodeController {
         return voucherCodeService.saveVoucherCodes(updatedVoucherCodes).size();
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{partnerId}/hardDeleteOldVoucherCodes")
     public int hardDeleteOldVoucherCodes(@PathVariable Long partnerId) {
         Partner partner = partnerService.validateAndGetPartner(partnerId);

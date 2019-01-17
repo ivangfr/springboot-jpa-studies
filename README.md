@@ -1,6 +1,6 @@
 # springboot-jpa-studies
 
-The idea of this project is to study `JPA Associations` (one-to-one, one-to-many and many-to-many) and
+The goal of this project is to study `JPA Associations` (one-to-one, one-to-many and many-to-many) and
 `JPA Batch Processing` (i.e, insert/update/delete a set of records in a single command) 
 
 ## Modules
@@ -19,7 +19,7 @@ The idea of this project is to study `JPA Associations` (one-to-one, one-to-many
 docker-compose up -d
 ```
 >
-> To stop and remove containers, networks, images, and volumes
+> To stop and remove containers, networks and volumes
 >```
 >docker-compose down -v
 >```

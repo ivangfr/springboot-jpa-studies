@@ -3,15 +3,13 @@ package com.mycompany.jpaassociations.onetoone.simplepk.rest.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Data
 public class CreateTeamDto {
 
     @ApiModelProperty(example = "Team White")
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private String name;
 
 }

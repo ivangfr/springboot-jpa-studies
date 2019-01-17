@@ -41,7 +41,6 @@ public class WriterBookController {
     // ------
     // Writer
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/writers/{writerId}")
     private WriterDto getWriter(@PathVariable Long writerId) {
         Writer writer = writerService.validateAndGetWriter(writerId);
@@ -56,7 +55,6 @@ public class WriterBookController {
         return mapperFacade.map(writer, WriterDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/writers/{writerId}")
     private WriterDto updateWriter(@PathVariable Long writerId, @Valid @RequestBody UpdateWriterDto updateWriterDto) {
         Writer writer = writerService.validateAndGetWriter(writerId);
@@ -65,7 +63,6 @@ public class WriterBookController {
         return mapperFacade.map(writer, WriterDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/writers/{writerId}")
     private WriterDto deleteWriter(@PathVariable Long writerId) {
         Writer writer = writerService.validateAndGetWriter(writerId);
@@ -84,7 +81,6 @@ public class WriterBookController {
         return mapperFacade.map(writer, WriterDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/writers/{writerId}/books/{bookId}")
     private WriterDto removeWriterBook(@PathVariable Long writerId, @PathVariable Long bookId) {
         Writer writer = writerService.validateAndGetWriter(writerId);
@@ -97,7 +93,6 @@ public class WriterBookController {
     // -----
     // Books
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/books/{bookId}")
     private BookDto getBook(@PathVariable Long bookId) {
         Book book = bookService.validateAndGetBook(bookId);
@@ -112,7 +107,6 @@ public class WriterBookController {
         return mapperFacade.map(book, BookDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/books/{bookId}")
     private BookDto updateBook(@PathVariable Long bookId, @Valid @RequestBody UpdateBookDto updateBookDto) {
         Book book = bookService.validateAndGetBook(bookId);
@@ -121,7 +115,6 @@ public class WriterBookController {
         return mapperFacade.map(book, BookDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/books/{bookId}")
     private BookDto deleteBook(@PathVariable Long bookId) {
         Book book = bookService.validateAndGetBook(bookId);
@@ -140,7 +133,6 @@ public class WriterBookController {
         return mapperFacade.map(book, BookDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/books/{bookId}/writers/{writerId}")
     private BookDto removeBookWriter(@PathVariable Long bookId, @PathVariable Long writerId) {
         Book book = bookService.validateAndGetBook(bookId);

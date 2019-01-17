@@ -48,7 +48,6 @@ public class StudentCourseController {
     // -------
     // Student
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/students/{studentId}")
     public StudentDto getStudent(@PathVariable Long studentId) {
         Student student = studentService.validateAndGetStudent(studentId);
@@ -63,7 +62,6 @@ public class StudentCourseController {
         return mapperFacade.map(student, StudentDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/students/{studentId}")
     public StudentDto updateStudent(@PathVariable Long studentId, @Valid @RequestBody UpdateStudentDto updateStudentDto) {
         Student student = studentService.validateAndGetStudent(studentId);
@@ -72,7 +70,6 @@ public class StudentCourseController {
         return mapperFacade.map(student, StudentDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/students/{studentId}")
     public StudentDto deleteStudent(@PathVariable Long studentId) {
         Student student = studentService.validateAndGetStudent(studentId);
@@ -83,7 +80,6 @@ public class StudentCourseController {
     // ------
     // Course
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/courses/{courseId}")
     public CourseDto getCourse(@PathVariable Long courseId) {
         Course course = courseService.validateAndGetCourse(courseId);
@@ -98,7 +94,6 @@ public class StudentCourseController {
         return mapperFacade.map(course, CourseDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/courses/{courseId}")
     public CourseDto updateCourse(@PathVariable Long courseId, @Valid @RequestBody UpdateCourseDto updateCourseDto) {
         Course course = courseService.validateAndGetCourse(courseId);
@@ -107,7 +102,6 @@ public class StudentCourseController {
         return mapperFacade.map(course, CourseDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/courses/{courseId}")
     public CourseDto deleteCourse(@PathVariable Long courseId) {
         Course course = courseService.validateAndGetCourse(courseId);
@@ -129,7 +123,6 @@ public class StudentCourseController {
         return mapperFacade.map(courseStudent, CourseStudentDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/courses/{courseId}/students/{studentId}")
     public CourseStudentDto unregisterStudentOfCourse(@PathVariable Long courseId, @PathVariable Long studentId) {
         CourseStudent courseStudent = courseStudentService.validateAndGetCourseStudent(courseId, studentId);
@@ -137,7 +130,6 @@ public class StudentCourseController {
         return mapperFacade.map(courseStudent, CourseStudentDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/courses/{courseId}/students/{studentId}")
     public CourseStudentDto updateStudentDataInCourse(@PathVariable Long courseId, @PathVariable Long studentId,
                                                       @Valid @RequestBody UpdateCourseStudentDto updateCourseStudentDto) {

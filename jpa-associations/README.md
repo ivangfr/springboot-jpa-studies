@@ -1,6 +1,6 @@
 # jpa-associations
 
-The idea of this module is to study the three associations that JPA and Hibernate provide: `one-to-one`, `one-to-many` and
+The goal of this module is to study the three associations that JPA and Hibernate provide: `one-to-one`, `one-to-many` and
 `many-to-many`.
 
 ## Start the Application
@@ -57,12 +57,6 @@ Hibernate is not generating an auto-increment value for `id` field of `person_de
 }
 ```
 
-I've tried things like:
-- using MySQL (5.7 or 8.0) or PostgreSQL;
-- using MySQL engine MyISAM or InnoDB;
-- using different GeneratedValue strategies;
-- creating the tables manually or automatically;
-
 ### Simple PK with Auto Increment
 
 #### 2) `teams 1 : 1 team_details`
@@ -77,7 +71,7 @@ I've tried things like:
 +-------+--------------+------+-----+---------+-------+
 ```
 
-*teams_details*
+*team_details*
 ```
 +-------------+--------------+------+-----+---------+-------+
 | Field       | Type         | Null | Key | Default | Extra |
@@ -259,8 +253,6 @@ This model works fine.
 ```
 
 This model works fine.
-
-## TODO
 
 ## References
 

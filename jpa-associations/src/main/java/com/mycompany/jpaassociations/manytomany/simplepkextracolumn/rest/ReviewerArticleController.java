@@ -45,7 +45,6 @@ public class ReviewerArticleController {
     // --------
     // Reviewer
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/reviewers/{reviewerId}")
     public ReviewerDto getReviewer(@PathVariable Long reviewerId) {
         Reviewer reviewer = reviewerService.validateAndGetReviewer(reviewerId);
@@ -60,7 +59,6 @@ public class ReviewerArticleController {
         return mapperFacade.map(reviewer, ReviewerDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/reviewers/{reviewerId}")
     public ReviewerDto deleteReviewer(@PathVariable Long reviewerId) {
         Reviewer reviewer = reviewerService.validateAndGetReviewer(reviewerId);
@@ -71,7 +69,6 @@ public class ReviewerArticleController {
     // -------
     // Article
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/articles/{articleId}")
     public ArticleDto getArticle(@PathVariable Long articleId) {
         Article article = articleService.validateAndGetArticle(articleId);
@@ -86,7 +83,6 @@ public class ReviewerArticleController {
         return mapperFacade.map(article, ArticleDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/articles/{articleId}")
     public ArticleDto deleteArticle(@PathVariable Long articleId) {
         Article article = articleService.validateAndGetArticle(articleId);
@@ -97,7 +93,6 @@ public class ReviewerArticleController {
     // --------
     // Comments
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/comments/{commentId}")
     public CommentDto getComment(@PathVariable Long commentId) {
         Comment comment = commentService.valideteAndGetComment(commentId);
@@ -118,7 +113,6 @@ public class ReviewerArticleController {
         return mapperFacade.map(comment, CommentDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/comments/{commentId}")
     public CommentDto deleteComment(@PathVariable Long commentId) {
         Comment comment = commentService.valideteAndGetComment(commentId);

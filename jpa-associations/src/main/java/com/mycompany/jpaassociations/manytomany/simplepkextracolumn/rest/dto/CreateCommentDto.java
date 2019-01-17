@@ -3,7 +3,7 @@ package com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -18,8 +18,7 @@ public class CreateCommentDto {
     private Long articleId;
 
     @ApiModelProperty(position = 3, example = "This article is very interesting")
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private String text;
 
 }

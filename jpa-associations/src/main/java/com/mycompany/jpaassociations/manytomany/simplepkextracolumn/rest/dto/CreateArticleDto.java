@@ -3,15 +3,13 @@ package com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Data
 public class CreateArticleDto {
 
     @ApiModelProperty(example = "Comparison between Springboot and Play Framework")
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private String title;
 
 }

@@ -33,8 +33,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@TestPropertySource(properties = "spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@TestPropertySource(properties = {
+        "spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true",
+        "spring.jpa.hibernate.ddl-auto=create-drop"
+})
 class ReviewerArticleControllerTest {
 
     @Autowired
