@@ -7,12 +7,13 @@ The goal of this module is to study the three associations that JPA and Hibernat
 
 - Start the environment (explained in the main README)
 
-- To start the application, you just need to run the following command in the `/sprinboot-jpa-studies/jpa-associations` folder:
+- To start the application using `MySQL` (default configuration), run the following command in 
+`/sprinboot-jpa-studies/jpa-batch` folder
 ```
 mvn spring-boot:run
 ```
 
-- The default configuration is using `MySQL`. If you want to change to `PostgreSQL` run:
+- If you want to use `PostgreSQL` run the same command, however informing the profile `postgres`
 ```
 mvn spring-boot:run -Dspring-boot.run.profiles=postgres
 ```
