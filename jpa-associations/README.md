@@ -10,12 +10,12 @@ The goal of this module is to study the three associations that JPA and Hibernat
 - To start the application using `MySQL` (default configuration), run the following command in 
 `/sprinboot-jpa-studies/jpa-batch` folder
 ```
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
 
 - If you want to use `PostgreSQL` run the same command, however informing the profile `postgres`
 ```
-mvn spring-boot:run -Dspring-boot.run.profiles=postgres
+./mvnw spring-boot:run -Dspring-boot.run.profiles=postgres
 ```
 
 - The link to Swagger web page is: http://localhost:8080/swagger-ui.html

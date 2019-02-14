@@ -18,7 +18,6 @@ The goal of this project is to study `JPA Associations` (one-to-one, one-to-many
 ```
 docker-compose up -d
 ```
->
 > To stop and remove containers, networks and volumes
 >```
 >docker-compose down -v

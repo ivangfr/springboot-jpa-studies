@@ -9,4 +9,5 @@ public class JpaBatchApplication {
     public static void main(String[] args) {
         SpringApplication.run(JpaBatchApplication.class, args);
     }
+
 }

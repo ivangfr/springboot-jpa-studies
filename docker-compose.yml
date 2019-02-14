@@ -7,7 +7,7 @@ services:
     image: mysql:5.7.24 #8.0.13
     restart: unless-stopped
     ports:
-      - 3306:3306
+      - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=secret
       - MYSQL_DATABASE=studiesdb
@@ -22,7 +22,7 @@ services:
     image: postgres:11.1
     restart: unless-stopped
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       - POSTGRES_DB=studiesdb
       - POSTGRES_PASSWORD=secret
