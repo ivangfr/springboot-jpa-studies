@@ -1,5 +1,6 @@
 package com.mycompany.jpaassociations.manytomany.simplerelationship.rest;
 
+import com.mycompany.jpaassociations.ContainersExtension;
 import com.mycompany.jpaassociations.manytomany.simplerelationship.model.Book;
 import com.mycompany.jpaassociations.manytomany.simplerelationship.model.Writer;
 import com.mycompany.jpaassociations.manytomany.simplerelationship.repository.BookRepository;
@@ -20,7 +21,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -30,13 +30,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith({SpringExtension.class, ContainersExtension.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-@TestPropertySource(properties = {
-        "spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true",
-        "spring.jpa.hibernate.ddl-auto=create-drop"
-})
 class WriterBookControllerTest {
 
     @Autowired

@@ -1,5 +1,6 @@
 package com.mycompany.jpaassociations.onetoone.compositepk.rest;
 
+import com.mycompany.jpaassociations.ContainersExtension;
 import com.mycompany.jpaassociations.MessageError;
 import com.mycompany.jpaassociations.onetoone.compositepk.model.Person;
 import com.mycompany.jpaassociations.onetoone.compositepk.repository.PersonRepository;
@@ -14,7 +15,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -24,12 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith({SpringExtension.class, ContainersExtension.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-@TestPropertySource(properties = {
-        "spring.jpa.hibernate.ddl-auto=create-drop"
-})
 class PersonDetailControllerTest {
 
     @Autowired

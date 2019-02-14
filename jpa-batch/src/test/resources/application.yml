@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: jpa-batch
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+        jdbc.batch_size: 10
+  datasource:
+    url: jdbc:mysql://localhost:3306/studiesdb-test?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    username: root-test
+    password: secret-test

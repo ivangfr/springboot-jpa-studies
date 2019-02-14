@@ -211,6 +211,16 @@ HTTP/1.1 200
 
 TODO
 
+## Running tests
+
+In order to run the test cases, go into the modules folder and type
+```
+./mvnw clean verify
+```
+
+[`Testcontainers`](https://www.testcontainers.org/) is used to run the tests. It starts automatically Docker containers
+of the databases before the tests begin and shutting down the containers when the tests finish.
+
 ## TODO
 
 - Rename `VoucherCode` to `Voucher`;

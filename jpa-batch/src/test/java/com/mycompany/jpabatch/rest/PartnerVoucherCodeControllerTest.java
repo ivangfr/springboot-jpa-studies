@@ -16,7 +16,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
@@ -31,13 +30,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith({SpringExtension.class, ContainersExtension.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-@TestPropertySource(properties = {
-        "spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true",
-        "spring.jpa.hibernate.ddl-auto=create-drop"
-})
 class PartnerVoucherCodeControllerTest {
 
     @Autowired
@@ -63,7 +58,6 @@ class PartnerVoucherCodeControllerTest {
         assertEquals(partner.getName(), responseEntity.getBody().getName());
         assertEquals(partner.getId(), responseEntity.getBody().getId());
         assertEquals(partner.getName(), responseEntity.getBody().getName());
-        assertTrue(responseEntity.getBody().getVoucherCodes().isEmpty());
     }
 
     @Test
@@ -93,7 +87,6 @@ class PartnerVoucherCodeControllerTest {
         assertNotNull(responseEntity.getBody());
         assertEquals(partner.getId(), responseEntity.getBody().getId());
         assertEquals(partner.getName(), responseEntity.getBody().getName());
-        assertTrue(responseEntity.getBody().getVoucherCodes().isEmpty());
 
         Optional<Partner> optionalPartner = partnerRepository.findById(responseEntity.getBody().getId());
         assertFalse(optionalPartner.isPresent());
