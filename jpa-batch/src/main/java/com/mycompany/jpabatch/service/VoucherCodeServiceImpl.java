@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.google.common.collect.Lists.partition;
 
@@ -24,7 +25,12 @@ public class VoucherCodeServiceImpl implements VoucherCodeService {
     }
 
     @Override
-    public List<VoucherCode> getVoucherCodesByPartnet(Partner partner) {
+    public Stream<VoucherCode> getStreamOfVoucherCodesByPartner(Partner partner) {
+        return voucherCodeRepository.streamByPartner(partner);
+    }
+
+    @Override
+    public List<VoucherCode> getListOfVoucherCodesByPartner(Partner partner) {
         return voucherCodeRepository.findByPartner(partner);
     }
 

@@ -2,22 +2,39 @@
 
 The idea of this module is to study how to insert/update/delete a set of records in batch (bulk)
 
-## Start the Application
+## Start application
 
-- Start the environment (explained in the main README)
+Before start the application, the docker-compose environment must be up and running (it is explained in the main README)
+
+### Using MySQL
 
 - To start the application using `MySQL` (default configuration), run the following command in 
 `/sprinboot-jpa-studies/jpa-batch` folder
 ```
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
 
-- If you want to use `PostgreSQL` run the same command, however informing the profile `postgres`
-```
-mvn spring-boot:run -Dspring-boot.run.profiles=postgres
-```
+> Note: if you want to initialize the database manually, start the application as following
+> - Run the script below to create the tables
+> ```
+> ./init-database.sh
+> ```
+> - Start application, overwriting hibernate `ddl-auto` property
+> ```
+> ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.jpa.hibernate.ddl-auto=none"
+> ```
 
-- The link to Swagger web page is: http://localhost:8081/swagger-ui.html
+### Using PostgreSQL
+
+If you want to use `PostgreSQL` run the same command, however informing the profile `postgres`
+```
+./mvnw spring-boot:run -Dspring-boot.run.profiles=postgres
+```
+> Note: the application will initialize the database and all tables
+
+### Swagger
+
+Once the application is open, you can access its Swagger at: http://localhost:8081/swagger-ui.html
 
 ## Spring JPA Hibernate - JpaRepository (Batch)
 
@@ -39,14 +56,14 @@ void deleteInBatch(Iterable<T> entities);
 
 ### How to check whether it is working or not
 
-#### Enable MySQL logs
+#### Using MySQL
 
 - Connect to `MySQL` inside docker container
 ```
-docker exec -it studies-mysql bash -c 'mysql -uroot -psecret'
+docker exec -it studies-mysql bash -c 'mysql -uroot -psecret --database=studiesdb'
 ```
 
-- Log all queries
+- Enable log for all queries
 ```
 SET GLOBAL general_log = 'ON';
 SET global log_output = 'table';
@@ -196,8 +213,12 @@ TODO
 
 ## TODO
 
-- Write a simulation using `Postgres`
+- Rename `VoucherCode` to `Voucher`;
+- Implement manual `Postgres` database initialization using script and setting `ddl-auto=none`;
+- Write a simulation using `Postgres`.
 
 ## Reference
 
 - https://clarkdo.js.org/spring/jpa/java/2017/09/14/79/
+- https://thoughts-on-java.org/jpa-generate-primary-keys/
+- https://thoughts-on-java.org/5-things-you-need-to-know-when-using-hibernate-with-mysql/
