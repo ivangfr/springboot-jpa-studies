@@ -257,13 +257,13 @@ This model works fine.
 
 ## Running tests
 
-In order to run the test cases, go into the modules folder and type
+Execute the following command to run the test cases
 ```
 ./mvnw clean test
 ```
 
 [`Testcontainers`](https://www.testcontainers.org/) is used to run the tests. It starts automatically Docker containers
-of the databases before the tests begin and shutting down the containers when the tests finish.
+of the databases before the tests begin and shuts the containers down when the tests finish.
 
 ## References
 

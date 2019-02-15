@@ -478,20 +478,13 @@ HTTP/1.1 200
 
 # Running tests
 
-In order to run the test cases
-
-### Using MySQL
+Execute the following command to run the test cases
 ```
 ./mvnw clean test
 ```
 
-### Using PostgreSQL
-```
-./mvnw clean test -DargLine="-Dspring.profiles.active=postgres-test"
-```
-
 [`Testcontainers`](https://www.testcontainers.org/) is used to run the tests. It starts automatically Docker containers
-of the databases before the tests begin and shutting down the containers when the tests finish.
+of the databases before the tests begin and shuts the containers down when the tests finish.
 
 # Useful commands
 
