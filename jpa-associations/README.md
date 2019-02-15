@@ -259,7 +259,7 @@ This model works fine.
 
 In order to run the test cases, go into the modules folder and type
 ```
-./mvnw clean verify
+./mvnw clean test
 ```
 
 [`Testcontainers`](https://www.testcontainers.org/) is used to run the tests. It starts automatically Docker containers

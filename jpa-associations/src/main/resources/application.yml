@@ -26,5 +26,5 @@ spring:
         temp.use_jdbc_metadata_defaults: false # fix for exception: Method org.postgresql.jdbc.PgConnection.createClob() is not yet implemented
   datasource:
     url: jdbc:postgresql://${POSTGRES_ADDR:localhost}:5432/studiesdb
-    username: root
-    password: secret
+    username: postgres
+    password: postgres

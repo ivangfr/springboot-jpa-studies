@@ -25,8 +25,13 @@ services:
       - "5432:5432"
     environment:
       - POSTGRES_DB=studiesdb
-      - POSTGRES_PASSWORD=secret
-      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+    # -- enabling logs
+    volumes:
+      - ./postgres/postgresql.conf:/etc/postgresql.conf
+    command: postgres -c config_file=/etc/postgresql.conf
+    # --
     healthcheck:
       test: "pg_isready -U postgres"
       start_period: 10s
