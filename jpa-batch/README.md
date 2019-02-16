@@ -1,4 +1,4 @@
-# jpa-batch
+# `jpa-batch`
 
 The idea of this module is to study how to insert/update/delete a set of records in batch (bulk)
 

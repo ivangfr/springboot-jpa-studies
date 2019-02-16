@@ -1,4 +1,4 @@
-# jpa-associations
+# `jpa-associations`
 
 The goal of this module is to study the three associations that JPA and Hibernate provide: `one-to-one`, `one-to-many` and
 `many-to-many`.
