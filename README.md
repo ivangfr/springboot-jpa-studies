@@ -3,14 +3,14 @@
 The goal of this project is to study `JPA Associations` (one-to-one, one-to-many and many-to-many) and
 `JPA Batch Processing` (i.e, insert/update/delete a set of records in a single command) 
 
-## Modules
+# Modules
 
-#### [jpa-associations](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations#jpa-associations)
-#### [jpa-batch](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-batch#jpa-batch)
+### [jpa-associations](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations#jpa-associations)
+### [jpa-batch](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-batch#jpa-batch)
 
-## Start Environment
+# Start Environment
 
-### Docker Compose
+## Docker Compose
 
 - Open one terminal
 

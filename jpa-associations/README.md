@@ -3,28 +3,34 @@
 The goal of this module is to study the three associations that JPA and Hibernate provide: `one-to-one`, `one-to-many` and
 `many-to-many`.
 
-## Start the Application
+# Start application
 
-- Start the environment (explained in the main README)
+Before start the application, the `docker-compose` environment must be up and running (it is explained in the main README)
 
-- To start the application using `MySQL` (default configuration), run the following command in 
+## Using MySQL
+
+To start the application using `MySQL` (default configuration), run the following command in 
 `/sprinboot-jpa-studies/jpa-batch` folder
 ```
 ./mvnw spring-boot:run
 ```
 
-- If you want to use `PostgreSQL` run the same command, however informing the profile `postgres`
+## Using PostgreSQL
+
+If you want to use `PostgreSQL` run the same command, however informing the profile `postgres`
 ```
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=postgres
 ```
 
-- The link to Swagger web page is: http://localhost:8080/swagger-ui.html
+## Swagger
 
-## One to One
+Once the application is running, you can access its Swagger at: http://localhost:8080/swagger-ui.html
 
-### Composite PK with Auto Increment
+# One to One
 
-#### 1) `persons 1 : 1 person_details`
+## Composite PK with Auto Increment
+
+### `persons 1 : 1 person_details`
 
 *persons*
 ```
@@ -58,9 +64,9 @@ Hibernate is not generating an auto-increment value for `id` field of `person_de
 }
 ```
 
-### Simple PK with Auto Increment
+## Simple PK with Auto Increment
 
-#### 2) `teams 1 : 1 team_details`
+### `teams 1 : 1 team_details`
 
 *teams*
 ```
@@ -85,11 +91,11 @@ Hibernate is not generating an auto-increment value for `id` field of `person_de
 
 This model works fine.
 
-## One to Many
+# One to Many
 
-### Simple relationship
+## Simple relationship
 
-#### `restaurants 1 : N dishes`
+### `restaurants 1 : N dishes`
 
 *restaurants*
 ```
@@ -114,9 +120,9 @@ This model works fine.
 
 This model works fine.
 
-### Relationship with Composite PK
+## Relationship with Composite PK
 
-#### `players 1 : N weapons`
+### `players 1 : N weapons`
 
 *players*
 ```
@@ -141,11 +147,11 @@ This model works fine.
 
 This model works fine.
 
-## Many to Many
+# Many to Many
 
-### Simple relationship
+## Simple relationship
 
-#### `writers N : N books`
+### `writers N : N books`
 
 *writers*
 ```
@@ -179,9 +185,9 @@ This model works fine.
 
 This model works fine.
 
-### Relationship with Composite PK and extra column
+## Relationship with Composite PK and extra column
 
-#### `students N : N courses`
+### `students N : N courses`
 
 *students*
 ```
@@ -217,9 +223,9 @@ This model works fine.
 
 This model works fine.
 
-### Relationship with Simple PK and extra column
+## Relationship with Simple PK and extra column
 
-#### `reviewer N : N article`
+### `reviewer N : N article`
 
 *reviewers*
 ```
@@ -255,7 +261,7 @@ This model works fine.
 
 This model works fine.
 
-## Running tests
+# Running tests
 
 Execute the following command to run the test cases
 ```
@@ -265,7 +271,7 @@ Execute the following command to run the test cases
 [`Testcontainers`](https://www.testcontainers.org/) is used to run the tests. It starts automatically Docker containers
 of the databases before the tests begin and shuts the containers down when the tests finish.
 
-## References
+# References
 
 **JPA One to One**
 - https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate

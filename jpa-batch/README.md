@@ -8,7 +8,7 @@ Before start the application, the `docker-compose` environment must be up and ru
 
 ## Using MySQL
 
-- To start the application using `MySQL` (default configuration), run the following command in 
+To start the application using `MySQL` (default configuration), run the following command in 
 `/sprinboot-jpa-studies/jpa-batch` folder
 ```
 ./mvnw spring-boot:run
@@ -42,7 +42,7 @@ If you want to use `PostgreSQL` run the same command, however informing the prof
 
 ## Swagger
 
-Once the application is open, you can access its Swagger at: http://localhost:8081/swagger-ui.html
+Once the application is running, you can access its Swagger at: http://localhost:8081/swagger-ui.html
 
 # Spring JPA Hibernate - JpaRepository (Batch)
 
@@ -526,5 +526,7 @@ SELECT * FROM PARTNERS;
 # Reference
 
 - https://clarkdo.js.org/spring/jpa/java/2017/09/14/79/
+
 - https://thoughts-on-java.org/jpa-generate-primary-keys/
+
 - https://thoughts-on-java.org/5-things-you-need-to-know-when-using-hibernate-with-mysql/
