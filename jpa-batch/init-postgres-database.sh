@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-docker exec -i studies-postgres psql -U postgres -d studiesdb < init-postgres-database.sql
+docker exec -i studies-postgres psql -U postgres -d studiesdb < jpa-batch/init-postgres-database.sql

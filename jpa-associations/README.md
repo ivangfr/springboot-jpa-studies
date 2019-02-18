@@ -5,21 +5,21 @@ The goal of this module is to study the three associations that JPA and Hibernat
 
 # Start application
 
-Before start the application, the `docker-compose` environment must be up and running (it is explained in the main README)
+> **Note**: before starting the application, the services present in `docker-compose.yml` file must be up and running
+as explained in the main README.
 
 ## Using MySQL
 
-To start the application using `MySQL` (default configuration), run the following command in 
-`/sprinboot-jpa-studies/jpa-batch` folder
+To start the application using `MySQL` (default configuration), run the following command in `sprinboot-jpa-studies` root folder
 ```
-./mvnw spring-boot:run
+./mvnw spring-boot:run --projects jpa-associations
 ```
 
 ## Using PostgreSQL
 
 If you want to use `PostgreSQL` run the same command, however informing the profile `postgres`
 ```
-./mvnw spring-boot:run -Dspring-boot.run.profiles=postgres
+./mvnw spring-boot:run --projects jpa-associations -Dspring-boot.run.profiles=postgres
 ```
 
 ## Swagger
