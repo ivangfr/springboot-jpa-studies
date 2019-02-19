@@ -14,7 +14,7 @@ The goal of this project is to study `JPA Associations` (one-to-one, one-to-many
 
 - Open one terminal
 
-- In `/springboot-jpa-studies` root folder run
+- In `springboot-jpa-studies` root folder run
 ```
 docker-compose up -d
 ```

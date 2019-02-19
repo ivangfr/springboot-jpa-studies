@@ -68,7 +68,7 @@ void deleteInBatch(Iterable<T> entities);
 
 - Run `MySQL` interactive terminal (`mysql`) inside docker container
 ```
-docker exec -it studies-mysql bash -c 'mysql -uroot -psecret --database=studiesdb'
+docker exec -it studies-mysql mysql -uroot -psecret --database=studiesdb
 ```
 
 - Enable log for all queries
@@ -496,7 +496,7 @@ docker exec -it studies-mysql mysqldump --no-data -uroot -psecret studiesdb
 ```
 - Run `MySQL` interactive terminal (`mysql`), describe `partners` table and select all `partners`
 ```
-docker exec -it studies-mysql bash -c 'mysql -uroot -psecret --database=studiesdb'
+docker exec -it studies-mysql mysql -uroot -psecret --database=studiesdb
 DESCRIBE partners;
 SELECT * FROM partners;
 ```
