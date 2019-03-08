@@ -19,9 +19,11 @@ public class VoucherCodeServiceImpl implements VoucherCodeService {
     private int batchSize;
 
     private final VoucherCodeRepository voucherCodeRepository;
+    private final VoucherCodeBatchProcessing voucherCodeBatchProcessing;
 
-    public VoucherCodeServiceImpl(VoucherCodeRepository voucherCodeRepository) {
+    public VoucherCodeServiceImpl(VoucherCodeRepository voucherCodeRepository, VoucherCodeBatchProcessing voucherCodeBatchProcessing) {
         this.voucherCodeRepository = voucherCodeRepository;
+        this.voucherCodeBatchProcessing = voucherCodeBatchProcessing;
     }
 
     @Override
@@ -37,6 +39,7 @@ public class VoucherCodeServiceImpl implements VoucherCodeService {
     @Transactional
     @Override
     public List<VoucherCode> saveVoucherCodes(List<VoucherCode> voucherCodes) {
+//        return voucherCodeBatchProcessing.saveInBatch(voucherCodes);
         return voucherCodeRepository.saveAll(voucherCodes);
     }
 
@@ -47,4 +50,5 @@ public class VoucherCodeServiceImpl implements VoucherCodeService {
             voucherCodeRepository.deleteInBatch(subList);
         }
     }
+
 }
