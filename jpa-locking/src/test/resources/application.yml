@@ -1,0 +1,27 @@
+spring:
+  profiles: mysql-test
+  application:
+    name: jpa-locking
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/studiesdb-test?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root-test
+    password: secret-test
+
+---
+spring:
+  profiles: postgres-test
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        temp.use_jdbc_metadata_defaults: false # fix for exception: Method org.postgresql.jdbc.PgConnection.createClob() is not yet implemented
+  datasource:
+    url: jdbc:postgresql://localhost:5432/studiesdb-test
+    username: postgres-test
+    password: postgres-test

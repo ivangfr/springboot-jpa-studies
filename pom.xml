@@ -21,6 +21,7 @@
     <modules>
         <module>/jpa-associations</module>
         <module>/jpa-batch</module>
+        <module>/jpa-locking</module>
     </modules>
 
     <properties>
@@ -28,6 +29,8 @@
         <springfox.version>2.9.2</springfox.version>
         <orika.version>1.5.2</orika.version>
         <testcontainers.version>1.10.6</testcontainers.version>
+        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+        <sleuth.version>2.1.0.RELEASE</sleuth.version>
     </properties>
 
     <dependencies>
@@ -84,6 +87,28 @@
         </dependency>
 
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- https://stackoverflow.com/questions/52029459/spring-cloud-sleuth-did-not-run-with-zipkin -->
+            <!-- added to fix exception thrown by sleuth on statup -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-sleuth</artifactId>
+                <version>${sleuth.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
