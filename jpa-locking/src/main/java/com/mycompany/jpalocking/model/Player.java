@@ -11,14 +11,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Version;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
-@ToString(exclude = "lives")
-@EqualsAndHashCode(exclude = "lives")
+@ToString(exclude = {"lives", "stars"})
+@EqualsAndHashCode(exclude = {"lives", "stars"})
 @Entity
 @Table(name = "players")
 public class Player {
@@ -30,18 +32,36 @@ public class Player {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false)
-    private int numStars = 0;
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+    private Set<StarCollection> stars = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     private Set<Life> lives = new LinkedHashSet<>();
 
-    @Version
-    private Long version;
+    public void addStarCollection(StarCollection starCollection) {
+        starCollection.setPlayer(this);
+        stars.add(starCollection);
+    }
 
     public void addLife(Life life) {
         life.setPlayer(this);
         lives.add(life);
+    }
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void onPrePersist() {
+        createdAt = updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void onPreUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
 }

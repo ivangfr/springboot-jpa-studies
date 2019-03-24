@@ -1,6 +1,6 @@
-# jpa-locking
+# `jpa-locking`
 
-The idea of this module is to study jpa locking
+The idea of this module is to study jpa locking.
 
 # Start application
 
@@ -20,3 +20,12 @@ If you want to use `PostgreSQL` run the same command, however informing the prof
 ```
 ./mvnw spring-boot:run --projects jpa-locking -Dspring-boot.run.profiles=postgres
 ```
+
+## Swagger
+
+Once the application is running, you can access its Swagger at: http://localhost:8082/swagger-ui.html
+
+## Multithreading Simulation 
+
+In order to simulate multiple players collecting stars and redeeming them for lives at the same time, you can run the
+script `simulation.sh` or `PlayerControllerTest` test case.

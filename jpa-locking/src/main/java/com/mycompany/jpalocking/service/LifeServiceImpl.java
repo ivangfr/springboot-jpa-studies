@@ -6,7 +6,6 @@ import com.mycompany.jpalocking.repository.LifeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class LifeServiceImpl implements LifeService {
@@ -34,20 +33,8 @@ public class LifeServiceImpl implements LifeService {
 
     @Override
     public Life getAvailableLife() {
-        // -- Randomly
-        List<Life> lives = lifeRepository.findByPlayerIdIsNull();
-        if (lives.isEmpty()) {
-            throw new AllLivesRedeemedException("There are no lives to be redeemed.");
-        }
-        return lives.get(getRandomNumber(lives.size()));
-
-        // -- First
-//        return lifeRepository.findFirstByPlayerIdIsNull();
+        return lifeRepository.findFirstByPlayerIdIsNull()
+                .orElseThrow(() -> new AllLivesRedeemedException("There are no lives to be redeemed."));
     }
 
-    private static final Random random = new Random();
-
-    private static int getRandomNumber(int max) {
-        return random.nextInt(max);
-    }
 }

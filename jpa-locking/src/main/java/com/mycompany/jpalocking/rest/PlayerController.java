@@ -2,9 +2,9 @@ package com.mycompany.jpalocking.rest;
 
 import com.mycompany.jpalocking.exception.RedeemRaceConditionException;
 import com.mycompany.jpalocking.model.Player;
-import com.mycompany.jpalocking.rest.dto.AddStarDto;
 import com.mycompany.jpalocking.rest.dto.CreatePlayerDto;
 import com.mycompany.jpalocking.rest.dto.PlayerDto;
+import com.mycompany.jpalocking.rest.dto.StarCollectionDto;
 import com.mycompany.jpalocking.service.PlayerService;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
@@ -44,11 +44,10 @@ public class PlayerController {
     }
 
     @PostMapping("/{id}/stars")
-    public PlayerDto playerAddStars(@PathVariable Long id, @Valid @RequestBody AddStarDto addStarDto) {
+    public PlayerDto playerCollectStars(@PathVariable Long id, @Valid @RequestBody StarCollectionDto starCollectionDto) {
         log.info("==> Player {} collects stars", id);
-        Player player = playerService.addStars(id, addStarDto.getNumStars());
-        log.info("<== Player {} collected stars", player);
-
+        Player player = playerService.collectStars(id, starCollectionDto.getNumStars());
+        log.info("<== Player {} collected stars", id);
         return mapperFacade.map(player, PlayerDto.class);
     }
 
@@ -57,13 +56,13 @@ public class PlayerController {
         try {
             log.info("==> Player {} redeems stars", id);
             Player player = playerService.redeemStars(id);
-            log.info("<== Player {} redeemed stars", player);
-
+            log.info("<== Player {} redeemed stars", id);
             return mapperFacade.map(player, PlayerDto.class);
 
         } catch (ObjectOptimisticLockingFailureException e) {
+            log.error("An problem occurred while player {} redeems life. Error class: {}, error message: {}", id, e.getClass().getName(), e.getMessage());
             throw new RedeemRaceConditionException(
-                    String.format("Two or more threads of player %s tried to redeem stars at the same time", id));
+                    String.format("Two or more threads of player %s tried to redeem stars at the same time", id), e);
         }
     }
 

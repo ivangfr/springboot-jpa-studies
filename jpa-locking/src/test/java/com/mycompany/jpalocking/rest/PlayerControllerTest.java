@@ -1,10 +1,10 @@
 package com.mycompany.jpalocking.rest;
 
-import com.mycompany.jpalocking.rest.dto.AddStarDto;
 import com.mycompany.jpalocking.rest.dto.CreatePlayerDto;
 import com.mycompany.jpalocking.rest.dto.GameDto;
 import com.mycompany.jpalocking.rest.dto.GameSetupDto;
 import com.mycompany.jpalocking.rest.dto.PlayerDto;
+import com.mycompany.jpalocking.rest.dto.StarCollectionDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("mysql-test")
 @ExtendWith({SpringExtension.class, ContainersExtension.class})
@@ -26,57 +28,72 @@ class PlayerControllerTest {
 
     @Test
     void test() throws InterruptedException {
-        setupGame(10);
+        setupGame(5);
 
-        Long player1 = createPlayer("player1", 100).getId();
-        Long player2 = createPlayer("player2", 110).getId();
+        Long player1 = createPlayer("player1").getId();
+        Long player2 = createPlayer("player2").getId();
+        Long player3 = createPlayer("player3").getId();
 
-        Thread t1 = new Thread(() -> addStars(player1, 10));
-        Thread t2 = new Thread(() -> addStars(player1, 20));
-        Thread t3 = new Thread(() -> addStars(player2, 10));
-        Thread t4 = new Thread(() -> addStars(player2, 10));
+        Thread t1 = new Thread(() -> collectStars(player1, 30));
+        Thread t2 = new Thread(() -> collectStars(player1, 20));
+        Thread t3 = new Thread(() -> collectStars(player2, 40));
+        Thread t4 = new Thread(() -> collectStars(player2, 10));
+        Thread t5 = new Thread(() -> collectStars(player3, 60));
 
         t1.start();
         t2.start();
         t3.start();
         t4.start();
+        t5.start();
 
         t1.join();
         t2.join();
         t3.join();
         t4.join();
+        t5.join();
 
-        Thread t5 = new Thread(() -> redeemStars(player1));
         Thread t6 = new Thread(() -> redeemStars(player1));
         Thread t7 = new Thread(() -> redeemStars(player1));
-        Thread t8 = new Thread(() -> redeemStars(player1));
 
+        Thread t8 = new Thread(() -> redeemStars(player2));
         Thread t9 = new Thread(() -> redeemStars(player2));
-        Thread t10 = new Thread(() -> redeemStars(player2));
-        Thread t11 = new Thread(() -> redeemStars(player2));
 
-        t5.start();
+        Thread t10 = new Thread(() -> redeemStars(player3));
+
         t6.start();
         t7.start();
         t8.start();
         t9.start();
         t10.start();
-        t11.start();
 
-        t5.join();
         t6.join();
         t7.join();
         t8.join();
         t9.join();
         t10.join();
-        t11.join();
 
         PlayerDto playerDto1 = getPlayerInfo(player1);
         PlayerDto playerDto2 = getPlayerInfo(player2);
+        PlayerDto playerDto3 = getPlayerInfo(player3);
+        GameDto gameInfo = getGameInfo();
 
         System.out.println(playerDto1);
         System.out.println(playerDto2);
+        System.out.println(playerDto3);
         System.out.println(getGameInfo());
+
+        assertEquals(0, playerDto1.getNumStars());
+        assertEquals(1, playerDto1.getLives().size());
+
+        assertEquals(0, playerDto2.getNumStars());
+        assertEquals(1, playerDto2.getLives().size());
+
+        assertEquals(10, playerDto3.getNumStars());
+        assertEquals(1, playerDto3.getLives().size());
+
+        assertEquals(2, gameInfo.getAvailableLives());
+        assertEquals(3, gameInfo.getLives().stream().filter(lifeDto -> lifeDto.getUsername() != null).count());
+        assertEquals(2, gameInfo.getLives().stream().filter(lifeDto -> lifeDto.getUsername() == null).count());
     }
 
     private void setupGame(int numLives) {
@@ -89,16 +106,16 @@ class PlayerControllerTest {
         return responseEntity.getBody();
     }
 
-    private PlayerDto createPlayer(String username, int numStars) {
-        CreatePlayerDto createPlayerDto = getCreatePlayerDto(username, numStars);
+    private PlayerDto createPlayer(String username) {
+        CreatePlayerDto createPlayerDto = getCreatePlayerDto(username);
         ResponseEntity<PlayerDto> responseEntity = testRestTemplate.postForEntity("/api/players", createPlayerDto, PlayerDto.class);
         return responseEntity.getBody();
     }
 
-    private void addStars(Long playerId, int numStars) {
-        AddStarDto addStarDto = getAddStarDto(numStars);
+    private void collectStars(Long playerId, int numStars) {
+        StarCollectionDto collectStarDto = getCollectStarDto(numStars);
         String url = String.format("/api/players/%s/stars", playerId);
-        testRestTemplate.postForEntity(url, addStarDto, PlayerDto.class);
+        testRestTemplate.postForEntity(url, collectStarDto, PlayerDto.class);
     }
 
     private void redeemStars(Long playerId) {
@@ -118,17 +135,16 @@ class PlayerControllerTest {
         return gameSetupDto;
     }
 
-    private CreatePlayerDto getCreatePlayerDto(String username, int numStars) {
+    private CreatePlayerDto getCreatePlayerDto(String username) {
         CreatePlayerDto createPlayerDto = new CreatePlayerDto();
         createPlayerDto.setUsername(username);
-        createPlayerDto.setNumStars(numStars);
         return createPlayerDto;
     }
 
-    private AddStarDto getAddStarDto(int numStars) {
-        AddStarDto collectStarDto = new AddStarDto();
-        collectStarDto.setNumStars(numStars);
-        return collectStarDto;
+    private StarCollectionDto getCollectStarDto(int numStars) {
+        StarCollectionDto starCollectionDto = new StarCollectionDto();
+        starCollectionDto.setNumStars(numStars);
+        return starCollectionDto;
     }
 
 }

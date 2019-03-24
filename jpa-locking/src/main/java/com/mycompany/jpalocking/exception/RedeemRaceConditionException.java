@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.CONFLICT)
 public class RedeemRaceConditionException extends RuntimeException {
 
-    public RedeemRaceConditionException(String message) {
-        super(message);
+    public RedeemRaceConditionException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

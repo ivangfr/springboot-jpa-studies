@@ -6,7 +6,6 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,19 +21,24 @@ import java.time.LocalDateTime;
 @ToString(exclude = "player")
 @EqualsAndHashCode(exclude = "player")
 @Entity
-@Table(name = "lives")
-public class Life {
+@Table(name = "star_collections")
+public class StarCollection {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "player_id")
     private Player player;
 
-    @Version
     @Column(nullable = false)
+    private Integer numCollected;
+
+    @Column(nullable = false)
+    private Integer numAvailable;
+
+    @Version
     private Long version;
 
     @Column(nullable = false)
