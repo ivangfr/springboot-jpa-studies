@@ -1,12 +1,13 @@
 # `springboot-jpa-studies`
 
-The goal of this project is to study `JPA Associations` (one-to-one, one-to-many and many-to-many) and
-`JPA Batch Processing` (i.e, insert/update/delete a set of records in a single command) 
+The goal of this project is to study `JPA Associations` (one-to-one, one-to-many and many-to-many),
+`JPA Batch Processing` (i.e, insert/update/delete a set of records in a single command) and `JPA Locking`.
 
 # Modules
 
 ### [jpa-associations](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations#jpa-associations)
 ### [jpa-batch](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-batch#jpa-batch)
+### [jpa-locking](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-locking#jpa-locking)
 
 # Start Environment
 
