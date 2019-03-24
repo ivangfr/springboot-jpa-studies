@@ -1,5 +1,6 @@
 package com.mycompany.jpalocking.rest;
 
+import com.mycompany.jpalocking.ContainersExtension;
 import com.mycompany.jpalocking.rest.dto.CreatePlayerDto;
 import com.mycompany.jpalocking.rest.dto.GameDto;
 import com.mycompany.jpalocking.rest.dto.GameSetupDto;

@@ -1,5 +1,6 @@
 package com.mycompany.jpabatch.rest;
 
+import com.mycompany.jpabatch.ContainersExtension;
 import com.mycompany.jpabatch.model.Partner;
 import com.mycompany.jpabatch.model.VoucherCode;
 import com.mycompany.jpabatch.repository.PartnerRepository;

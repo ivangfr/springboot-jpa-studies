@@ -29,11 +29,21 @@
         <springfox.version>2.9.2</springfox.version>
         <orika.version>1.5.2</orika.version>
         <testcontainers.version>1.10.6</testcontainers.version>
-        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
-        <sleuth.version>2.1.0.RELEASE</sleuth.version>
+        <spring-cloud-sleuth.version>2.1.0.RELEASE</spring-cloud-sleuth.version>
+        <brave.version>5.6.3</brave.version>
     </properties>
 
     <dependencies>
+        <!-- Sleuth & Brave -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.zipkin.brave</groupId>
+            <artifactId>brave</artifactId>
+            <version>${brave.version}</version>
+        </dependency>
 
         <!-- Swagger2 -->
         <dependency>
@@ -92,18 +102,8 @@
         <dependencies>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <!-- https://stackoverflow.com/questions/52029459/spring-cloud-sleuth-did-not-run-with-zipkin -->
-            <!-- added to fix exception thrown by sleuth on statup -->
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-sleuth</artifactId>
-                <version>${sleuth.version}</version>
+                <artifactId>spring-cloud-sleuth</artifactId>
+                <version>${spring-cloud-sleuth.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

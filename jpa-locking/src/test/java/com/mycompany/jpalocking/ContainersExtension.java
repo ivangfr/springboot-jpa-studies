@@ -1,4 +1,4 @@
-package com.mycompany.jpabatch.rest;
+package com.mycompany.jpalocking;
 
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
