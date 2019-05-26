@@ -88,7 +88,7 @@ was set to `studies-postgres` service in `docker-compose.yml` using volumes mapp
 
 ## Using MySQL
 
-#### Create partner
+### Create partner
 
 Request
 ```
@@ -111,7 +111,7 @@ Logs
 | Query | SET autocommit=1
 ```
 
-####  Insert 15 voucher codes to partner with id 1 (batch_size = 10)
+###  Insert 15 voucher codes to partner with id 1 (batch_size = 10)
 
 Request
 ```
@@ -218,7 +218,7 @@ Logs
 | Query | SET autocommit=1  
 ```
 
-#### Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)
+### Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)
 
 Request
 ```
@@ -259,7 +259,7 @@ Logs
 | Query | SET autocommit=1
 ```
 
-#### Hard delete voucher codes of the partner with id 1 (batch_size = 10)
+### Hard delete voucher codes of the partner with id 1 (batch_size = 10)
 
 Request
 ```
@@ -291,12 +291,12 @@ Logs
 
 ## Using PostgreSQL
 
-#### Open a new terminal and run
+### Open a new terminal and run
 ```
 docker logs studies-postgres -f
 ```
 
-#### Create partner
+### Create partner
 
 Request
 ```
@@ -320,7 +320,7 @@ Logs
 [125] LOG:  execute S_1: COMMIT
 ```
 
-#### Insert 15 voucher codes to partner with id 1 (batch_size = 10)
+### Insert 15 voucher codes to partner with id 1 (batch_size = 10)
 
 Request
 ```
@@ -392,7 +392,7 @@ Logs
 [125] LOG:  execute S_1: COMMIT
 ```
 
-#### Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)
+### Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)
 
 Request
 ```
@@ -445,7 +445,7 @@ Logs
 [113] LOG:  execute S_1: COMMIT
 ```
 
-#### Hard delete voucher codes of the partner with id 1 (batch_size = 10)
+### Hard delete voucher codes of the partner with id 1 (batch_size = 10)
 
 Request
 ```
