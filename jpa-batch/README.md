@@ -81,29 +81,29 @@ SELECT event_time, command_type, SUBSTRING(argument,1,150) FROM mysql.general_lo
 
 ### PostgreSQL
 
-It was enabled setting `log_statement = 'all'` in `postgre/postgresql.conf`. Then, this new configuration file was set
-to `studies-postgres` service in `docker-compose.yml` using volumes mapping and `config_file` parameter.
+It was enabled by setting `log_statement = 'all'` in `postgres/postgresql.conf` file. Then, this new configuration
+was set to `studies-postgres` service in `docker-compose.yml` using volumes mapping and `config_file` parameter.
 
 # Execution examples
 
 ## Using MySQL
 
-1. Create partner
+#### Create partner
 
-- Request:
+Request
 ```
 curl -i -X POST http://localhost:8081/api/partners \
   -H "Content-Type: application/json" \
   -d '{"name": "partner1"}'
 ```
 
-- Response:
+Response
 ```
 HTTP/1.1 201
 {"id":1,"name":"partner1"}
 ```
 
-- Logs:
+Logs
 ```
 | Query | SET autocommit=0
 | Query | insert into partners (name) values ('partner1')
@@ -111,22 +111,22 @@ HTTP/1.1 201
 | Query | SET autocommit=1
 ```
 
-2. Insert 15 voucher codes to partner with id 1 (batch_size = 10)
+####  Insert 15 voucher codes to partner with id 1 (batch_size = 10)
 
-- Request:
+Request
 ```
 curl -i -X POST http://localhost:8081/api/partners/1/insertVoucherCodes \
   -H "Content-Type: application/json" \
   -d '{ "voucherCodes": [ "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115" ]}'
 ```
 
-- Response:
+Response
 ```
 HTTP/1.1 201
 15
 ```
 
-- Logs:
+Logs
 ```
 | Query | SET autocommit=0
 | Query | select partner0_.id as id1_0_0_, partner0_.name as name2_0_0_ from partners partner0_ where partner0_.id=1
@@ -218,20 +218,20 @@ HTTP/1.1 201
 | Query | SET autocommit=1  
 ```
 
-3. Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)
+#### Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)
 
-- Request:
+Request
 ```
 curl -i -X PUT http://localhost:8081/api/partners/1/softDeleteOldVoucherCodes
 ```
 
-- Response:
+Response
 ```
 HTTP/1.1 200
 15
 ```
 
-- Logs:
+Logs
 ```
 | Query | SET autocommit=0
 | Query | select partner0_.id as id1_0_0_, partner0_.name as name2_0_0_ from partners partner0_ where partner0_.id=1
@@ -259,20 +259,20 @@ HTTP/1.1 200
 | Query | SET autocommit=1
 ```
 
-4. Hard delete voucher codes of the partner with id 1 (batch_size = 10)
+#### Hard delete voucher codes of the partner with id 1 (batch_size = 10)
 
-- Request:
+Request
 ```
 curl -i -X DELETE http://localhost:8081/api/partners/1/hardDeleteOldVoucherCodes
 ```
 
-- Response:
+Response
 ```
 HTTP/1.1 200 
 15
 ```
 
-- Logs:
+Logs
 ```
 | Query | set session transaction read only
 | Query | SET autocommit=0
@@ -291,27 +291,27 @@ HTTP/1.1 200
 
 ## Using PostgreSQL
 
-1. Open a new terminal and run
+#### Open a new terminal and run
 ```
 docker logs studies-postgres -f
 ```
 
-2. Create partner
+#### Create partner
 
-- Request:
+Request
 ```
 curl -i -X POST http://localhost:8081/api/partners \
   -H "Content-Type: application/json" \
   -d '{"name": "partner1"}'
 ```
 
-- Response:
+Response
 ```
 HTTP/1.1 201
 {"id":1,"name":"partner1"}
 ```
 
-- Logs:
+Logs
 ```
 [125] LOG:  execute <unnamed>: BEGIN
 [125] LOG:  execute <unnamed>: insert into partners (name) values ($1)
@@ -320,22 +320,22 @@ HTTP/1.1 201
 [125] LOG:  execute S_1: COMMIT
 ```
 
-3. Insert 15 voucher codes to partner with id 1 (batch_size = 10)
+#### Insert 15 voucher codes to partner with id 1 (batch_size = 10)
 
-- Request:
+Request
 ```
 curl -i -X POST http://localhost:8081/api/partners/1/insertVoucherCodes \
   -H "Content-Type: application/json" \
   -d '{ "voucherCodes": [ "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115" ]}'
 ```
 
-- Response:
+Response
 ```
 HTTP/1.1 201
 15
 ```
 
-- Logs:
+Logs
 ```
 [125] LOG:  execute <unnamed>: SET SESSION CHARACTERISTICS AS TRANSACTION READ ONLY
 [125] LOG:  execute <unnamed>: BEGIN
@@ -392,20 +392,20 @@ HTTP/1.1 201
 [125] LOG:  execute S_1: COMMIT
 ```
 
-4. Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)
+#### Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)
 
-- Request:
+Request
 ```
 curl -i -X PUT http://localhost:8081/api/partners/1/softDeleteOldVoucherCodes
 ```
 
-- Response:
+Response
 ```
 HTTP/1.1 200
 15
 ```
 
-- Logs:
+Logs
 ```
 [113] LOG:  execute <unnamed>: BEGIN
 [113] LOG:  execute <unnamed>: select partner0_.id as id1_0_0_, partner0_.name as name2_0_0_ from partners partner0_ where partner0_.id=$1
@@ -445,20 +445,20 @@ HTTP/1.1 200
 [113] LOG:  execute S_1: COMMIT
 ```
 
-5. Hard delete voucher codes of the partner with id 1 (batch_size = 10)
+#### Hard delete voucher codes of the partner with id 1 (batch_size = 10)
 
-- Request:
+Request
 ```
 curl -i -X DELETE http://localhost:8081/api/partners/1/hardDeleteOldVoucherCodes
 ```
 
-- Response:
+Response
 ```
 HTTP/1.1 200 
 15
 ```
 
-- Logs:
+Logs
 ```
 [113] LOG:  execute <unnamed>: SET SESSION CHARACTERISTICS AS TRANSACTION READ ONLY
 [113] LOG:  execute <unnamed>: BEGIN
