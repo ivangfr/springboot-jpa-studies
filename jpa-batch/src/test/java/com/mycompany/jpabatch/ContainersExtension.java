@@ -23,7 +23,7 @@ public class ContainersExtension implements BeforeAllCallback, AfterAllCallback 
     public void beforeAll(ExtensionContext extensionContext) {
 
         // MySQL
-        mySQLContainer = new MySQLContainer("mysql:5.7.24")
+        mySQLContainer = new MySQLContainer("mysql:5.7.26")
                 .withDatabaseName("studiesdb-test")
                 .withUsername("root-test")
                 .withPassword("secret-test");
@@ -31,7 +31,7 @@ public class ContainersExtension implements BeforeAllCallback, AfterAllCallback 
         mySQLContainer.start();
 
         // PostgreSQL
-        postgreSQLContainer = new PostgreSQLContainer("postgres:11.1")
+        postgreSQLContainer = new PostgreSQLContainer("postgres:11.4")
                 .withDatabaseName("studiesdb-test")
                 .withUsername("postgres-test")
                 .withPassword("postgres-test");

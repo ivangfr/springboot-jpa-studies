@@ -2,12 +2,12 @@
 
 The idea of this module is to study how to insert/update/delete a set of records in batch (bulk)
 
-# Start application
+## Start application
 
 > **Note**: before starting the application, the services present in `docker-compose.yml` file must be up and running
 as explained in the main README.
 
-## Using MySQL
+### Using MySQL
 
 To start the application using `MySQL` (default configuration), run the following command in `sprinboot-jpa-studies` root folder
 ```
@@ -24,7 +24,7 @@ To start the application using `MySQL` (default configuration), run the followin
 > ./mvnw spring-boot:run --projects jpa-batch -Dspring-boot.run.jvmArguments="-Dspring.jpa.hibernate.ddl-auto=none"
 > ```
 
-## Using PostgreSQL
+### Using PostgreSQL
 
 If you want to use `PostgreSQL` run the same command, however informing the profile `postgres`
 ```
@@ -40,31 +40,28 @@ If you want to use `PostgreSQL` run the same command, however informing the prof
 > ./mvnw spring-boot:run --projects jpa-batch -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=postgres -Dspring.jpa.hibernate.ddl-auto=none"
 > ```
 
-## Swagger
+### Swagger
 
 Once the application is running, you can access its Swagger at: http://localhost:8081/swagger-ui.html
 
-# Spring JPA Hibernate - JpaRepository (Batch)
+## Spring JPA Hibernate - JpaRepository (Batch)
 
-## What to configure
+### What to configure
 
 - add `spring.jpa.properties.hibernate.jdbc.batch_size: 10` to `application.yml`
-
 - append `&rewriteBatchedStatements=true` to `spring.datasource.url`
-
 - use `saveAll` to save entities
 ```
 <S extends T> List<S> saveAll(Iterable<S> entities);
 ```
-
 - use `deleteInBatch` to delete entities
 ```
 void deleteInBatch(Iterable<T> entities);
 ```
 
-## Enable database logs
+### Enable database logs
 
-### MySQL
+#### MySQL
 
 - Run `MySQL` interactive terminal (`mysql`) inside docker container
 ```
@@ -79,16 +76,16 @@ SET global log_output = 'table';
 SELECT event_time, command_type, SUBSTRING(argument,1,150) FROM mysql.general_log;
 ```
 
-### PostgreSQL
+#### PostgreSQL
 
 It was enabled by setting `log_statement = 'all'` in `postgres/postgresql.conf` file. Then, this new configuration
 was set to `studies-postgres` service in `docker-compose.yml` using volumes mapping and `config_file` parameter.
 
-# Execution examples
+## Execution examples
 
-## Using MySQL
+### Using MySQL
 
-### Create partner
+#### Create partner
 
 Request
 ```
@@ -111,7 +108,7 @@ Logs
 | Query | SET autocommit=1
 ```
 
-###  Insert 15 voucher codes to partner with id 1 (batch_size = 10)
+####  Insert 15 voucher codes to partner with id 1 (batch_size = 10)
 
 Request
 ```
@@ -218,7 +215,7 @@ Logs
 | Query | SET autocommit=1  
 ```
 
-### Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)
+#### Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)
 
 Request
 ```
@@ -259,7 +256,7 @@ Logs
 | Query | SET autocommit=1
 ```
 
-### Hard delete voucher codes of the partner with id 1 (batch_size = 10)
+#### Hard delete voucher codes of the partner with id 1 (batch_size = 10)
 
 Request
 ```
@@ -289,14 +286,14 @@ Logs
 | Query | SET autocommit=1
 ```
 
-## Using PostgreSQL
+### Using PostgreSQL
 
-### Open a new terminal and run
+#### Open a new terminal and run
 ```
 docker logs studies-postgres -f
 ```
 
-### Create partner
+#### Create partner
 
 Request
 ```
@@ -320,7 +317,7 @@ Logs
 [125] LOG:  execute S_1: COMMIT
 ```
 
-### Insert 15 voucher codes to partner with id 1 (batch_size = 10)
+#### Insert 15 voucher codes to partner with id 1 (batch_size = 10)
 
 Request
 ```
@@ -392,7 +389,7 @@ Logs
 [125] LOG:  execute S_1: COMMIT
 ```
 
-### Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)
+#### Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)
 
 Request
 ```
@@ -445,7 +442,7 @@ Logs
 [113] LOG:  execute S_1: COMMIT
 ```
 
-### Hard delete voucher codes of the partner with id 1 (batch_size = 10)
+#### Hard delete voucher codes of the partner with id 1 (batch_size = 10)
 
 Request
 ```
@@ -476,7 +473,7 @@ Logs
 [113] LOG:  execute S_1: COMMIT
 ```
 
-# Running tests
+## Running tests
 
 Execute the following command to run the test cases
 ```
@@ -486,9 +483,9 @@ Execute the following command to run the test cases
 [`Testcontainers`](https://www.testcontainers.org/) is used to run the tests. It starts automatically Docker containers
 of the databases before the tests begin and shuts the containers down when the tests finish.
 
-# Useful commands
+## Useful commands
 
-## MySQL
+### MySQL
 
 - Dumping the database structure for all tables with no data
 ```
@@ -503,7 +500,7 @@ SELECT * FROM partners;
 
 - Type `exit` to exit
 
-## Postgres
+### Postgres
 
 - Dumping the database structure for all tables with no data
 ```
@@ -519,14 +516,8 @@ SELECT * FROM PARTNERS;
 
 - Type `\q` to exit
 
-# TODO
-
-- How to run `mvn clean test` selecting the database, `MySQL` or `PostgreSQL`?
-
-# Reference
+## Reference
 
 - https://clarkdo.js.org/spring/jpa/java/2017/09/14/79/
-
 - https://thoughts-on-java.org/jpa-generate-primary-keys/
-
 - https://thoughts-on-java.org/5-things-you-need-to-know-when-using-hibernate-with-mysql/

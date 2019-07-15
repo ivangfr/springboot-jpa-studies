@@ -18,7 +18,8 @@ public class MapperConfig {
 
     @Bean
     MapperFactory mapperFactory() {
-        DefaultMapperFactory mapperFactory = new DefaultMapperFactory.Builder().useAutoMapping(true).build();
+        DefaultMapperFactory mapperFactory = new DefaultMapperFactory.Builder()
+                .useAutoMapping(true).mapNulls(false).build();
 
         mapperFactory.classMap(Life.class, GameDto.LifeDto.class)
                 .byDefault()
