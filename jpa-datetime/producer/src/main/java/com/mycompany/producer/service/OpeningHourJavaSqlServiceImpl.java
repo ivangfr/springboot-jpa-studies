@@ -58,8 +58,8 @@ public class OpeningHourJavaSqlServiceImpl implements OpeningHourJavaSqlService 
     }
 
     private java.util.Date convertStringToDate(String date, String time) throws ParseException {
-        SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return SDF.parse(String.format("%s %s", date, time));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.parse(String.format("%s %s", date, time));
     }
 
 }

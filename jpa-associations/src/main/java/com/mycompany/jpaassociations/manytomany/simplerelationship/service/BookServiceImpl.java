@@ -16,7 +16,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book validateAndGetBook(Long id) {
-        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(String.format("Book with id 'id' not found", id)));
+        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(String.format("Book with id '%s' not found", id)));
     }
 
     @Override

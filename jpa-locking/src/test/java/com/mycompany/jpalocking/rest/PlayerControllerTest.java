@@ -6,6 +6,7 @@ import com.mycompany.jpalocking.rest.dto.GameDto;
 import com.mycompany.jpalocking.rest.dto.GameSetupDto;
 import com.mycompany.jpalocking.rest.dto.PlayerDto;
 import com.mycompany.jpalocking.rest.dto.StarCollectionDto;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Slf4j
 @ActiveProfiles("mysql-test")
 @ExtendWith({SpringExtension.class, ContainersExtension.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -78,10 +80,10 @@ class PlayerControllerTest {
         PlayerDto playerDto3 = getPlayerInfo(player3);
         GameDto gameInfo = getGameInfo();
 
-        System.out.println(playerDto1);
-        System.out.println(playerDto2);
-        System.out.println(playerDto3);
-        System.out.println(getGameInfo());
+        log.info("playerDto1 = {}", playerDto1);
+        log.info("playerDto2 = {}", playerDto2);
+        log.info("playerDto3 = {}", playerDto3);
+        log.info("getGameInfo = {}", getGameInfo());
 
         assertEquals(0, playerDto1.getNumStars());
         assertEquals(1, playerDto1.getLives().size());

@@ -14,10 +14,10 @@ import java.util.Collections;
 public class ContainersExtension implements BeforeAllCallback, AfterAllCallback {
 
     @Container
-    private static MySQLContainer mySQLContainer;
+    private MySQLContainer mySQLContainer;
 
     @Container
-    private static PostgreSQLContainer postgreSQLContainer;
+    private PostgreSQLContainer postgreSQLContainer;
 
     @Override
     public void beforeAll(ExtensionContext extensionContext) {

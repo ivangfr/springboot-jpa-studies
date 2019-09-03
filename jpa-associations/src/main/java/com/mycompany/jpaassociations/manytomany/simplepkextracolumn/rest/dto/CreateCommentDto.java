@@ -13,11 +13,11 @@ public class CreateCommentDto {
     @NotNull
     private Long reviewerId;
 
-    @ApiModelProperty(position = 2, example = "1")
+    @ApiModelProperty(position = 1, example = "1")
     @NotNull
     private Long articleId;
 
-    @ApiModelProperty(position = 3, example = "This article is very interesting")
+    @ApiModelProperty(position = 2, example = "This article is very interesting")
     @NotBlank
     private String text;
 

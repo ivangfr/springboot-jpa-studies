@@ -13,15 +13,15 @@ public class CreateOpeningHourDto {
     private String date;
 
     @NotBlank
-    @ApiModelProperty(example = "00:00:00", position = 1)
+    @ApiModelProperty(position = 1, example = "00:00:00")
     private String begin;
 
     @NotBlank
-    @ApiModelProperty(example = "23:59:59", position = 2)
+    @ApiModelProperty(position = 2, example = "23:59:59")
     private String end;
 
     @NotBlank
-    @ApiModelProperty(example = "Europe/Berlin", position = 3)
+    @ApiModelProperty(position = 3, example = "Europe/Berlin")
     private String zoneId;
 
 }

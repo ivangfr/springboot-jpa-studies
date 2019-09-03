@@ -8,10 +8,9 @@ import com.mycompany.jpalocking.model.StarCollection;
 import com.mycompany.jpalocking.repository.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
