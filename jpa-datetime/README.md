@@ -2,10 +2,10 @@
 
 The goal of this example is to study how `Date`, `Time` and `DateTime` work with `Java`, `JPA/Hibernate` and `MySQL`. 
 
-## Start microservices
+## Start applications
 
-> **Note**: before starting the application, the services present in `docker-compose.yml` file must be up and running
-as explained in the main README.
+> Note. before starting the applications, the services present in `docker-compose.yml` file must be up and running
+as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment).
 
 ### producer
 

@@ -5,8 +5,8 @@ The goal of this module is to study the three associations that JPA and Hibernat
 
 ## Start application
 
-> **Note**: before starting the application, the services present in `docker-compose.yml` file must be up and running
-as explained in the main README.
+> Note. before starting the application, the services present in `docker-compose.yml` file must be up and running
+as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment).
 
 ### Using MySQL
 

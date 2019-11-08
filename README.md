@@ -1,7 +1,8 @@
 # `springboot-jpa-studies`
 
 The goal of this project is to study `JPA Associations` (one-to-one, one-to-many and many-to-many),
-`JPA Batch Processing` (i.e, insert/update/delete a set of records in a single command) and `JPA Locking`.
+`JPA Batch Processing` (i.e, insert/update/delete a set of records in a single command), `JPA Locking` and
+`Datetime in JPA`.
 
 ## Modules
 

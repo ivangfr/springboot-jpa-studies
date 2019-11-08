@@ -4,8 +4,8 @@ The idea of this module is to study how to insert/update/delete a set of records
 
 ## Start application
 
-> **Note**: before starting the application, the services present in `docker-compose.yml` file must be up and running
-as explained in the main README.
+> Note. before starting the application, the services present in `docker-compose.yml` file must be up and running
+as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment).
 
 ### Using MySQL
 
@@ -14,12 +14,12 @@ To start the application using `MySQL` (default configuration), run the followin
 ./mvnw spring-boot:run --projects jpa-batch
 ```
 
-> Note: if you want to initialize the database manually, start the application as following
-> - Run the script below to create the tables
+> Note. if you want to initialize the database manually, start the application as following
+> 1. Run the script below to create the tables
 > ```
 > ./jpa-batch/init-mysql-database.sh
 > ```
-> - Start application, overwriting hibernate `ddl-auto` property
+> 2. Start application, overwriting hibernate `ddl-auto` property
 > ```
 > ./mvnw spring-boot:run --projects jpa-batch -Dspring-boot.run.jvmArguments="-Dspring.jpa.hibernate.ddl-auto=none"
 > ```
@@ -30,12 +30,12 @@ If you want to use `PostgreSQL` run the same command, however informing the prof
 ```
 ./mvnw spring-boot:run --projects jpa-batch -Dspring-boot.run.profiles=postgres
 ```
-> Note: if you want to initialize the database manually, start the application as following
-> - Run the script below to create the tables
+> Note. if you want to initialize the database manually, start the application as following
+> 1. Run the script below to create the tables
 > ```
 > ./jpa-batch/init-postgres-database.sh
 > ```
-> - Start application, overwriting hibernate `ddl-auto` property
+> 2. Start application, overwriting hibernate `ddl-auto` property
 > ```
 > ./mvnw spring-boot:run --projects jpa-batch -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=postgres -Dspring.jpa.hibernate.ddl-auto=none"
 > ```
