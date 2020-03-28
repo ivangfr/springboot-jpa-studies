@@ -6,7 +6,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     properties:
       hibernate:
         jdbc.batch_size: 10

@@ -7,7 +7,6 @@ spring:
     properties:
       hibernate:
         enable_lazy_load_no_trans: true
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
     url: jdbc:mysql://localhost:3306/studiesdb-test?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root-test
