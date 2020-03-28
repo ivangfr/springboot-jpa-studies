@@ -93,15 +93,13 @@ void deleteInBatch(Iterable<T> entities);
 ### Using MySQL
 
 - **Create partner**
-
-  Request
   ```
   curl -i -X POST http://localhost:8081/api/partners \
     -H "Content-Type: application/json" \
     -d '{"name": "partner1"}'
   ```
 
-  Response
+  It should return
   ```
   HTTP/1.1 201
   {"id":1,"name":"partner1"}
@@ -116,15 +114,13 @@ void deleteInBatch(Iterable<T> entities);
   ```
 
 - **Insert 15 voucher codes to partner with id 1 (batch_size = 10)**
-
-  Request
   ```
   curl -i -X POST http://localhost:8081/api/partners/1/insertVoucherCodes \
     -H "Content-Type: application/json" \
     -d '{ "voucherCodes": [ "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115" ]}'
   ```
 
-  Response
+  It should return
   ```
   HTTP/1.1 201
   15
@@ -223,13 +219,11 @@ void deleteInBatch(Iterable<T> entities);
   ```
 
 - **Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)**
-
-  Request
   ```
   curl -i -X PUT http://localhost:8081/api/partners/1/softDeleteOldVoucherCodes
   ```
 
-  Response
+  It should return
   ```
   HTTP/1.1 200
   15
@@ -264,13 +258,11 @@ void deleteInBatch(Iterable<T> entities);
   ```
 
 - **Hard delete voucher codes of the partner with id 1 (batch_size = 10)**
-
-  Request
   ```
   curl -i -X DELETE http://localhost:8081/api/partners/1/hardDeleteOldVoucherCodes
   ```
 
-  Response
+  It should return
   ```
   HTTP/1.1 200 
   15
