@@ -480,17 +480,6 @@ void deleteInBatch(Iterable<T> entities);
   [113] LOG:  execute S_1: COMMIT
   ```
 
-## Running tests
-
-- Open a terminal and make sure you are in `sprinboot-jpa-studies` root folder
-
-- Execute the following command to run the test cases
-  ```
-  ./mvnw clean test
-  ```
-
-  [`Testcontainers`](https://www.testcontainers.org/) is used to run the tests. It starts automatically Docker containers of the databases before the tests begin and shuts the containers down when the tests finish.
-
 ## Useful commands
 
 - **MySQL**
@@ -507,7 +496,7 @@ void deleteInBatch(Iterable<T> entities);
   SELECT * FROM partners;
   ```
 
-  - Type `exit` to exit
+  Type `exit` to exit
 
 - **Postgres**
 
@@ -523,7 +512,7 @@ void deleteInBatch(Iterable<T> entities);
   SELECT * FROM PARTNERS;
   ```
 
-  - Type `\q` to exit
+  Type `\q` to exit
 
 ## Reference
 
