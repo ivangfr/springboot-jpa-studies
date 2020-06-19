@@ -3,16 +3,14 @@ package com.mycompany.jpaassociations.onetomany.compositepk.service;
 import com.mycompany.jpaassociations.onetomany.compositepk.exception.PlayerNotFoundException;
 import com.mycompany.jpaassociations.onetomany.compositepk.model.Player;
 import com.mycompany.jpaassociations.onetomany.compositepk.repository.PlayerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerRepository playerRepository;
-
-    public PlayerServiceImpl(PlayerRepository playerRepository) {
-        this.playerRepository = playerRepository;
-    }
 
     @Override
     public Player validateAndGetPlayer(Long id) {

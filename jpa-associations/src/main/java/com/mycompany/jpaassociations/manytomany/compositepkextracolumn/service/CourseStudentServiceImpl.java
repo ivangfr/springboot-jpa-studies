@@ -4,16 +4,14 @@ import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.exception
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.model.CourseStudent;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.model.CourseStudentPk;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.repository.CourseStudentRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class CourseStudentServiceImpl implements CourseStudentService {
 
     private final CourseStudentRepository courseStudentRepository;
-
-    public CourseStudentServiceImpl(CourseStudentRepository courseStudentRepository) {
-        this.courseStudentRepository = courseStudentRepository;
-    }
 
     @Override
     public CourseStudent validateAndGetCourseStudent(Long courseId, Long studentId) {

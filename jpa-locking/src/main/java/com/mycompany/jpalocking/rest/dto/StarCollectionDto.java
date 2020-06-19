@@ -1,6 +1,6 @@
 package com.mycompany.jpalocking.rest.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.Positive;
@@ -8,7 +8,7 @@ import javax.validation.constraints.Positive;
 @Data
 public class StarCollectionDto {
 
-    @ApiModelProperty(example = "10")
+    @Schema(example = "10")
     @Positive
     private int numStars;
 

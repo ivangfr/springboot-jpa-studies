@@ -1,6 +1,6 @@
 package com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -9,15 +9,15 @@ import javax.validation.constraints.NotNull;
 @Data
 public class CreateCommentDto {
 
-    @ApiModelProperty(example = "2")
+    @Schema(example = "2")
     @NotNull
     private Long reviewerId;
 
-    @ApiModelProperty(position = 1, example = "1")
+    @Schema(example = "1")
     @NotNull
     private Long articleId;
 
-    @ApiModelProperty(position = 2, example = "This article is very interesting")
+    @Schema(example = "This article is very interesting")
     @NotBlank
     private String text;
 

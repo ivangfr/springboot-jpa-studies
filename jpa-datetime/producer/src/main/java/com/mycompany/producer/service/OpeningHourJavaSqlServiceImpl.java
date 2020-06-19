@@ -2,7 +2,7 @@ package com.mycompany.producer.service;
 
 import com.mycompany.producer.model.OpeningHourJavaSql;
 import com.mycompany.producer.repository.OpeningHourJavaSqlRepository;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -10,15 +10,11 @@ import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-@Slf4j
+@RequiredArgsConstructor
 @Service
 public class OpeningHourJavaSqlServiceImpl implements OpeningHourJavaSqlService {
 
     private final OpeningHourJavaSqlRepository openingHourJavaSqlRepository;
-
-    public OpeningHourJavaSqlServiceImpl(OpeningHourJavaSqlRepository openingHourJavaSqlRepository) {
-        this.openingHourJavaSqlRepository = openingHourJavaSqlRepository;
-    }
 
     @Override
     public OpeningHourJavaSql create(String date, String begin, String end) throws ParseException {

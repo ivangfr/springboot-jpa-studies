@@ -4,7 +4,7 @@ import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.model.Commen
 
 public interface CommentService {
 
-    Comment valideteAndGetComment(Long id);
+    Comment validateAndGetComment(Long id);
 
     Comment saveComment(Comment comment);
 

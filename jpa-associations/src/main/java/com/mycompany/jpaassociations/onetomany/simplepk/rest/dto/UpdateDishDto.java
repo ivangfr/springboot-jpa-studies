@@ -1,12 +1,12 @@
 package com.mycompany.jpaassociations.onetomany.simplepk.rest.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
 public class UpdateDishDto {
 
-    @ApiModelProperty(example = "Pizza Fungi")
+    @Schema(example = "Pizza Fungi")
     private String name;
 
 }

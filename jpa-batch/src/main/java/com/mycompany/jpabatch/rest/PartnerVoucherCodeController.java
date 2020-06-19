@@ -1,5 +1,6 @@
 package com.mycompany.jpabatch.rest;
 
+import com.mycompany.jpabatch.mapper.PartnerMapper;
 import com.mycompany.jpabatch.model.Partner;
 import com.mycompany.jpabatch.model.VoucherCode;
 import com.mycompany.jpabatch.rest.dto.CreatePartnerDto;
@@ -7,8 +8,8 @@ import com.mycompany.jpabatch.rest.dto.CreateVoucherCodeDto;
 import com.mycompany.jpabatch.rest.dto.PartnerDto;
 import com.mycompany.jpabatch.service.PartnerService;
 import com.mycompany.jpabatch.service.VoucherCodeService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ma.glasnost.orika.MapperFacade;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,40 +28,34 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/partners")
 public class PartnerVoucherCodeController {
 
     private final PartnerService partnerService;
     private final VoucherCodeService voucherCodeService;
-    private final MapperFacade mapperFacade;
-
-    public PartnerVoucherCodeController(PartnerService partnerService, VoucherCodeService voucherCodeService,
-                                        MapperFacade mapperFacade) {
-        this.partnerService = partnerService;
-        this.voucherCodeService = voucherCodeService;
-        this.mapperFacade = mapperFacade;
-    }
+    private final PartnerMapper partnerMapper;
 
     @GetMapping("/{partnerId}")
     public PartnerDto getPartner(@PathVariable Long partnerId) {
         Partner partner = partnerService.validateAndGetPartner(partnerId);
-        return mapperFacade.map(partner, PartnerDto.class);
+        return partnerMapper.toPartnerDto(partner);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public PartnerDto createPartner(@Valid @RequestBody CreatePartnerDto createPartnerDto) {
-        Partner partner = mapperFacade.map(createPartnerDto, Partner.class);
+        Partner partner = partnerMapper.toPartner(createPartnerDto);
         partner = partnerService.savePartner(partner);
-        return mapperFacade.map(partner, PartnerDto.class);
+        return partnerMapper.toPartnerDto(partner);
     }
 
     @DeleteMapping("/{partnerId}")
     public PartnerDto deletePartner(@PathVariable Long partnerId) {
         Partner partner = partnerService.validateAndGetPartner(partnerId);
         partnerService.deletePartner(partner);
-        return mapperFacade.map(partner, PartnerDto.class);
+        return partnerMapper.toPartnerDto(partner);
     }
 
     @Transactional

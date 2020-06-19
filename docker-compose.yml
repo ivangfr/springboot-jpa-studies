@@ -4,7 +4,7 @@ services:
 
   studies-mysql:
     container_name: studies-mysql
-    image: mysql:5.7.29
+    image: mysql:5.7.30
     restart: unless-stopped
     ports:
       - "3306:3306"
@@ -17,7 +17,7 @@ services:
 
   studies-postgres:
     container_name: studies-postgres
-    image: postgres:12.2
+    image: postgres:12.3
     restart: unless-stopped
     ports:
       - "5432:5432"

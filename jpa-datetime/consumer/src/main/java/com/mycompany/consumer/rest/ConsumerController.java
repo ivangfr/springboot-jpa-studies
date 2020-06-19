@@ -7,6 +7,7 @@ import com.mycompany.consumer.rest.dto.OpeningHourResponse;
 import com.mycompany.consumer.service.OpeningHourJavaSqlService;
 import com.mycompany.consumer.service.OpeningHourJavaTimeLocalService;
 import com.mycompany.consumer.service.OpeningHourJavaTimeZoneService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,20 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api")
 public class ConsumerController {
 
     private final OpeningHourJavaSqlService openingHourJavaSqlService;
     private final OpeningHourJavaTimeLocalService openingHourJavaTimeLocalService;
     private final OpeningHourJavaTimeZoneService openingHourJavaTimeZoneService;
-
-    public ConsumerController(OpeningHourJavaSqlService openingHourJavaSqlService,
-                              OpeningHourJavaTimeLocalService openingHourJavaTimeLocalService,
-                              OpeningHourJavaTimeZoneService openingHourJavaTimeZoneService) {
-        this.openingHourJavaSqlService = openingHourJavaSqlService;
-        this.openingHourJavaTimeLocalService = openingHourJavaTimeLocalService;
-        this.openingHourJavaTimeZoneService = openingHourJavaTimeZoneService;
-    }
 
     @GetMapping("/zoneid-default")
     public String getZoneIdDefault() {

@@ -1,12 +1,12 @@
 package com.mycompany.jpaassociations.onetoone.simplepk.rest.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
 public class UpdateTeamDetailDto {
 
-    @ApiModelProperty(example = "This team is excellent")
+    @Schema(example = "This team is excellent")
     private String description;
 
 }

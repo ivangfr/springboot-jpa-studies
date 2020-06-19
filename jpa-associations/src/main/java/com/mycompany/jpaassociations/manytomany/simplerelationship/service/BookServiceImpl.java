@@ -3,16 +3,14 @@ package com.mycompany.jpaassociations.manytomany.simplerelationship.service;
 import com.mycompany.jpaassociations.manytomany.simplerelationship.exception.BookNotFoundException;
 import com.mycompany.jpaassociations.manytomany.simplerelationship.model.Book;
 import com.mycompany.jpaassociations.manytomany.simplerelationship.repository.BookRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
-
-    public BookServiceImpl(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
 
     @Override
     public Book validateAndGetBook(Long id) {

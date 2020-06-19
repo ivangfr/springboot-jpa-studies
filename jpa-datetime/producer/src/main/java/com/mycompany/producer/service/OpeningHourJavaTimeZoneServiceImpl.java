@@ -2,6 +2,7 @@ package com.mycompany.producer.service;
 
 import com.mycompany.producer.model.OpeningHourJavaTimeZone;
 import com.mycompany.producer.repository.OpeningHourJavaTimeZoneRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -9,14 +10,11 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+@RequiredArgsConstructor
 @Service
 public class OpeningHourJavaTimeZoneServiceImpl implements OpeningHourJavaTimeZoneService {
 
     private final OpeningHourJavaTimeZoneRepository openingHourJavaTimeZoneRepository;
-
-    public OpeningHourJavaTimeZoneServiceImpl(OpeningHourJavaTimeZoneRepository openingHourJavaTimeZoneRepository) {
-        this.openingHourJavaTimeZoneRepository = openingHourJavaTimeZoneRepository;
-    }
 
     @Override
     public OpeningHourJavaTimeZone create(String date, String begin, String end, String zoneId) {

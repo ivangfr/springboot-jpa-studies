@@ -3,19 +3,17 @@ package com.mycompany.jpaassociations.manytomany.simplepkextracolumn.service;
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.exception.CommentNotFoundException;
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.model.Comment;
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.repository.CommentRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
-    public CommentServiceImpl(CommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
-    }
-
     @Override
-    public Comment valideteAndGetComment(Long id) {
+    public Comment validateAndGetComment(Long id) {
         return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException(String.format("Comment with id '%s' not found", id)));
     }
 

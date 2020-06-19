@@ -3,16 +3,14 @@ package com.mycompany.jpaassociations.manytomany.compositepkextracolumn.service;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.exception.CourseNotFoundException;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.model.Course;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.repository.CourseRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
-
-    public CourseServiceImpl(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
-    }
 
     @Override
     public Course validateAndGetCourse(Long id) {

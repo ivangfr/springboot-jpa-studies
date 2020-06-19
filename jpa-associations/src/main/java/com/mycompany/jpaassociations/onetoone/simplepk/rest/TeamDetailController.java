@@ -1,5 +1,6 @@
 package com.mycompany.jpaassociations.onetoone.simplepk.rest;
 
+import com.mycompany.jpaassociations.onetoone.simplepk.mapper.TeamMapper;
 import com.mycompany.jpaassociations.onetoone.simplepk.model.Team;
 import com.mycompany.jpaassociations.onetoone.simplepk.model.TeamDetail;
 import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.CreateTeamDetailDto;
@@ -8,7 +9,7 @@ import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.TeamDto;
 import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.UpdateTeamDetailDto;
 import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.UpdateTeamDto;
 import com.mycompany.jpaassociations.onetoone.simplepk.service.TeamService;
-import ma.glasnost.orika.MapperFacade;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,64 +23,60 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/teams")
 public class TeamDetailController {
 
     private final TeamService teamService;
-    private final MapperFacade mapperFacade;
-
-    public TeamDetailController(TeamService teamService, MapperFacade mapperFacade) {
-        this.teamService = teamService;
-        this.mapperFacade = mapperFacade;
-    }
+    private final TeamMapper teamMapper;
 
     @GetMapping("/{teamId}")
     public TeamDto getTeam(@PathVariable Long teamId) {
         Team team = teamService.validateAndGetTeam(teamId);
-        return mapperFacade.map(team, TeamDto.class);
+        return teamMapper.toTeamDto(team);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public TeamDto createTeam(@Valid @RequestBody CreateTeamDto createTeamDto) {
-        Team team = mapperFacade.map(createTeamDto, Team.class);
+        Team team = teamMapper.toTeam(createTeamDto);
         team = teamService.saveTeam(team);
-        return mapperFacade.map(team, TeamDto.class);
+        return teamMapper.toTeamDto(team);
     }
 
     @PutMapping("/{teamId}")
     public TeamDto updateTeam(@PathVariable Long teamId, @Valid @RequestBody UpdateTeamDto updateTeamDto) {
         Team team = teamService.validateAndGetTeam(teamId);
-        mapperFacade.map(updateTeamDto, team);
+        teamMapper.updateTeamFromDto(updateTeamDto, team);
         teamService.saveTeam(team);
-        return mapperFacade.map(team, TeamDto.class);
+        return teamMapper.toTeamDto(team);
     }
 
     @DeleteMapping("/{teamId}")
     public TeamDto deleteTeam(@PathVariable Long teamId) {
         Team team = teamService.validateAndGetTeam(teamId);
         teamService.deleteTeam(team);
-        return mapperFacade.map(team, TeamDto.class);
+        return teamMapper.toTeamDto(team);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{teamId}/team-details")
     public TeamDto addTeamDetail(@PathVariable Long teamId, @Valid @RequestBody CreateTeamDetailDto createTeamDetailDto) {
         Team team = teamService.validateAndGetTeam(teamId);
-        TeamDetail teamDetail = mapperFacade.map(createTeamDetailDto, TeamDetail.class);
+        TeamDetail teamDetail = teamMapper.toTeamDetail(createTeamDetailDto);
         team.addTeamDetail(teamDetail);
         team = teamService.saveTeam(team);
-        return mapperFacade.map(team, TeamDto.class);
+        return teamMapper.toTeamDto(team);
     }
 
     @PutMapping("/{teamId}/team-details")
     public TeamDto updateTeamDetail(@PathVariable Long teamId, @Valid @RequestBody UpdateTeamDetailDto updateTeamDetailDto) {
         Team team = teamService.validateAndGetTeam(teamId);
         TeamDetail teamDetail = team.getTeamDetail();
-        mapperFacade.map(updateTeamDetailDto, teamDetail);
+        teamMapper.updateTeamDetailFromDto(updateTeamDetailDto, teamDetail);
         team = teamService.saveTeam(team);
-        return mapperFacade.map(team, TeamDto.class);
+        return teamMapper.toTeamDto(team);
     }
 
     @DeleteMapping("/{teamId}/team-details")
@@ -87,7 +84,7 @@ public class TeamDetailController {
         Team team = teamService.validateAndGetTeam(teamId);
         team.removeTeamDetail();
         team = teamService.saveTeam(team);
-        return mapperFacade.map(team, TeamDto.class);
+        return teamMapper.toTeamDto(team);
     }
 
 }

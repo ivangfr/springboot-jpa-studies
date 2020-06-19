@@ -9,6 +9,12 @@ The goal of this project is to study `JPA Associations` (one-to-one, one-to-many
 - ### [jpa-locking](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-locking#jpa-locking)
 - ### [jpa-datetime](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-datetime#jpa-datetime)
 
+## Prerequisites
+
+- `Java 11+`
+- `Docker`
+- `Docker-Compose`
+
 ## Start Environment
 
 - Open one terminal and inside `springboot-jpa-studies` root folder run
@@ -42,12 +48,22 @@ The goal of this project is to study `JPA Associations` (one-to-one, one-to-many
 
 - In a terminal, make sure you are in `springboot-jpa-studies` root folder
 
-- Execute the following command to run the all test cases
-  ```
-  ./mvnw clean test
-  ```
+- Make sure you don't have docker-compose `MySQL` and `PostgreSQL` containers running. During the tests, [`Testcontainers`](https://www.testcontainers.org/) starts automatically Docker containers of the databases before the tests begin and shuts the containers down when the tests finish. 
 
-  [`Testcontainers`](https://www.testcontainers.org/) is used to run the tests. It starts automatically Docker containers of the databases before the tests begin and shuts the containers down when the tests finish.
+- Running test cases
+    
+  - For one specific module
+    ```
+    ./mvnw clean test --projects jpa-associations
+    ./mvnw clean test --projects jpa-batch
+    ./mvnw clean test --projects jpa-locking
+    ```
+    > **Note:** jpa-datetime producer and consumer don't have test cases
+
+  - For all modules
+    ```
+    ./mvnw clean test
+    ```
 
 ## TODO
 

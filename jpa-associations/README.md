@@ -25,7 +25,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
 
 ## One to One
 
-### Composite PK with Auto Increment
+### [Shared PK](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/mycompany/jpaassociations/onetoone/sharedpk)
 
 #### `persons 1 : 1 person_details`
 
@@ -44,24 +44,12 @@ The goal of this module is to study the three associations that JPA and Hibernat
   +-------------+--------------+------+-----+---------+-------+
   | Field       | Type         | Null | Key | Default | Extra |
   +-------------+--------------+------+-----+---------+-------+
-  | id          | bigint(20)   | NO   | PRI | NULL    |       |
-  | person_id   | bigint(20)   | NO   | PRI | NULL    |       |
   | description | varchar(255) | YES  |     | NULL    |       |
+  | person_id   | bigint(20)   | NO   | PRI | NULL    |       |
   +-------------+--------------+------+-----+---------+-------+
   ```
 
-> **EXCEPTION:** Hibernate is not generating an auto-increment value for `id` field of `person_details`
-> ```
-> {
->   "timestamp": "2018-10-12T05:44:56.403+0000",
->   "status": 500,
->   "error": "Internal Server Error",
->   "message": "No part of a composite identifier may be null; nested exception is org.hibernate.HibernateException: No part of a composite identifier may be null",
->   "path": "/api/persons/1/person-details"
-> }
-> ```
-
-### Simple PK with Auto Increment
+### [Simple PK with Auto Increment](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/mycompany/jpaassociations/onetoone/simplepk)
 
 #### `teams 1 : 1 team_details`
 
@@ -88,7 +76,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
 
 ## One to Many
 
-### Simple relationship
+### [Simple relationship](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/mycompany/jpaassociations/onetomany/simplepk)
 
 #### `restaurants 1 : N dishes`
 
@@ -113,7 +101,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
   +---------------+--------------+------+-----+---------+-------+
   ```
 
-### Relationship with Composite PK
+### [Relationship with Composite PK](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/mycompany/jpaassociations/onetomany/compositepk)
 
 #### `players 1 : N weapons`
 
@@ -140,7 +128,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
 
 ## Many to Many
 
-### Simple relationship
+### [Simple relationship](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/mycompany/jpaassociations/manytomany/simplerelationship)
 
 #### `writers N : N books`
 
@@ -174,7 +162,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
   +-----------+------------+------+-----+---------+-------+
   ```
 
-### Relationship with Composite PK and extra column
+### [Relationship with Composite PK and extra column](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/mycompany/jpaassociations/manytomany/compositepkextracolumn)
 
 #### `students N : N courses`
 
@@ -210,7 +198,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
   +-------------------+-------------+------+-----+---------+-------+
   ```
 
-### Relationship with Simple PK and extra column
+### [Relationship with Simple PK and extra column](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/mycompany/jpaassociations/manytomany/simplepkextracolumn)
 
 #### `reviewer N : N article`
 
@@ -245,6 +233,20 @@ The goal of this module is to study the three associations that JPA and Hibernat
   | reviewer_id | bigint(20)   | YES  | MUL | NULL    |       |
   +-------------+--------------+------+-----+---------+-------+
   ```
+
+## Util Commands
+
+- **MySQL**
+
+  - Run `MySQL` interactive terminal (`mysql`) inside docker container
+    ```
+    docker exec -it studies-mysql mysql -uroot -psecret --database=studiesdb
+    ```
+    
+  - To see the strucuture of a table run
+    ```
+    describe [table-name]
+    ```
 
 ## References
 

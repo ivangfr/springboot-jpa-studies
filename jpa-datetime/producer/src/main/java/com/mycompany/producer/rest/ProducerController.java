@@ -8,6 +8,7 @@ import com.mycompany.producer.rest.dto.OpeningHourResponse;
 import com.mycompany.producer.service.OpeningHourJavaSqlService;
 import com.mycompany.producer.service.OpeningHourJavaTimeLocalService;
 import com.mycompany.producer.service.OpeningHourJavaTimeZoneService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 import java.text.ParseException;
 import java.time.ZoneId;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
 public class ProducerController {
@@ -28,14 +30,6 @@ public class ProducerController {
     private final OpeningHourJavaSqlService openingHourJavaSqlService;
     private final OpeningHourJavaTimeLocalService openingHourJavaTimeLocalService;
     private final OpeningHourJavaTimeZoneService openingHourJavaTimeZoneService;
-
-    public ProducerController(OpeningHourJavaSqlService openingHourJavaSqlService,
-                              OpeningHourJavaTimeLocalService openingHourJavaTimeLocalService,
-                              OpeningHourJavaTimeZoneService openingHourJavaTimeZoneService) {
-        this.openingHourJavaSqlService = openingHourJavaSqlService;
-        this.openingHourJavaTimeLocalService = openingHourJavaTimeLocalService;
-        this.openingHourJavaTimeZoneService = openingHourJavaTimeZoneService;
-    }
 
     @GetMapping("/zoneid-default")
     public String getZoneIdDefault() {

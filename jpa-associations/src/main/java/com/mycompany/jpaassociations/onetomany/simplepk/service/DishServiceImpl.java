@@ -3,16 +3,14 @@ package com.mycompany.jpaassociations.onetomany.simplepk.service;
 import com.mycompany.jpaassociations.onetomany.simplepk.exception.DishNotFoundException;
 import com.mycompany.jpaassociations.onetomany.simplepk.model.Dish;
 import com.mycompany.jpaassociations.onetomany.simplepk.repository.DishRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class DishServiceImpl implements DishService {
 
     private final DishRepository dishRepository;
-
-    public DishServiceImpl(DishRepository dishRepository) {
-        this.dishRepository = dishRepository;
-    }
 
     @Override
     public Dish validateAndGetDish(Long dishId, Long restaurantId) {

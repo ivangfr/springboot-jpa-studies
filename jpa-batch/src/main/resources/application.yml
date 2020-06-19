@@ -14,11 +14,11 @@ spring:
     username: root
     password: secret
 
-logging:
-  level:
-    org.hibernate:
-      SQL: DEBUG
-      type.descriptor.sql.BasicBinder: TRACE
+#logging:
+#  level:
+#    org.hibernate:
+#      SQL: DEBUG
+#      type.descriptor.sql.BasicBinder: TRACE
 
 ---
 spring:

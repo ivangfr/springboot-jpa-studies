@@ -6,6 +6,7 @@ import com.mycompany.jpalocking.model.Life;
 import com.mycompany.jpalocking.model.Player;
 import com.mycompany.jpalocking.model.StarCollection;
 import com.mycompany.jpalocking.repository.PlayerRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,20 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class PlayerServiceImpl implements PlayerService {
 
-    private static final Integer NUM_STARS_REDEEM_LIFE = 50;
+    private static final int NUM_STARS_REDEEM_LIFE = 50;
 
     private final PlayerRepository playerRepository;
     private final StarCollectionService starCollectionService;
     private final LifeService lifeService;
-
-    public PlayerServiceImpl(PlayerRepository playerRepository, StarCollectionService starCollectionService, LifeService lifeService) {
-        this.playerRepository = playerRepository;
-        this.starCollectionService = starCollectionService;
-        this.lifeService = lifeService;
-    }
 
     @Override
     public Player validateAndGetPlayer(Long id) {
@@ -41,9 +37,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Transactional
     @Override
-    public Player collectStars(Long id, int numStars) {
-        Player player = validateAndGetPlayer(id);
-
+    public Player collectStars(Player player, int numStars) {
         StarCollection starCollection = new StarCollection();
         starCollection.setNumCollected(numStars);
         starCollection.setNumAvailable(numStars);
@@ -54,9 +48,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Transactional
     @Override
-    public Player redeemStars(Long id) {
-        Player player = validateAndGetPlayer(id);
-
+    public Player redeemStars(Player player) {
         List<StarCollection> starCollections = starCollectionService.getAvailableStarCollections(player);
         int numStars = starCollections.stream().mapToInt(StarCollection::getNumAvailable).sum();
         if (numStars - NUM_STARS_REDEEM_LIFE < 0) {

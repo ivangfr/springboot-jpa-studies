@@ -57,13 +57,13 @@ Once the application is running, you can access its Swagger website at http://lo
 - add `spring.jpa.properties.hibernate.jdbc.batch_size: 10` to `application.yml`
 - append `&rewriteBatchedStatements=true` to `spring.datasource.url`
 - use `saveAll` to save entities
-```
-<S extends T> List<S> saveAll(Iterable<S> entities);
-```
+  ```
+  <S extends T> List<S> saveAll(Iterable<S> entities);
+  ```
 - use `deleteInBatch` to delete entities
-```
-void deleteInBatch(Iterable<T> entities);
-```
+  ```
+  void deleteInBatch(Iterable<T> entities);
+  ```
 
 ### Enable database logs
 

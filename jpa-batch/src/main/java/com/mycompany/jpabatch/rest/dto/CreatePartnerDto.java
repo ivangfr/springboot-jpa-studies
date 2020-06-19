@@ -1,6 +1,6 @@
 package com.mycompany.jpabatch.rest.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class CreatePartnerDto {
 
-    @ApiModelProperty(example = "partner1")
+    @Schema(example = "partner1")
     @NotBlank
     private String name;
 

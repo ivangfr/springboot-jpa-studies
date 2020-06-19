@@ -1,6 +1,7 @@
 package com.mycompany.jpabatch.service;
 
 import com.mycompany.jpabatch.model.VoucherCode;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class VoucherCodeBatchProcessingImpl implements VoucherCodeBatchProcessing {
 
@@ -19,10 +21,6 @@ public class VoucherCodeBatchProcessingImpl implements VoucherCodeBatchProcessin
     private int batchSize;
 
     private final EntityManager entityManager;
-
-    public VoucherCodeBatchProcessingImpl(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     @Override
     public List<VoucherCode> saveInBatch(List<VoucherCode> voucherCodes) {

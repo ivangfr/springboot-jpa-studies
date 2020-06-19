@@ -14,7 +14,10 @@ import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.service.CourseService;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.service.CourseStudentService;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.service.StudentService;
-import ma.glasnost.orika.MapperFacade;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.mapper.CourseMapper;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.mapper.CourseStudentMapper;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.mapper.StudentMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
 public class StudentCourseController {
@@ -35,15 +39,9 @@ public class StudentCourseController {
     private final StudentService studentService;
     private final CourseService courseService;
     private final CourseStudentService courseStudentService;
-    private final MapperFacade mapperFacade;
-
-    public StudentCourseController(StudentService studentService, CourseService courseService,
-                                   CourseStudentService courseStudentService, MapperFacade mapperFacade) {
-        this.studentService = studentService;
-        this.courseService = courseService;
-        this.courseStudentService = courseStudentService;
-        this.mapperFacade = mapperFacade;
-    }
+    private final StudentMapper studentMapper;
+    private final CourseMapper courseMapper;
+    private final CourseStudentMapper courseStudentMapper;
 
     // -------
     // Student
@@ -51,30 +49,30 @@ public class StudentCourseController {
     @GetMapping("/students/{studentId}")
     public StudentDto getStudent(@PathVariable Long studentId) {
         Student student = studentService.validateAndGetStudent(studentId);
-        return mapperFacade.map(student, StudentDto.class);
+        return studentMapper.toStudentDto(student);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/students")
     public StudentDto createStudent(@Valid @RequestBody CreateStudentDto createStudentDto) {
-        Student student = mapperFacade.map(createStudentDto, Student.class);
+        Student student = studentMapper.toStudent(createStudentDto);
         student = studentService.saveStudent(student);
-        return mapperFacade.map(student, StudentDto.class);
+        return studentMapper.toStudentDto(student);
     }
 
     @PutMapping("/students/{studentId}")
     public StudentDto updateStudent(@PathVariable Long studentId, @Valid @RequestBody UpdateStudentDto updateStudentDto) {
         Student student = studentService.validateAndGetStudent(studentId);
-        mapperFacade.map(updateStudentDto, student);
+        studentMapper.updateStudentFromDto(updateStudentDto, student);
         student = studentService.saveStudent(student);
-        return mapperFacade.map(student, StudentDto.class);
+        return studentMapper.toStudentDto(student);
     }
 
     @DeleteMapping("/students/{studentId}")
     public StudentDto deleteStudent(@PathVariable Long studentId) {
         Student student = studentService.validateAndGetStudent(studentId);
         studentService.deleteStudent(student);
-        return mapperFacade.map(student, StudentDto.class);
+        return studentMapper.toStudentDto(student);
     }
 
     // ------
@@ -83,30 +81,30 @@ public class StudentCourseController {
     @GetMapping("/courses/{courseId}")
     public CourseDto getCourse(@PathVariable Long courseId) {
         Course course = courseService.validateAndGetCourse(courseId);
-        return mapperFacade.map(course, CourseDto.class);
+        return courseMapper.toCourseDto(course);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/courses")
     public CourseDto createCourse(@Valid @RequestBody CreateCourseDto createCourseDto) {
-        Course course = mapperFacade.map(createCourseDto, Course.class);
+        Course course = courseMapper.toCourse(createCourseDto);
         course = courseService.saveCourse(course);
-        return mapperFacade.map(course, CourseDto.class);
+        return courseMapper.toCourseDto(course);
     }
 
     @PutMapping("/courses/{courseId}")
     public CourseDto updateCourse(@PathVariable Long courseId, @Valid @RequestBody UpdateCourseDto updateCourseDto) {
         Course course = courseService.validateAndGetCourse(courseId);
-        mapperFacade.map(updateCourseDto, course);
+        courseMapper.updateCourseFromDto(updateCourseDto, course);
         course = courseService.saveCourse(course);
-        return mapperFacade.map(course, CourseDto.class);
+        return courseMapper.toCourseDto(course);
     }
 
     @DeleteMapping("/courses/{courseId}")
     public CourseDto deleteCourse(@PathVariable Long courseId) {
         Course course = courseService.validateAndGetCourse(courseId);
         courseService.deleteCourse(course);
-        return mapperFacade.map(course, CourseDto.class);
+        return courseMapper.toCourseDto(course);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -120,23 +118,23 @@ public class StudentCourseController {
         courseStudent.setCourse(course);
         courseStudent = courseStudentService.saveCourseStudent(courseStudent);
 
-        return mapperFacade.map(courseStudent, CourseStudentDto.class);
+        return courseStudentMapper.toCourseStudentDto(courseStudent);
     }
 
     @DeleteMapping("/courses/{courseId}/students/{studentId}")
     public CourseStudentDto unregisterStudentOfCourse(@PathVariable Long courseId, @PathVariable Long studentId) {
         CourseStudent courseStudent = courseStudentService.validateAndGetCourseStudent(courseId, studentId);
         courseStudentService.deleteCourseStudent(courseStudent);
-        return mapperFacade.map(courseStudent, CourseStudentDto.class);
+        return courseStudentMapper.toCourseStudentDto(courseStudent);
     }
 
     @PutMapping("/courses/{courseId}/students/{studentId}")
     public CourseStudentDto updateStudentDataInCourse(@PathVariable Long courseId, @PathVariable Long studentId,
                                                       @Valid @RequestBody UpdateCourseStudentDto updateCourseStudentDto) {
         CourseStudent courseStudent = courseStudentService.validateAndGetCourseStudent(courseId, studentId);
-        mapperFacade.map(updateCourseStudentDto, courseStudent);
+        courseStudentMapper.updateCourseStudentFromDto(updateCourseStudentDto, courseStudent);
         courseStudentService.saveCourseStudent(courseStudent);
-        return mapperFacade.map(courseStudent, CourseStudentDto.class);
+        return courseStudentMapper.toCourseStudentDto(courseStudent);
     }
 
 }

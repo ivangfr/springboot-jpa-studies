@@ -10,9 +10,9 @@ public interface PlayerService {
 
     Player savePlayer(Player player);
 
-    Player collectStars(Long id, int numStars);
+    Player collectStars(Player player, int numStars);
 
-    Player redeemStars(Long id);
+    Player redeemStars(Player player);
 
     List<Player> getAllPlayers();
 }

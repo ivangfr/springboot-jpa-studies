@@ -3,6 +3,7 @@ package com.mycompany.jpabatch.service;
 import com.mycompany.jpabatch.model.Partner;
 import com.mycompany.jpabatch.model.VoucherCode;
 import com.mycompany.jpabatch.repository.VoucherCodeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import java.util.stream.Stream;
 
 import static com.google.common.collect.Lists.partition;
 
+@RequiredArgsConstructor
 @Service
 public class VoucherCodeServiceImpl implements VoucherCodeService {
 
@@ -20,11 +22,6 @@ public class VoucherCodeServiceImpl implements VoucherCodeService {
 
     private final VoucherCodeRepository voucherCodeRepository;
     private final VoucherCodeBatchProcessing voucherCodeBatchProcessing;
-
-    public VoucherCodeServiceImpl(VoucherCodeRepository voucherCodeRepository, VoucherCodeBatchProcessing voucherCodeBatchProcessing) {
-        this.voucherCodeRepository = voucherCodeRepository;
-        this.voucherCodeBatchProcessing = voucherCodeBatchProcessing;
-    }
 
     @Override
     public Stream<VoucherCode> getStreamOfVoucherCodesByPartner(Partner partner) {

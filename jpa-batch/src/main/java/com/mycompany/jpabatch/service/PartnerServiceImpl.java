@@ -3,17 +3,15 @@ package com.mycompany.jpabatch.service;
 import com.mycompany.jpabatch.exception.PartnerNotFoundException;
 import com.mycompany.jpabatch.model.Partner;
 import com.mycompany.jpabatch.repository.PartnerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Service
 public class PartnerServiceImpl implements PartnerService {
 
     private final PartnerRepository partnerRepository;
-
-    public PartnerServiceImpl(PartnerRepository partnerRepository) {
-        this.partnerRepository = partnerRepository;
-    }
 
     @Override
     public Partner savePartner(Partner partner) {

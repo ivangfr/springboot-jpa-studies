@@ -1,12 +1,13 @@
 package com.mycompany.jpalocking.rest;
 
+import com.mycompany.jpalocking.mapper.LifeMapper;
 import com.mycompany.jpalocking.model.Life;
 import com.mycompany.jpalocking.model.Player;
 import com.mycompany.jpalocking.rest.dto.GameDto;
 import com.mycompany.jpalocking.rest.dto.GameSetupDto;
 import com.mycompany.jpalocking.service.LifeService;
 import com.mycompany.jpalocking.service.PlayerService;
-import ma.glasnost.orika.MapperFacade;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,19 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/games")
 public class GameController {
 
     private final LifeService lifeService;
     private final PlayerService playerService;
-    private final MapperFacade mapperFacade;
-
-    public GameController(LifeService lifeService, PlayerService playerService, MapperFacade mapperFacade) {
-        this.lifeService = lifeService;
-        this.playerService = playerService;
-        this.mapperFacade = mapperFacade;
-    }
+    private final LifeMapper lifeMapper;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -50,7 +46,7 @@ public class GameController {
     private GameDto getGameInfoDto() {
         GameDto gameDto = new GameDto();
         gameDto.setAvailableLives(lifeService.countAvailableLives());
-        gameDto.setLives(lifeService.getAllLives().stream().map(life -> mapperFacade.map(life, GameDto.LifeDto.class)).collect(Collectors.toList()));
+        gameDto.setLives(lifeService.getAllLives().stream().map(lifeMapper::toLifeDto).collect(Collectors.toList()));
         gameDto.setPlayers(playerService.getAllPlayers().stream().map(Player::getUsername).collect(Collectors.toList()));
         return gameDto;
     }

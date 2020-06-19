@@ -3,16 +3,14 @@ package com.mycompany.jpaassociations.manytomany.simplepkextracolumn.service;
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.exception.ReviewerNotFoundException;
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.model.Reviewer;
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.repository.ReviewerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class ReviewerServiceImpl implements ReviewerService {
 
     private final ReviewerRepository reviewerRepository;
-
-    public ReviewerServiceImpl(ReviewerRepository reviewerRepository) {
-        this.reviewerRepository = reviewerRepository;
-    }
 
     @Override
     public Reviewer validateAndGetReviewer(Long id) {

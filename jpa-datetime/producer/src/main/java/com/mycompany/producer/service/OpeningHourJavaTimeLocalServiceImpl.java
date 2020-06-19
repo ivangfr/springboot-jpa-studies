@@ -2,20 +2,18 @@ package com.mycompany.producer.service;
 
 import com.mycompany.producer.model.OpeningHourJavaTimeLocal;
 import com.mycompany.producer.repository.OpeningHourJavaTimeLocalRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@RequiredArgsConstructor
 @Service
 public class OpeningHourJavaTimeLocalServiceImpl implements OpeningHourJavaTimeLocalService {
 
     private final OpeningHourJavaTimeLocalRepository openingHourJavaTimeLocalRepository;
-
-    public OpeningHourJavaTimeLocalServiceImpl(OpeningHourJavaTimeLocalRepository openingHourJavaTimeLocalRepository) {
-        this.openingHourJavaTimeLocalRepository = openingHourJavaTimeLocalRepository;
-    }
 
     @Override
     public OpeningHourJavaTimeLocal create(String date, String begin, String end) {

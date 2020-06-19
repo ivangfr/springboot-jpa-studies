@@ -4,16 +4,14 @@ import com.mycompany.jpaassociations.onetomany.compositepk.exception.WeaponNotFo
 import com.mycompany.jpaassociations.onetomany.compositepk.model.Weapon;
 import com.mycompany.jpaassociations.onetomany.compositepk.model.WeaponPk;
 import com.mycompany.jpaassociations.onetomany.compositepk.repository.WeaponRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class WeaponServiceImpl implements WeaponService {
 
     private final WeaponRepository weaponRepository;
-
-    public WeaponServiceImpl(WeaponRepository weaponRepository) {
-        this.weaponRepository = weaponRepository;
-    }
 
     @Override
     public Weapon validateAndGetWeapon(Long playerId, Long weaponId) {

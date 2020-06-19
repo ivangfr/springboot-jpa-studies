@@ -30,7 +30,7 @@ class PlayerControllerTest {
     private TestRestTemplate testRestTemplate;
 
     @Test
-    void test() throws InterruptedException {
+    void testStarsRedemption() throws InterruptedException {
         setupGame(5);
 
         Long player1 = createPlayer("player1").getId();
