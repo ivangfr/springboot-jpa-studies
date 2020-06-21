@@ -7,90 +7,81 @@ The idea of this module is to study how to insert/update/delete a set of records
 
 > **Note:** before starting the application, the services present in `docker-compose.yml` file must be up and running as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment)
 
-### Using MySQL
-
 - Open a terminal and navigate to `sprinboot-jpa-studies` root folder
 
-- To start the application run
-  ```
-  ./mvnw clean spring-boot:run --projects jpa-batch
-  ```
+- You can use `MySQL` or `PostgreSQL`
 
-> **Note:** if you want to initialize the database manually, start the application as following
->
-> - Run the script below to create the tables
->   ```
->   ./jpa-batch/init-mysql-database.sh
->   ```
-> - Start application, overwriting hibernate `ddl-auto` property
->   ```
->   ./mvnw clean spring-boot:run --projects jpa-batch -Dspring-boot.run.jvmArguments="-Dspring.jpa.hibernate.ddl-auto=none"
->   ```
-
-### Using PostgreSQL
-
-- Open a terminal and make sure you are in `sprinboot-jpa-studies` root folder
-
-- To start the application run
-  ```
-  ./mvnw clean spring-boot:run --projects jpa-batch -Dspring-boot.run.profiles=postgres
-  ```
+  - **Using MySQL**
+    ```
+    ./mvnw clean spring-boot:run --projects jpa-batch -Dspring-boot.run.profiles=mysql
+    ```
   
-> **Note:** if you want to initialize the database manually, start the application as following
-> - Run the script below to create the tables
->   ```
->   ./jpa-batch/init-postgres-database.sh
->   ```
-> - Start application, overwriting hibernate `ddl-auto` property
->   ```
->   ./mvnw clean spring-boot:run --projects jpa-batch -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=postgres -Dspring.jpa.hibernate.ddl-auto=none"
->   ```
+  - **Using PostgreSQL**
+    ```
+    ./mvnw clean spring-boot:run --projects jpa-batch -Dspring-boot.run.profiles=postgres
+    ```
 
-### Swagger
+- Once the application is running, you can access its Swagger website at http://localhost:8081/swagger-ui.html
 
-Once the application is running, you can access its Swagger website at http://localhost:8081/swagger-ui.html
+## Running Tests
+
+- In a terminal, make sure you are in `sprinboot-jpa-studies` root folder
+
+- You can use `MySQL` or `PostgreSQL`
+
+  - **Using MySQL**
+    ```
+    ./mvnw clean test --projects jpa-batch -DargLine="-Dspring.profiles.active=mysql-test"
+    ```
+  
+  - **Using PostgreSQL**
+    ```
+    ./mvnw clean test --projects jpa-batch -DargLine="-Dspring.profiles.active=postgres-test"
+    ```
 
 ## Spring JPA Hibernate - JpaRepository (Batch)
 
 ### What to configure
 
-- add `spring.jpa.properties.hibernate.jdbc.batch_size: 10` to `application.yml`
-- append `&rewriteBatchedStatements=true` to `spring.datasource.url`
-- use `saveAll` to save entities
+- Add `spring.jpa.properties.hibernate.jdbc.batch_size: 10` to `application.yml`
+- Append `&rewriteBatchedStatements=true` to `spring.datasource.url`
+- Use `saveAll` to save entities
   ```
   <S extends T> List<S> saveAll(Iterable<S> entities);
   ```
-- use `deleteInBatch` to delete entities
+- Use `deleteInBatch` to delete entities
   ```
   void deleteInBatch(Iterable<T> entities);
   ```
 
 ### Enable database logs
 
-#### MySQL
+- **MySQL**
 
-- Run `MySQL` interactive terminal (`mysql`) inside docker container
-  ```
-  docker exec -it studies-mysql mysql -uroot -psecret --database=studiesdb
-  ```
+  - Run `MySQL` interactive terminal (`mysql`) inside docker container
+    ```
+    docker exec -it mysql mysql -uroot -psecret --database studiesdb
+    ```
 
-- Enable log for all queries
-  ```
-  SET GLOBAL general_log = 'ON';
-  SET global log_output = 'table';
+  - Enable log for all queries
+    ```
+    SET GLOBAL general_log = 'ON';
+    SET global log_output = 'table';
+     
+    SELECT event_time, command_type, SUBSTRING(argument,1,150) FROM mysql.general_log;
+    ```
   
-  SELECT event_time, command_type, SUBSTRING(argument,1,150) FROM mysql.general_log;
-  ```
-  
-#### PostgreSQL
+- **PostgreSQL**
 
-- Set `log_statement = 'all'` in `postgres/postgresql.conf` file
+  - Set `log_statement = 'all'` in `postgres/postgresql.conf` file
 
-- Set `postgres/postgresql.conf` in `studies-postgres` service in `docker-compose.yml` using volumes mapping and `config_file` parameter
+  - Set `postgres/postgresql.conf` in `postgres` service in `docker-compose.yml` using volumes mapping and `config_file` parameter
 
 ## Execution examples
 
 ### Using MySQL
+
+In a terminal, run the following commands
 
 - **Create partner**
   ```
@@ -287,10 +278,12 @@ Once the application is running, you can access its Swagger website at http://lo
 
 ### Using PostgreSQL
 
-- Open a new terminal and run
-  ```
-  docker logs studies-postgres -f
-  ```
+In order to see `PostgreSQL` logs, open a new terminal and run
+```
+docker logs postgres -f
+```
+
+In another terminal, run the following commands
 
 - **Create partner**
   ```
@@ -464,39 +457,37 @@ Once the application is running, you can access its Swagger website at http://lo
   [113] LOG:  execute S_1: COMMIT
   ```
 
-## Useful commands
+## Useful Commands
 
 - **MySQL**
 
-  Dumping the database structure for all tables with no data
-  ```
-  docker exec -it studies-mysql mysqldump --no-data -uroot -psecret studiesdb
-  ```
+  - Dumping the database structure for all tables with no data
+    ```
+    docker exec -it mysql mysqldump --no-data -uroot -psecret studiesdb
+    ```
   
-  Run `MySQL` interactive terminal (`mysql`), describe `partners` table and select all `partners`
-  ```
-  docker exec -it studies-mysql mysql -uroot -psecret --database=studiesdb
-  DESCRIBE partners;
-  SELECT * FROM partners;
-  ```
-
-  Type `exit` to exit
+  - Run `MySQL` interactive terminal (`mysql`), describe `partners` table and select all `partners`
+    ```
+    docker exec -it mysql mysql -uroot -psecret --database studiesdb
+    describe partners;
+    select * from partners;
+    ```
+    > Type `exit` to exit
 
 - **Postgres**
 
-  Dumping the database structure for all tables with no data
-  ```
-  docker exec -it studies-postgres pg_dump -U postgres -s studiesdb;
-  ```
+  - Dumping the database structure for all tables with no data
+    ```
+    docker exec -it postgres pg_dump -U postgres -s studiesdb;
+    ```
 
-  Run `Postgres` interactive terminal (`psql`), describe `partners` table and select all `partners`
-  ```
-  docker exec -it studies-postgres psql -U postgres -d studiesdb
-  \dt partners
-  SELECT * FROM PARTNERS;
-  ```
-
-  Type `\q` to exit
+  - Run `Postgres` interactive terminal (`psql`), describe `partners` table and select all `partners`
+    ```
+    docker exec -it postgres psql -U postgres -d studiesdb
+    \d partners
+    select * from partners;
+    ```
+    > Type `\q` to exit
 
 ## Reference
 

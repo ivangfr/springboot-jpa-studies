@@ -13,7 +13,7 @@ The idea of this module is to study jpa locking.
 
   - **Using MySQL**
     ```
-    ./mvnw clean spring-boot:run --projects jpa-locking
+    ./mvnw clean spring-boot:run --projects jpa-locking -Dspring-boot.run.profiles=mysql
     ```
 
   - **Using PostgreSQL**
@@ -22,6 +22,23 @@ The idea of this module is to study jpa locking.
     ```
 
 - Once the application is running, you can access its Swagger website at http://localhost:8082/swagger-ui.html
+
+## Running Tests
+
+- In a terminal, make sure you are in `sprinboot-jpa-studies` root folder
+
+- You can use `MySQL` or `PostgreSQL`
+
+  - **Using MySQL**
+    ```
+    ./mvnw clean test --projects jpa-locking -DargLine="-Dspring.profiles.active=mysql-test"
+    ```
+  
+  - **Using PostgreSQL**
+    ```
+    ./mvnw clean test --projects jpa-locking -DargLine="-Dspring.profiles.active=postgres-test"
+    ```
+    > **Note:** jpa-locking test is failing. The problem is while calling `getAvailableLife` in `redeemStars` of `PlayerServiceImpl` class. It's always returning a `life` with id `1`. It's different when using `mysql-test` profile that returns different ids.
 
 ## Multithreading Simulation 
 

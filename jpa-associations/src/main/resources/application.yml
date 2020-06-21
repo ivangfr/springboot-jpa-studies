@@ -1,15 +1,9 @@
-server.port: 8080
-
 spring:
   application:
     name: jpa-associations
   jpa:
     hibernate:
       ddl-auto: update
-  datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/studiesdb?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: root
-    password: secret
 
 #logging:
 #  level:
@@ -19,13 +13,40 @@ spring:
 
 ---
 spring:
-  profiles: postgres
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    properties:
-      hibernate:
-        temp.use_jdbc_metadata_defaults: false # fix for exception: Method org.postgresql.jdbc.PgConnection.createClob() is not yet implemented
+  profiles: mysql
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/studiesdb
+    url: jdbc:mysql://localhost:3306/studiesdb?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: secret
+
+---
+spring:
+  profiles: postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5432/studiesdb
     username: postgres
     password: postgres
+
+---
+spring:
+  profiles: mysql-test
+  jpa:
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+  datasource:
+    url: jdbc:mysql://localhost:33066/studiesdb-test?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    username: root-test
+    password: secret-test
+
+---
+spring:
+  profiles: postgres-test
+  jpa:
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+  datasource:
+    url: jdbc:postgresql://localhost:54322/studiesdb-test
+    username: postgres-test
+    password: postgres-test

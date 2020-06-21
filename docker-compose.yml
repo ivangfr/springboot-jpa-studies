@@ -2,9 +2,9 @@ version: "3.7"
 
 services:
 
-  studies-mysql:
-    container_name: studies-mysql
-    image: mysql:5.7.30
+  mysql:
+    container_name: mysql
+    image: mysql:8.0.20
     restart: unless-stopped
     ports:
       - "3306:3306"
@@ -15,8 +15,8 @@ services:
       test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
       start_period: 10s
 
-  studies-postgres:
-    container_name: studies-postgres
+  postgres:
+    container_name: postgres
     image: postgres:12.3
     restart: unless-stopped
     ports:

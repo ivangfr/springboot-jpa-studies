@@ -13,7 +13,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
 
   - **Using MySQL**
     ```
-    ./mvnw clean spring-boot:run --projects jpa-associations
+    ./mvnw clean spring-boot:run --projects jpa-associations -Dspring-boot.run.profiles=mysql
     ```
 
   - **Using PostgreSQL**
@@ -22,6 +22,22 @@ The goal of this module is to study the three associations that JPA and Hibernat
     ```
 
 - Once the application is running, you can access its Swagger website at http://localhost:8080/swagger-ui.html
+
+## Running Tests
+
+- In a terminal, make sure you are in `sprinboot-jpa-studies` root folder
+
+- You can use `MySQL` or `PostgreSQL`
+
+  - **Using MySQL**
+    ```
+    ./mvnw clean test --projects jpa-associations -DargLine="-Dspring.profiles.active=mysql-test"
+    ```
+  
+  - **Using PostgreSQL**
+    ```
+    ./mvnw clean test --projects jpa-associations -DargLine="-Dspring.profiles.active=postgres-test"
+    ```
 
 ## One to One
 
@@ -234,19 +250,27 @@ The goal of this module is to study the three associations that JPA and Hibernat
   +-------------+--------------+------+-----+---------+-------+
   ```
 
-## Util Commands
+## Useful Commands
 
 - **MySQL**
 
-  - Run `MySQL` interactive terminal (`mysql`) inside docker container
+  - Run `MySQL` interactive terminal (`mysql`), describe `persons` table and select all `persons`
     ```
-    docker exec -it studies-mysql mysql -uroot -psecret --database=studiesdb
+    docker exec -it mysql mysql -uroot -psecret --database studiesdb
+    describe persons;
+    select * from persons;
     ```
+    > Type `exit` to exit
     
-  - To see the strucuture of a table run
+- **PostgreSQL**
+
+  - Run `Postgres` interactive terminal (`psql`), describe `persons` table and select all `persons`
     ```
-    describe [table-name]
+    docker exec -it postgres psql -U postgres -d studiesdb
+    \d persons
+    select * from persons;
     ```
+    > Type `\q` to exit
 
 ## References
 

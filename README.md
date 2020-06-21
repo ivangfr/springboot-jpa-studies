@@ -29,11 +29,29 @@ The goal of this project is to study `JPA Associations` (one-to-one, one-to-many
 
   You should see something like
   ```
-        Name                    Command                 State                     Ports              
-  ---------------------------------------------------------------------------------------------------
-  studies-mysql      docker-entrypoint.sh mysqld     Up (healthy)   0.0.0.0:3306->3306/tcp, 33060/tcp
-  studies-postgres   docker-entrypoint.sh postgres   Up (healthy)   0.0.0.0:5432->5432/tcp
+    Name                Command                  State                     Ports
+  --------------------------------------------------------------------------------------------
+  mysql      docker-entrypoint.sh mysqld      Up (healthy)   0.0.0.0:3306->3306/tcp, 33060/tcp
+  postgres   docker-entrypoint.sh postg ...   Up (healthy)   0.0.0.0:5432->5432/tcp
   ```
+
+## Useful Commands
+
+- **MySQL**
+
+  - Run `MySQL` interactive terminal (`mysql`)
+    ```
+    docker exec -it mysql mysql -uroot -psecret --database studiesdb
+    ```
+    > Type `exit` to exit
+    
+- **PostgreSQL**
+
+  - Run `Postgres` interactive terminal (`psql`)
+    ```
+    docker exec -it postgres psql -U postgres -d studiesdb
+    ```
+    > Type `\q` to exit
 
 ## Shutdown
 
@@ -46,25 +64,25 @@ The goal of this project is to study `JPA Associations` (one-to-one, one-to-many
 
 ## Running tests
 
-- In a terminal, make sure you are in `springboot-jpa-studies` root folder
+- In a terminal, make sure you are in `springboot-jpa-studies` root folder  
 
-- Make sure you don't have docker-compose `MySQL` and `PostgreSQL` containers running. During the tests, [`Testcontainers`](https://www.testcontainers.org/) starts automatically Docker containers of the databases before the tests begin and shuts the containers down when the tests finish. 
+- The commands below will run the test cases of all modules. In order to run just the tests of a specific module che the module README.
 
-- Running test cases
-    
-  - For one specific module
-    ```
-    ./mvnw clean test --projects jpa-associations
-    ./mvnw clean test --projects jpa-batch
-    ./mvnw clean test --projects jpa-locking
-    ```
-    > **Note:** jpa-datetime producer and consumer don't have test cases
+  > During the tests, [`Testcontainers`](https://www.testcontainers.org/) starts automatically Docker containers of the databases before the tests begin and shuts the containers down when the tests finish.
 
-  - For all modules
+  > jpa-datetime producer and consumer don't have test cases
+
+  - **Using MySQL**
     ```
-    ./mvnw clean test
+    ./mvnw clean test -DargLine="-Dspring.profiles.active=mysql-test"
     ```
+
+  - **Using PostgreSQL**
+    ```
+    ./mvnw clean test -DargLine="-Dspring.profiles.active=postgres-test"
+    ```
+    > **Note:** jpa-locking test is failing. The problem is while calling `getAvailableLife` in `redeemStars` of `PlayerServiceImpl` class. It's always returning a `life` with id `1`. It's different when using `mysql-test` profile that returns different ids.
 
 ## TODO
 
-- How to run `./mvnw clean test` selecting the database, `MySQL` or `PostgreSQL`?
+- Fix `jpa-locking` tests when using PostgreSQL
