@@ -17,10 +17,10 @@ import java.util.Collections;
 public class ContainersExtension implements BeforeAllCallback, AfterAllCallback {
 
     @Container
-    private MySQLContainer mySQLContainer;
+    private MySQLContainer<?> mySQLContainer;
 
     @Container
-    private PostgreSQLContainer postgreSQLContainer;
+    private PostgreSQLContainer<?> postgreSQLContainer;
 
     private String activeProfile;
 
@@ -33,18 +33,12 @@ public class ContainersExtension implements BeforeAllCallback, AfterAllCallback 
         activeProfile = activeProfiles[0];
 
         if (activeProfile.equals("postgres-test")) {
-            postgreSQLContainer = new PostgreSQLContainer("postgres:12.3")
-                    .withDatabaseName("studiesdb-test")
-                    .withUsername("postgres-test")
-                    .withPassword("postgres-test");
+            postgreSQLContainer = new PostgreSQLContainer<>("postgres:12.3");
             postgreSQLContainer.setPortBindings(Collections.singletonList("54322:5432"));
             postgreSQLContainer.start();
         } else {
-            mySQLContainer = new MySQLContainer("mysql:8.0.20")
-                    .withDatabaseName("studiesdb-test")
-                    .withUsername("root-test")
-                    .withPassword("secret-test");
-            mySQLContainer.setPortBindings(Collections.singletonList("33066:3306"));
+            mySQLContainer = new MySQLContainer<>("mysql:8.0.20");
+            mySQLContainer.setPortBindings(Collections.singletonList("3307:3306"));
             mySQLContainer.start();
         }
     }

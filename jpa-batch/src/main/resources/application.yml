@@ -40,9 +40,9 @@ spring:
       hibernate:
         enable_lazy_load_no_trans: true
   datasource:
-    url: jdbc:mysql://localhost:33066/studiesdb-test?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
-    username: root-test
-    password: secret-test
+    url: jdbc:mysql://localhost:3307/test?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    username: test
+    password: test
 
 ---
 spring:
@@ -52,6 +52,6 @@ spring:
       hibernate:
         enable_lazy_load_no_trans: true
   datasource:
-    url: jdbc:postgresql://localhost:54322/studiesdb-test
-    username: postgres-test
-    password: postgres-test
+    url: jdbc:postgresql://localhost:54322/test
+    username: test
+    password: test
