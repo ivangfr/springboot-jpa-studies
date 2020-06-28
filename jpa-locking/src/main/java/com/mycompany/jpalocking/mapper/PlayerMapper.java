@@ -1,7 +1,6 @@
 package com.mycompany.jpalocking.mapper;
 
 import com.mycompany.jpalocking.model.Player;
-import com.mycompany.jpalocking.model.StarCollection;
 import com.mycompany.jpalocking.rest.dto.CreatePlayerDto;
 import com.mycompany.jpalocking.rest.dto.PlayerDto;
 import org.mapstruct.Mapper;

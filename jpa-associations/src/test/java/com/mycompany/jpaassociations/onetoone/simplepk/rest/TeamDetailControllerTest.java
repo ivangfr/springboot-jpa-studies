@@ -1,6 +1,6 @@
 package com.mycompany.jpaassociations.onetoone.simplepk.rest;
 
-import com.mycompany.jpaassociations.ContainersExtension;
+import com.mycompany.jpaassociations.AbstractTestcontainers;
 import com.mycompany.jpaassociations.onetoone.simplepk.model.Team;
 import com.mycompany.jpaassociations.onetoone.simplepk.model.TeamDetail;
 import com.mycompany.jpaassociations.onetoone.simplepk.repository.TeamRepository;
@@ -10,7 +10,6 @@ import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.TeamDto;
 import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.UpdateTeamDetailDto;
 import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.UpdateTeamDto;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -28,10 +27,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(ContainersExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-class TeamDetailControllerTest {
+class TeamDetailControllerTest extends AbstractTestcontainers {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
@@ -41,10 +39,9 @@ class TeamDetailControllerTest {
 
     @Test
     void testGetTeam() {
-        Team team = getDefaultTeam();
-        team = teamRepository.save(team);
+        Team team = teamRepository.save(getDefaultTeam());
 
-        String url = String.format("/api/teams/%s", team.getId());
+        String url = String.format(API_TEAMS_TEAM_ID_URL, team.getId());
         ResponseEntity<TeamDto> responseEntity = testRestTemplate.getForEntity(url, TeamDto.class);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -57,7 +54,7 @@ class TeamDetailControllerTest {
     @Test
     void testCreateTeam() {
         CreateTeamDto createTeamDto = getDefaultCreateTeamDto();
-        ResponseEntity<TeamDto> responseEntity = testRestTemplate.postForEntity("/api/teams", createTeamDto, TeamDto.class);
+        ResponseEntity<TeamDto> responseEntity = testRestTemplate.postForEntity(API_TEAMS_URL, createTeamDto, TeamDto.class);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
@@ -65,37 +62,34 @@ class TeamDetailControllerTest {
         assertEquals(createTeamDto.getName(), responseEntity.getBody().getName());
         assertNull(responseEntity.getBody().getTeamDetail());
 
-        Optional<Team> optionalTeam = teamRepository.findById(responseEntity.getBody().getId());
-        assertTrue(optionalTeam.isPresent());
-        assertEquals(createTeamDto.getName(), optionalTeam.get().getName());
+        Optional<Team> teamOptional = teamRepository.findById(responseEntity.getBody().getId());
+        assertTrue(teamOptional.isPresent());
+        teamOptional.ifPresent(t -> assertEquals(createTeamDto.getName(), t.getName()));
     }
 
     @Test
     void testUpdateTeam() {
-        Team team = getDefaultTeam();
-        team = teamRepository.save(team);
-
+        Team team = teamRepository.save(getDefaultTeam());
         UpdateTeamDto updateTeamDto = getDefaultUpdateTeamDto();
 
         HttpEntity<UpdateTeamDto> requestUpdate = new HttpEntity<>(updateTeamDto);
-        String url = String.format("/api/teams/%s", team.getId());
+        String url = String.format(API_TEAMS_TEAM_ID_URL, team.getId());
         ResponseEntity<TeamDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.PUT, requestUpdate, TeamDto.class);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
         assertEquals(updateTeamDto.getName(), responseEntity.getBody().getName());
 
-        Optional<Team> optionalTeam = teamRepository.findById(team.getId());
-        assertTrue(optionalTeam.isPresent());
-        assertEquals(updateTeamDto.getName(), optionalTeam.get().getName());
+        Optional<Team> teamOptional = teamRepository.findById(team.getId());
+        assertTrue(teamOptional.isPresent());
+        teamOptional.ifPresent(t -> assertEquals(updateTeamDto.getName(), t.getName()));
     }
 
     @Test
     void testDeleteTeam() {
-        Team team = getDefaultTeam();
-        team = teamRepository.save(team);
+        Team team = teamRepository.save(getDefaultTeam());
 
-        String url = String.format("/api/teams/%s", team.getId());
+        String url = String.format(API_TEAMS_TEAM_ID_URL, team.getId());
         ResponseEntity<TeamDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, TeamDto.class);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -104,18 +98,16 @@ class TeamDetailControllerTest {
         assertEquals(team.getName(), responseEntity.getBody().getName());
         assertNull(responseEntity.getBody().getTeamDetail());
 
-        Optional<Team> optionalTeam = teamRepository.findById(team.getId());
-        assertFalse(optionalTeam.isPresent());
+        Optional<Team> teamOptional = teamRepository.findById(team.getId());
+        assertFalse(teamOptional.isPresent());
     }
 
     @Test
     void testAddTeamDetail() {
-        Team team = getDefaultTeam();
-        team = teamRepository.save(team);
-
+        Team team = teamRepository.save(getDefaultTeam());
         CreateTeamDetailDto createTeamDetailDto = getDefaultCreateTeamDetailDto();
 
-        String url = String.format("/api/teams/%s/team-details", team.getId());
+        String url = String.format(API_TEAMS_TEAM_ID_TEAMS_DETAILS_URL, team.getId());
         ResponseEntity<TeamDto> responseEntity = testRestTemplate.postForEntity(url, createTeamDetailDto, TeamDto.class);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
@@ -123,23 +115,24 @@ class TeamDetailControllerTest {
         assertNotNull(responseEntity.getBody().getTeamDetail());
         assertEquals(createTeamDetailDto.getDescription(), responseEntity.getBody().getTeamDetail().getDescription());
 
-        Optional<Team> optionalTeam = teamRepository.findById(team.getId());
-        assertTrue(optionalTeam.isPresent());
-        assertNotNull(optionalTeam.get().getTeamDetail());
-        assertEquals(createTeamDetailDto.getDescription(), optionalTeam.get().getTeamDetail().getDescription());
+        Optional<Team> teamOptional = teamRepository.findById(team.getId());
+        assertTrue(teamOptional.isPresent());
+        teamOptional.ifPresent(t -> {
+            assertNotNull(t.getTeamDetail());
+            assertEquals(createTeamDetailDto.getDescription(), t.getTeamDetail().getDescription());
+        });
     }
 
     @Test
     void testUpdateTeamDetail() {
         Team team = getDefaultTeam();
-        TeamDetail teamDetail = getDefaultTeamDetail();
-        team.addTeamDetail(teamDetail);
+        team.addTeamDetail(getDefaultTeamDetail());
         team = teamRepository.save(team);
 
         UpdateTeamDetailDto updateTeamDetailDto = getDefaultUpdateTeamDetailDto();
 
         HttpEntity<UpdateTeamDetailDto> requestUpdate = new HttpEntity<>(updateTeamDetailDto);
-        String url = String.format("/api/teams/%s/team-details", team.getId());
+        String url = String.format(API_TEAMS_TEAM_ID_TEAMS_DETAILS_URL, team.getId());
         ResponseEntity<TeamDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.PUT, requestUpdate, TeamDto.class);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -147,29 +140,30 @@ class TeamDetailControllerTest {
         assertNotNull(responseEntity.getBody().getTeamDetail());
         assertEquals(updateTeamDetailDto.getDescription(), responseEntity.getBody().getTeamDetail().getDescription());
 
-        Optional<Team> optionalTeam = teamRepository.findById(team.getId());
-        assertTrue(optionalTeam.isPresent());
-        assertNotNull(optionalTeam.get().getTeamDetail());
-        assertEquals(updateTeamDetailDto.getDescription(), optionalTeam.get().getTeamDetail().getDescription());
+        Optional<Team> teamOptional = teamRepository.findById(team.getId());
+        assertTrue(teamOptional.isPresent());
+        teamOptional.ifPresent(t -> {
+            assertNotNull(t.getTeamDetail());
+            assertEquals(updateTeamDetailDto.getDescription(), t.getTeamDetail().getDescription());
+        });
     }
 
     @Test
     void testDeleteTeamDetail() {
         Team team = getDefaultTeam();
-        TeamDetail teamDetail = getDefaultTeamDetail();
-        team.addTeamDetail(teamDetail);
+        team.addTeamDetail(getDefaultTeamDetail());
         team = teamRepository.save(team);
 
-        String url = String.format("/api/teams/%s/team-details", team.getId());
+        String url = String.format(API_TEAMS_TEAM_ID_TEAMS_DETAILS_URL, team.getId());
         ResponseEntity<TeamDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, TeamDto.class);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
         assertNull(responseEntity.getBody().getTeamDetail());
 
-        Optional<Team> optionalTeam = teamRepository.findById(team.getId());
-        assertTrue(optionalTeam.isPresent());
-        assertNull(optionalTeam.get().getTeamDetail());
+        Optional<Team> teamOptional = teamRepository.findById(team.getId());
+        assertTrue(teamOptional.isPresent());
+        teamOptional.ifPresent(t -> assertNull(t.getTeamDetail()));
     }
 
     private Team getDefaultTeam() {
@@ -207,5 +201,9 @@ class TeamDetailControllerTest {
         updateTeamDetailDto.setDescription("This team is excellent");
         return updateTeamDetailDto;
     }
+
+    private static final String API_TEAMS_URL = "/api/teams";
+    private static final String API_TEAMS_TEAM_ID_URL = "/api/teams/%s";
+    private static final String API_TEAMS_TEAM_ID_TEAMS_DETAILS_URL = "/api/teams/%s/team-details";
 
 }

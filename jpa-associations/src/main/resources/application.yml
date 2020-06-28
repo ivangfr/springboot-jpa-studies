@@ -15,7 +15,7 @@ spring:
 spring:
   profiles: mysql
   datasource:
-    url: jdbc:mysql://localhost:3306/studiesdb?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/studiesdb?characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: secret
 
@@ -35,9 +35,9 @@ spring:
       hibernate:
         enable_lazy_load_no_trans: true
   datasource:
-    url: jdbc:mysql://localhost:3307/test?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
-    username: test
-    password: test
+    url:      # \
+    username: #  ) they will be set dynamically by AbstractTestcontainers
+    password: # /
 
 ---
 spring:
@@ -47,6 +47,6 @@ spring:
       hibernate:
         enable_lazy_load_no_trans: true
   datasource:
-    url: jdbc:postgresql://localhost:54322/test
-    username: test
-    password: test
+    url:      # \
+    username: #  ) they will be set dynamically by AbstractTestcontainers
+    password: # /

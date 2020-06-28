@@ -1,6 +1,6 @@
 package com.mycompany.jpalocking.rest;
 
-import com.mycompany.jpalocking.ContainersExtension;
+import com.mycompany.jpalocking.AbstractTestcontainers;
 import com.mycompany.jpalocking.rest.dto.CreatePlayerDto;
 import com.mycompany.jpalocking.rest.dto.GameDto;
 import com.mycompany.jpalocking.rest.dto.GameSetupDto;
@@ -8,7 +8,6 @@ import com.mycompany.jpalocking.rest.dto.PlayerDto;
 import com.mycompany.jpalocking.rest.dto.StarCollectionDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -18,10 +17,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
-@ExtendWith(ContainersExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-class PlayerControllerTest {
+class PlayerControllerTest extends AbstractTestcontainers {
 
     @Autowired
     private TestRestTemplate testRestTemplate;

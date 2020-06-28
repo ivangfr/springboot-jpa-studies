@@ -1,6 +1,6 @@
 package com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest;
 
-import com.mycompany.jpaassociations.ContainersExtension;
+import com.mycompany.jpaassociations.AbstractTestcontainers;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.model.Course;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.model.CourseStudent;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.model.CourseStudentPk;
@@ -17,7 +17,6 @@ import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseStudentDto;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateStudentDto;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -35,10 +34,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(ContainersExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-class StudentCourseControllerTest {
+class StudentCourseControllerTest extends AbstractTestcontainers {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
@@ -54,10 +52,9 @@ class StudentCourseControllerTest {
 
     @Test
     void testGetStudent() {
-        Student student = getDefaultStudent();
-        student = studentRepository.save(student);
+        Student student = studentRepository.save(getDefaultStudent());
 
-        String url = String.format("/api/students/%s", student.getId());
+        String url = String.format(API_STUDENTS_STUDENT_ID_URL, student.getId());
         ResponseEntity<StudentDto> responseEntity = testRestTemplate.getForEntity(url, StudentDto.class);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -70,7 +67,7 @@ class StudentCourseControllerTest {
     @Test
     void testCreateStudent() {
         CreateStudentDto createStudentDto = getDefaultCreateStudentDto();
-        ResponseEntity<StudentDto> responseEntity = testRestTemplate.postForEntity("/api/students", createStudentDto, StudentDto.class);
+        ResponseEntity<StudentDto> responseEntity = testRestTemplate.postForEntity(API_STUDENTS_URL, createStudentDto, StudentDto.class);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
@@ -78,37 +75,34 @@ class StudentCourseControllerTest {
         assertEquals(createStudentDto.getName(), responseEntity.getBody().getName());
         assertEquals(0, responseEntity.getBody().getCourses().size());
 
-        Optional<Student> optionalStudent = studentRepository.findById(responseEntity.getBody().getId());
-        assertTrue(optionalStudent.isPresent());
-        assertEquals(createStudentDto.getName(), optionalStudent.get().getName());
+        Optional<Student> studentOptional = studentRepository.findById(responseEntity.getBody().getId());
+        assertTrue(studentOptional.isPresent());
+        studentOptional.ifPresent(s -> assertEquals(createStudentDto.getName(), s.getName()));
     }
 
     @Test
     void testUpdateStudent() {
-        Student student = getDefaultStudent();
-        student = studentRepository.save(student);
-
+        Student student = studentRepository.save(getDefaultStudent());
         UpdateStudentDto updateStudentDto = getDefaultUpdateStudentDto();
 
         HttpEntity<UpdateStudentDto> requestUpdate = new HttpEntity<>(updateStudentDto);
-        String url = String.format("/api/students/%s", student.getId());
+        String url = String.format(API_STUDENTS_STUDENT_ID_URL, student.getId());
         ResponseEntity<StudentDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.PUT, requestUpdate, StudentDto.class);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
         assertEquals(updateStudentDto.getName(), responseEntity.getBody().getName());
 
-        Optional<Student> optionalStudent = studentRepository.findById(student.getId());
-        assertTrue(optionalStudent.isPresent());
-        assertEquals(updateStudentDto.getName(), optionalStudent.get().getName());
+        Optional<Student> studentOptional = studentRepository.findById(student.getId());
+        assertTrue(studentOptional.isPresent());
+        studentOptional.ifPresent(s -> assertEquals(updateStudentDto.getName(), s.getName()));
     }
 
     @Test
     void testDeleteStudent() {
-        Student student = getDefaultStudent();
-        student = studentRepository.save(student);
+        Student student = studentRepository.save(getDefaultStudent());
 
-        String url = String.format("/api/students/%s", student.getId());
+        String url = String.format(API_STUDENTS_STUDENT_ID_URL, student.getId());
         ResponseEntity<StudentDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, StudentDto.class);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -117,16 +111,15 @@ class StudentCourseControllerTest {
         assertEquals(student.getName(), responseEntity.getBody().getName());
         assertEquals(0, responseEntity.getBody().getCourses().size());
 
-        Optional<Student> optionalStudent = studentRepository.findById(student.getId());
-        assertFalse(optionalStudent.isPresent());
+        Optional<Student> studentOptional = studentRepository.findById(student.getId());
+        assertFalse(studentOptional.isPresent());
     }
 
     @Test
     void testGetCourse() {
-        Course course = getDefaultCourse();
-        course = courseRepository.save(course);
+        Course course = courseRepository.save(getDefaultCourse());
 
-        String url = String.format("/api/courses/%s", course.getId());
+        String url = String.format(API_COURSES_COURSE_ID_URL, course.getId());
         ResponseEntity<CourseDto> responseEntity = testRestTemplate.getForEntity(url, CourseDto.class);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -139,7 +132,7 @@ class StudentCourseControllerTest {
     @Test
     void testCreateCourse() {
         CreateCourseDto createCourseDto = getDefaultCreateCourseDto();
-        ResponseEntity<CourseDto> responseEntity = testRestTemplate.postForEntity("/api/courses", createCourseDto, CourseDto.class);
+        ResponseEntity<CourseDto> responseEntity = testRestTemplate.postForEntity(API_COURSES_URL, createCourseDto, CourseDto.class);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
@@ -147,37 +140,34 @@ class StudentCourseControllerTest {
         assertEquals(createCourseDto.getName(), responseEntity.getBody().getName());
         assertEquals(0, responseEntity.getBody().getStudents().size());
 
-        Optional<Course> optionalCourse = courseRepository.findById(responseEntity.getBody().getId());
-        assertTrue(optionalCourse.isPresent());
-        assertEquals(createCourseDto.getName(), optionalCourse.get().getName());
+        Optional<Course> courseOptional = courseRepository.findById(responseEntity.getBody().getId());
+        assertTrue(courseOptional.isPresent());
+        courseOptional.ifPresent(c -> assertEquals(createCourseDto.getName(), c.getName()));
     }
 
     @Test
     void testUpdateCourse() {
-        Course course = getDefaultCourse();
-        course = courseRepository.save(course);
-
+        Course course = courseRepository.save(getDefaultCourse());
         UpdateCourseDto updateCourseDto = getDefaultUpdateCourseDto();
 
         HttpEntity<UpdateCourseDto> requestUpdate = new HttpEntity<>(updateCourseDto);
-        String url = String.format("/api/courses/%s", course.getId());
+        String url = String.format(API_COURSES_COURSE_ID_URL, course.getId());
         ResponseEntity<CourseDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.PUT, requestUpdate, CourseDto.class);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
         assertEquals(updateCourseDto.getName(), responseEntity.getBody().getName());
 
-        Optional<Course> optionalCourse = courseRepository.findById(course.getId());
-        assertTrue(optionalCourse.isPresent());
-        assertEquals(updateCourseDto.getName(), optionalCourse.get().getName());
+        Optional<Course> courseOptional = courseRepository.findById(course.getId());
+        assertTrue(courseOptional.isPresent());
+        courseOptional.ifPresent(c -> assertEquals(updateCourseDto.getName(), c.getName()));
     }
 
     @Test
     void testDeleteCourse() {
-        Course course = getDefaultCourse();
-        course = courseRepository.save(course);
+        Course course = courseRepository.save(getDefaultCourse());
 
-        String url = String.format("/api/courses/%s", course.getId());
+        String url = String.format(API_COURSES_COURSE_ID_URL, course.getId());
         ResponseEntity<CourseDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, CourseDto.class);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -186,19 +176,16 @@ class StudentCourseControllerTest {
         assertEquals(course.getName(), responseEntity.getBody().getName());
         assertEquals(0, responseEntity.getBody().getStudents().size());
 
-        Optional<Course> optionalCourse = courseRepository.findById(course.getId());
-        assertFalse(optionalCourse.isPresent());
+        Optional<Course> courseOptional = courseRepository.findById(course.getId());
+        assertFalse(courseOptional.isPresent());
     }
 
     @Test
     void testEnrollStudentInCourse() {
-        Course course = getDefaultCourse();
-        course = courseRepository.save(course);
+        Course course = courseRepository.save(getDefaultCourse());
+        Student student = studentRepository.save(getDefaultStudent());
 
-        Student student = getDefaultStudent();
-        student = studentRepository.save(student);
-
-        String url = String.format("/api/courses/%s/students/%s", course.getId(), student.getId());
+        String url = String.format(API_COURSES_COURSE_ID_STUDENTS_STUDENT_ID_URL, course.getId(), student.getId());
         ResponseEntity<CourseStudentDto> responseEntity = testRestTemplate.postForEntity(url, null, CourseStudentDto.class);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
@@ -210,36 +197,35 @@ class StudentCourseControllerTest {
         assertNotNull(responseEntity.getBody().getRegistrationDate());
         assertNull(responseEntity.getBody().getGrade());
 
-        Optional<Course> optionalCourse = courseRepository.findById(course.getId());
-        assertTrue(optionalCourse.isPresent());
-        assertEquals(1, optionalCourse.get().getStudents().size());
+        Optional<Course> courseOptional = courseRepository.findById(course.getId());
+        assertTrue(courseOptional.isPresent());
+        courseOptional.ifPresent(c -> assertEquals(1, c.getStudents().size()));
 
-        Optional<Student> optionalStudent = studentRepository.findById(student.getId());
-        assertTrue(optionalStudent.isPresent());
-        assertEquals(1, optionalStudent.get().getCourses().size());
+        Optional<Student> studentOptional = studentRepository.findById(student.getId());
+        assertTrue(studentOptional.isPresent());
+        studentOptional.ifPresent(s -> assertEquals(1, s.getCourses().size()));
 
         CourseStudentPk courseStudentPk = new CourseStudentPk(course.getId(), student.getId());
-        Optional<CourseStudent> optionalCourseStudent = courseStudentRepository.findById(courseStudentPk);
-        assertTrue(optionalCourseStudent.isPresent());
-        assertEquals(student, optionalCourseStudent.get().getStudent());
-        assertEquals(course, optionalCourseStudent.get().getCourse());
-        assertNotNull(optionalCourseStudent.get().getRegistrationDate());
+        Optional<CourseStudent> courseStudentOptional = courseStudentRepository.findById(courseStudentPk);
+        assertTrue(courseStudentOptional.isPresent());
+        courseStudentOptional.ifPresent(cs -> {
+            assertEquals(student, cs.getStudent());
+            assertEquals(course, cs.getCourse());
+            assertNotNull(cs.getRegistrationDate());
+        });
     }
 
     @Test
     void testUnregisterStudentOfCourse() {
-        Course course = getDefaultCourse();
-        course = courseRepository.save(course);
-
-        Student student = getDefaultStudent();
-        student = studentRepository.save(student);
+        Course course = courseRepository.save(getDefaultCourse());
+        Student student = studentRepository.save(getDefaultStudent());
 
         CourseStudent courseStudent = new CourseStudent();
         courseStudent.setCourse(course);
         courseStudent.setStudent(student);
         courseStudentRepository.save(courseStudent);
 
-        String url = String.format("/api/courses/%s/students/%s", course.getId(), student.getId());
+        String url = String.format(API_COURSES_COURSE_ID_STUDENTS_STUDENT_ID_URL, course.getId(), student.getId());
         ResponseEntity<CourseStudentDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, CourseStudentDto.class);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -250,26 +236,23 @@ class StudentCourseControllerTest {
         assertEquals(student.getName(), responseEntity.getBody().getStudent().getName());
         assertNotNull(responseEntity.getBody().getRegistrationDate());
 
-        Optional<Course> optionalCourse = courseRepository.findById(course.getId());
-        assertTrue(optionalCourse.isPresent());
-        assertEquals(0, optionalCourse.get().getStudents().size());
+        Optional<Course> courseOptional = courseRepository.findById(course.getId());
+        assertTrue(courseOptional.isPresent());
+        courseOptional.ifPresent(c -> assertEquals(0, c.getStudents().size()));
 
-        Optional<Student> optionalStudent = studentRepository.findById(student.getId());
-        assertTrue(optionalStudent.isPresent());
-        assertEquals(0, optionalStudent.get().getCourses().size());
+        Optional<Student> studentOptional = studentRepository.findById(student.getId());
+        assertTrue(studentOptional.isPresent());
+        studentOptional.ifPresent(s -> assertEquals(0, s.getCourses().size()));
 
         CourseStudentPk courseStudentPk = new CourseStudentPk(course.getId(), student.getId());
-        Optional<CourseStudent> optionalCourseStudent = courseStudentRepository.findById(courseStudentPk);
-        assertFalse(optionalCourseStudent.isPresent());
+        Optional<CourseStudent> courseStudentOptional = courseStudentRepository.findById(courseStudentPk);
+        assertFalse(courseStudentOptional.isPresent());
     }
 
     @Test
     void testUpdateStudentDataInCourse() {
-        Course course = getDefaultCourse();
-        course = courseRepository.save(course);
-
-        Student student = getDefaultStudent();
-        student = studentRepository.save(student);
+        Course course = courseRepository.save(getDefaultCourse());
+        Student student = studentRepository.save(getDefaultStudent());
 
         CourseStudent courseStudent = new CourseStudent();
         courseStudent.setCourse(course);
@@ -279,7 +262,7 @@ class StudentCourseControllerTest {
         UpdateCourseStudentDto updateCourseStudentDto = getDefaultUpdateCourseStudentDto();
 
         HttpEntity<UpdateCourseStudentDto> requestUpdate = new HttpEntity<>(updateCourseStudentDto);
-        String url = String.format("/api/courses/%s/students/%s", course.getId(), student.getId());
+        String url = String.format(API_COURSES_COURSE_ID_STUDENTS_STUDENT_ID_URL, course.getId(), student.getId());
         ResponseEntity<CourseStudentDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.PUT, requestUpdate, CourseStudentDto.class);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -292,12 +275,14 @@ class StudentCourseControllerTest {
         assertEquals(updateCourseStudentDto.getGrade(), responseEntity.getBody().getGrade());
 
         CourseStudentPk courseStudentPk = new CourseStudentPk(course.getId(), student.getId());
-        Optional<CourseStudent> optionalCourseStudent = courseStudentRepository.findById(courseStudentPk);
-        assertTrue(optionalCourseStudent.isPresent());
-        assertEquals(student, optionalCourseStudent.get().getStudent());
-        assertEquals(course, optionalCourseStudent.get().getCourse());
-        assertNotNull(optionalCourseStudent.get().getRegistrationDate());
-        assertEquals(updateCourseStudentDto.getGrade(), optionalCourseStudent.get().getGrade());
+        Optional<CourseStudent> courseStudentOptional = courseStudentRepository.findById(courseStudentPk);
+        assertTrue(courseStudentOptional.isPresent());
+        courseStudentOptional.ifPresent(cs -> {
+            assertEquals(student, cs.getStudent());
+            assertEquals(course, cs.getCourse());
+            assertNotNull(cs.getRegistrationDate());
+            assertEquals(updateCourseStudentDto.getGrade(), cs.getGrade());
+        });
     }
 
     private Student getDefaultStudent() {
@@ -341,5 +326,11 @@ class StudentCourseControllerTest {
         updateCourseStudentDto.setGrade((short) 8);
         return updateCourseStudentDto;
     }
+
+    private static final String API_STUDENTS_URL = "/api/students";
+    private static final String API_STUDENTS_STUDENT_ID_URL = "/api/students/%s";
+    private static final String API_COURSES_URL = "/api/courses";
+    private static final String API_COURSES_COURSE_ID_URL = "/api/courses/%s";
+    private static final String API_COURSES_COURSE_ID_STUDENTS_STUDENT_ID_URL = "/api/courses/%s/students/%s";
 
 }
