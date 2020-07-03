@@ -274,14 +274,14 @@ The goal of this module is to study the three associations that JPA and Hibernat
 
 ## References
 
-- **JPA One to One**
+- JPA One to One
   - https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate
   - https://www.callicoder.com/hibernate-spring-boot-jpa-one-to-one-mapping-example/
 
-- **JPA One to Many**
+- JPA One to Many
   - https://vladmihalcea.com/the-best-way-to-map-a-onetomany-association-with-jpa-and-hibernate
   - https://www.callicoder.com/hibernate-spring-boot-jpa-one-to-many-mapping-example/
 
-- **JPA Many to Many**
+- JPA Many to Many
   - https://vladmihalcea.com/the-best-way-to-use-the-manytomany-annotation-with-jpa-and-hibernate
   - https://www.callicoder.com/hibernate-spring-boot-jpa-many-to-many-mapping-example/
