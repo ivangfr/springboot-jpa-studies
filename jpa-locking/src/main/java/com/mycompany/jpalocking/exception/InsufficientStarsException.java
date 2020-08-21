@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.CONFLICT)
 public class InsufficientStarsException extends RuntimeException {
 
-    public InsufficientStarsException(String message) {
-        super(message);
+    public InsufficientStarsException(Long playerId) {
+        super(String.format("Player %s has insufficient stars to redeem", playerId));
     }
 }

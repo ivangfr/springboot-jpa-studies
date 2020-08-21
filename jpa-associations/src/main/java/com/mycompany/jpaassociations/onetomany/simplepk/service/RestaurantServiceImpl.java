@@ -14,7 +14,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public Restaurant validateAndGetRestaurant(Long id) {
-        return restaurantRepository.findById(id).orElseThrow(() -> new RestaurantNotFoundException(String.format("Restaurant with id '%s' not found", id)));
+        return restaurantRepository.findById(id).orElseThrow(() -> new RestaurantNotFoundException(id));
     }
 
     @Override

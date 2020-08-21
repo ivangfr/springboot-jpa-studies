@@ -16,7 +16,7 @@ public class WeaponServiceImpl implements WeaponService {
     @Override
     public Weapon validateAndGetWeapon(Long playerId, Long weaponId) {
         WeaponPk weaponPk = new WeaponPk(weaponId, playerId);
-        return weaponRepository.findById(weaponPk).orElseThrow(() -> new WeaponNotFoundException(String.format("Weapon with id '%s' not found", weaponPk)));
+        return weaponRepository.findById(weaponPk).orElseThrow(() -> new WeaponNotFoundException(weaponPk));
     }
 
     @Override

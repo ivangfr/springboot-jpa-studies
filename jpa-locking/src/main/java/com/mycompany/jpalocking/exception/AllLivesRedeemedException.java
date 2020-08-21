@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.CONFLICT)
 public class AllLivesRedeemedException extends RuntimeException {
 
-    public AllLivesRedeemedException(String message) {
-        super(message);
+    public AllLivesRedeemedException() {
+        super("There are no lives to be redeemed.");
     }
 }

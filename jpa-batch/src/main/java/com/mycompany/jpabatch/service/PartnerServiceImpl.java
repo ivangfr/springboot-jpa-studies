@@ -20,8 +20,7 @@ public class PartnerServiceImpl implements PartnerService {
 
     @Override
     public Partner validateAndGetPartner(Long id) {
-        return partnerRepository.findById(id)
-                .orElseThrow(() -> new PartnerNotFoundException(String.format("Partner with id '%s' not found", id)));
+        return partnerRepository.findById(id).orElseThrow(() -> new PartnerNotFoundException(id));
     }
 
     @Transactional

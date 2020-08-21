@@ -31,8 +31,7 @@ public class LifeServiceImpl implements LifeService {
 
     @Override
     public Life getAvailableLife() {
-        return lifeRepository.findFirstByPlayerIdIsNull()
-                .orElseThrow(() -> new AllLivesRedeemedException("There are no lives to be redeemed."));
+        return lifeRepository.findFirstByPlayerIdIsNull().orElseThrow(AllLivesRedeemedException::new);
     }
 
 }

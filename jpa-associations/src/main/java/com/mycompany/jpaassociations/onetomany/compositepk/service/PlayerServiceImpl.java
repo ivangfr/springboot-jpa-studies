@@ -14,7 +14,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player validateAndGetPlayer(Long id) {
-        return playerRepository.findById(id).orElseThrow(() -> new PlayerNotFoundException(String.format("Player with id '%s' not found", id)));
+        return playerRepository.findById(id).orElseThrow(() -> new PlayerNotFoundException(id));
     }
 
     @Override

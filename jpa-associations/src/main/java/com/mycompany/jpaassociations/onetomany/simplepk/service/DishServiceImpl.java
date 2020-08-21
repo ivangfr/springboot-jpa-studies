@@ -15,7 +15,7 @@ public class DishServiceImpl implements DishService {
     @Override
     public Dish validateAndGetDish(Long dishId, Long restaurantId) {
         return dishRepository.findByIdAndRestaurantId(dishId, restaurantId)
-                .orElseThrow(() -> new DishNotFoundException(String.format("Restaurant with id '%s' doesn't have dish with id '%s'", restaurantId, dishId)));
+                .orElseThrow(() -> new DishNotFoundException(dishId, restaurantId));
     }
 
     @Override

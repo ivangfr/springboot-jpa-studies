@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.CONFLICT)
 public class RedeemRaceConditionException extends RuntimeException {
 
-    public RedeemRaceConditionException(String message, Throwable cause) {
-        super(message, cause);
+    public RedeemRaceConditionException(Long id, Throwable cause) {
+        super(String.format("Two or more threads of player %s tried to redeem stars at the same time", id), cause);
     }
 }

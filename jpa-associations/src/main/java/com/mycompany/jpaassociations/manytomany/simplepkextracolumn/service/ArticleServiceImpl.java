@@ -14,7 +14,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article validateAndGetArticle(Long id) {
-        return articleRepository.findById(id).orElseThrow(() -> new ArticleNotFoundException(String.format("Article with id '%s' not found", id)));
+        return articleRepository.findById(id).orElseThrow(() -> new ArticleNotFoundException(id));
     }
 
     @Override

@@ -60,8 +60,7 @@ public class PlayerController {
 
         } catch (ObjectOptimisticLockingFailureException e) {
             log.error("An problem occurred while player {} redeems life. Error class: {}, error message: {}", id, e.getClass().getName(), e.getMessage());
-            throw new RedeemRaceConditionException(
-                    String.format("Two or more threads of player %s tried to redeem stars at the same time", id), e);
+            throw new RedeemRaceConditionException(id, e);
         }
     }
 

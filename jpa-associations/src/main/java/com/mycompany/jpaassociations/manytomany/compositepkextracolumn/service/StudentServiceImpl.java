@@ -14,7 +14,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student validateAndGetStudent(Long id) {
-        return studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(String.format("Student with id '%s' not found", id)));
+        return studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
     }
 
     @Override

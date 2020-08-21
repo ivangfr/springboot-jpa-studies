@@ -14,8 +14,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person validateAndGetPerson(Long id) {
-        return personRepository.findById(id)
-                .orElseThrow(() -> new PersonNotFoundException(String.format("Person with id '%s' not found", id)));
+        return personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
     }
 
     @Override

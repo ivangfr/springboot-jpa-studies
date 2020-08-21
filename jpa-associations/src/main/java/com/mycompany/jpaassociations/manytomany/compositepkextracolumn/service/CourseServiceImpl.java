@@ -14,7 +14,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course validateAndGetCourse(Long id) {
-        return courseRepository.findById(id).orElseThrow(() -> new CourseNotFoundException(String.format("Course with id '%s' not found", id)));
+        return courseRepository.findById(id).orElseThrow(() -> new CourseNotFoundException(id));
     }
 
     @Override

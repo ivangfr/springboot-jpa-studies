@@ -14,7 +14,7 @@ public class ReviewerServiceImpl implements ReviewerService {
 
     @Override
     public Reviewer validateAndGetReviewer(Long id) {
-        return reviewerRepository.findById(id).orElseThrow(() -> new ReviewerNotFoundException(String.format("Reviewer with id '%s' not found", id)));
+        return reviewerRepository.findById(id).orElseThrow(() -> new ReviewerNotFoundException(id));
     }
 
     @Override

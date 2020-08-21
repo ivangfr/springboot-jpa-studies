@@ -14,7 +14,7 @@ public class WriterServiceImpl implements WriterService {
 
     @Override
     public Writer validateAndGetWriter(Long id) {
-        return writerRepository.findById(id).orElseThrow(() -> new WriterNotFoundException(String.format("Writer with id '%s' not found", id)));
+        return writerRepository.findById(id).orElseThrow(() -> new WriterNotFoundException(id));
     }
 
     @Override

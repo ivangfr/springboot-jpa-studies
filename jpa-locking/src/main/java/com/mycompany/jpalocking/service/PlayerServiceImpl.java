@@ -26,8 +26,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player validateAndGetPlayer(Long id) {
-        return playerRepository.findById(id)
-                .orElseThrow(() -> new PlayerNotFoundException(String.format("Player with id %s not found.", id)));
+        return playerRepository.findById(id).orElseThrow(() -> new PlayerNotFoundException(id));
     }
 
     @Override
@@ -52,7 +51,7 @@ public class PlayerServiceImpl implements PlayerService {
         List<StarCollection> starCollections = starCollectionService.getAvailableStarCollections(player);
         int numStars = starCollections.stream().mapToInt(StarCollection::getNumAvailable).sum();
         if (numStars - NUM_STARS_REDEEM_LIFE < 0) {
-            throw new InsufficientStarsException(String.format("Player %s has insufficient stars to redeem", player.getId()));
+            throw new InsufficientStarsException(player.getId());
         }
 
         Life life = lifeService.getAvailableLife();

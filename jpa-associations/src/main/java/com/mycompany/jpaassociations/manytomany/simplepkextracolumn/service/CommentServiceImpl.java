@@ -14,7 +14,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment validateAndGetComment(Long id) {
-        return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException(String.format("Comment with id '%s' not found", id)));
+        return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException(id));
     }
 
     @Override
