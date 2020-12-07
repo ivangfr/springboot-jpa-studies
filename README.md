@@ -22,7 +22,7 @@ The goal of this project is to study `JPA Associations` (one-to-one, one-to-many
   docker-compose up -d
   ```
 
-- Wait a little bit until all containers are Up (healthy). You can check their status running
+- Wait until all containers are Up (healthy). You can check their status running
   ```
   docker-compose ps
   ```

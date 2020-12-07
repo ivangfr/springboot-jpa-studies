@@ -18,7 +18,8 @@ spring:
 
 ---
 spring:
-  profiles: mysql
+  config:
+    activate.on-profile: mysql
   datasource:
     url: jdbc:mysql://localhost:3306/studiesdb?characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
     username: root
@@ -26,7 +27,8 @@ spring:
 
 ---
 spring:
-  profiles: postgres
+  config:
+    activate.on-profile: postgres
   datasource:
     url: jdbc:postgresql://localhost:5432/studiesdb
     username: postgres
@@ -34,7 +36,8 @@ spring:
 
 ---
 spring:
-  profiles: mysql-test
+  config:
+    activate.on-profile: mysql-test
   jpa:
     properties:
       hibernate:
@@ -46,7 +49,8 @@ spring:
 
 ---
 spring:
-  profiles: postgres-test
+  config:
+    activate.on-profile: postgres-test
   jpa:
     properties:
       hibernate:
