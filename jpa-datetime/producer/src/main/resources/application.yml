@@ -7,9 +7,6 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/studiesdb?characterEncoding=UTF-8&serverTimezone=${app.server-timezone}
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/studiesdb?characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: secret
-
-app:
-  server-timezone: UTC

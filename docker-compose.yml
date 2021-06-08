@@ -4,7 +4,7 @@ services:
 
   mysql:
     container_name: mysql
-    image: mysql:8.0.22
+    image: mysql:8.0.25
     restart: unless-stopped
     ports:
       - "3306:3306"
@@ -17,7 +17,7 @@ services:
 
   postgres:
     container_name: postgres
-    image: postgres:13.2
+    image: postgres:13.3
     restart: unless-stopped
     ports:
       - "5432:5432"
