@@ -10,3 +10,7 @@ spring:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/studiesdb?characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: secret
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true

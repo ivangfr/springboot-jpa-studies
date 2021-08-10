@@ -7,6 +7,10 @@ spring:
     hibernate:
       ddl-auto: update
 
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+
 #logging:
 #  level:
 #    org.hibernate:

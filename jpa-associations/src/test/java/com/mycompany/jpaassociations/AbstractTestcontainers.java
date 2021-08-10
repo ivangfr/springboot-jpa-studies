@@ -14,7 +14,7 @@ public abstract class AbstractTestcontainers {
 
     private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:13.3");
 
-    private static final MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:8.0.25")
+    private static final MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:8.0.26")
             .withUrlParam("characterEncoding", "UTF-8")
             .withUrlParam("serverTimezone", "UTC");
 

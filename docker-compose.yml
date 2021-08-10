@@ -3,8 +3,8 @@ version: "3.8"
 services:
 
   mysql:
+    image: mysql:8.0.26
     container_name: mysql
-    image: mysql:8.0.25
     restart: unless-stopped
     ports:
       - "3306:3306"
@@ -16,8 +16,8 @@ services:
       start_period: 10s
 
   postgres:
-    container_name: postgres
     image: postgres:13.3
+    container_name: postgres
     restart: unless-stopped
     ports:
       - "5432:5432"
