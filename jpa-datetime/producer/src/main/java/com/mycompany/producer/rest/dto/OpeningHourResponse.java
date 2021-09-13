@@ -3,15 +3,12 @@ package com.mycompany.producer.rest.dto;
 import com.mycompany.producer.model.OpeningHourJavaSql;
 import com.mycompany.producer.model.OpeningHourJavaTimeLocal;
 import com.mycompany.producer.model.OpeningHourJavaTimeZone;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Value;
 
-@Data
-@AllArgsConstructor
+@Value
 public class OpeningHourResponse {
 
-    private OpeningHourJavaSql openingHourJavaSql;
-    private OpeningHourJavaTimeLocal openingHourJavaTimeLocal;
-    private OpeningHourJavaTimeZone openingHourJavaTimeZone;
-
+    OpeningHourJavaSql openingHourJavaSql;
+    OpeningHourJavaTimeLocal openingHourJavaTimeLocal;
+    OpeningHourJavaTimeZone openingHourJavaTimeZone;
 }

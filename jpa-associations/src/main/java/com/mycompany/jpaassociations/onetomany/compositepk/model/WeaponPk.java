@@ -6,12 +6,11 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class WeaponPk implements Serializable {
 
     private Long id;
     private Long player;
-
 }

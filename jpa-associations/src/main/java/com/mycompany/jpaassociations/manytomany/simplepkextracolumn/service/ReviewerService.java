@@ -9,5 +9,4 @@ public interface ReviewerService {
     Reviewer saveReviewer(Reviewer reviewer);
 
     void deleteReviewer(Reviewer reviewer);
-
 }

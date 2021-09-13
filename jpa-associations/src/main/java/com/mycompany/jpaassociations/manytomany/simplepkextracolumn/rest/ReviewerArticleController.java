@@ -6,12 +6,12 @@ import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.mapper.Revie
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.model.Article;
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.model.Comment;
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.model.Reviewer;
-import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.ArticleDto;
-import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CommentDto;
-import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateArticleDto;
-import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateCommentDto;
-import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateReviewerDto;
-import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.ReviewerDto;
+import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.ArticleResponse;
+import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CommentResponse;
+import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateArticleRequest;
+import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateCommentRequest;
+import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateReviewerRequest;
+import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.ReviewerResponse;
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.service.ArticleService;
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.service.CommentService;
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.service.ReviewerService;
@@ -44,78 +44,71 @@ public class ReviewerArticleController {
     // Reviewer
 
     @GetMapping("/reviewers/{reviewerId}")
-    public ReviewerDto getReviewer(@PathVariable Long reviewerId) {
+    public ReviewerResponse getReviewer(@PathVariable Long reviewerId) {
         Reviewer reviewer = reviewerService.validateAndGetReviewer(reviewerId);
-        return reviewerMapper.toReviewerDto(reviewer);
+        return reviewerMapper.toReviewerResponse(reviewer);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/reviewers")
-    public ReviewerDto createReviewer(@Valid @RequestBody CreateReviewerDto createReviewerDto) {
-        Reviewer reviewer = reviewerMapper.toReviewer(createReviewerDto);
+    public ReviewerResponse createReviewer(@Valid @RequestBody CreateReviewerRequest createReviewerRequest) {
+        Reviewer reviewer = reviewerMapper.toReviewer(createReviewerRequest);
         reviewer = reviewerService.saveReviewer(reviewer);
-        return reviewerMapper.toReviewerDto(reviewer);
+        return reviewerMapper.toReviewerResponse(reviewer);
     }
 
     @DeleteMapping("/reviewers/{reviewerId}")
-    public ReviewerDto deleteReviewer(@PathVariable Long reviewerId) {
+    public ReviewerResponse deleteReviewer(@PathVariable Long reviewerId) {
         Reviewer reviewer = reviewerService.validateAndGetReviewer(reviewerId);
         reviewerService.deleteReviewer(reviewer);
-        return reviewerMapper.toReviewerDto(reviewer);
+        return reviewerMapper.toReviewerResponse(reviewer);
     }
 
     // -------
     // Article
 
     @GetMapping("/articles/{articleId}")
-    public ArticleDto getArticle(@PathVariable Long articleId) {
+    public ArticleResponse getArticle(@PathVariable Long articleId) {
         Article article = articleService.validateAndGetArticle(articleId);
-        return articleMapper.toArticleDto(article);
+        return articleMapper.toArticleResponse(article);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/articles")
-    public ArticleDto createArticle(@Valid @RequestBody CreateArticleDto createArticleDto) {
-        Article article = articleMapper.toArticle(createArticleDto);
+    public ArticleResponse createArticle(@Valid @RequestBody CreateArticleRequest createArticleRequest) {
+        Article article = articleMapper.toArticle(createArticleRequest);
         article = articleService.createArticle(article);
-        return articleMapper.toArticleDto(article);
+        return articleMapper.toArticleResponse(article);
     }
 
     @DeleteMapping("/articles/{articleId}")
-    public ArticleDto deleteArticle(@PathVariable Long articleId) {
+    public ArticleResponse deleteArticle(@PathVariable Long articleId) {
         Article article = articleService.validateAndGetArticle(articleId);
         articleService.deleteArticle(article);
-        return articleMapper.toArticleDto(article);
+        return articleMapper.toArticleResponse(article);
     }
 
     // --------
     // Comments
 
     @GetMapping("/comments/{commentId}")
-    public CommentDto getComment(@PathVariable Long commentId) {
+    public CommentResponse getComment(@PathVariable Long commentId) {
         Comment comment = commentService.validateAndGetComment(commentId);
-        return commentMapper.toCommentDto(comment);
+        return commentMapper.toCommentResponse(comment);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/comments")
-    public CommentDto createComment(@Valid @RequestBody CreateCommentDto createCommentDto) {
-        Reviewer reviewer = reviewerService.validateAndGetReviewer(createCommentDto.getReviewerId());
-        Article article = articleService.validateAndGetArticle(createCommentDto.getArticleId());
-
-        Comment comment = commentMapper.toComment(createCommentDto);
-        comment.setReviewer(reviewer);
-        comment.setArticle(article);
+    public CommentResponse createComment(@Valid @RequestBody CreateCommentRequest createCommentRequest) {
+        Comment comment = commentMapper.toComment(createCommentRequest);
         comment = commentService.saveComment(comment);
-
-        return commentMapper.toCommentDto(comment);
+        return commentMapper.toCommentResponse(comment);
     }
 
     @DeleteMapping("/comments/{commentId}")
-    public CommentDto deleteComment(@PathVariable Long commentId) {
+    public CommentResponse deleteComment(@PathVariable Long commentId) {
         Comment comment = commentService.validateAndGetComment(commentId);
         commentService.deleteComment(comment);
-        return commentMapper.toCommentDto(comment);
+        return commentMapper.toCommentResponse(comment);
     }
-
 }

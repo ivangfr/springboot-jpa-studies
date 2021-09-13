@@ -5,12 +5,12 @@ import com.mycompany.jpaassociations.onetomany.simplepk.model.Dish;
 import com.mycompany.jpaassociations.onetomany.simplepk.model.Restaurant;
 import com.mycompany.jpaassociations.onetomany.simplepk.repository.DishRepository;
 import com.mycompany.jpaassociations.onetomany.simplepk.repository.RestaurantRepository;
-import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.CreateDishDto;
-import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.CreateRestaurantDto;
-import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.DishDto;
-import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.RestaurantDto;
-import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.UpdateDishDto;
-import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.UpdateRestaurantDto;
+import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.CreateDishRequest;
+import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.CreateRestaurantRequest;
+import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.DishResponse;
+import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.RestaurantResponse;
+import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.UpdateDishRequest;
+import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.UpdateRestaurantRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,10 +23,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
@@ -46,49 +43,51 @@ class RestaurantDishControllerTest extends AbstractTestcontainers {
         Restaurant restaurant = restaurantRepository.save(getDefaultRestaurant());
 
         String url = String.format(API_RESTAURANTS_RESTAURANT_ID_URL, restaurant.getId());
-        ResponseEntity<RestaurantDto> responseEntity = testRestTemplate.getForEntity(url, RestaurantDto.class);
+        ResponseEntity<RestaurantResponse> responseEntity = testRestTemplate.getForEntity(url, RestaurantResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(restaurant.getId(), responseEntity.getBody().getId());
-        assertEquals(restaurant.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getDishes().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(restaurant.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(restaurant.getName());
+        assertThat(responseEntity.getBody().getDishes().size()).isEqualTo(0);
     }
 
     @Test
     void testCreateRestaurant() {
-        CreateRestaurantDto createRestaurantDto = getDefaultCreateRestaurantDto();
-        ResponseEntity<RestaurantDto> responseEntity = testRestTemplate.postForEntity(API_RESTAURANTS_URL, createRestaurantDto, RestaurantDto.class);
+        CreateRestaurantRequest createRestaurantRequest = new CreateRestaurantRequest("Happy Pizza");
+        ResponseEntity<RestaurantResponse> responseEntity = testRestTemplate.postForEntity(
+                API_RESTAURANTS_URL, createRestaurantRequest, RestaurantResponse.class);
 
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertNotNull(responseEntity.getBody().getId());
-        assertEquals(createRestaurantDto.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getDishes().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isNotNull();
+        assertThat(responseEntity.getBody().getName()).isEqualTo(createRestaurantRequest.getName());
+        assertThat(responseEntity.getBody().getDishes().size()).isEqualTo(0);
 
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(responseEntity.getBody().getId());
-        assertTrue(restaurantOptional.isPresent());
-        restaurantOptional.ifPresent(r -> assertEquals(createRestaurantDto.getName(), r.getName()));
+        assertThat(restaurantOptional.isPresent()).isTrue();
+        restaurantOptional.ifPresent(r -> assertThat(r.getName()).isEqualTo(createRestaurantRequest.getName()));
     }
 
     @Test
     void testUpdateRestaurant() {
         Restaurant restaurant = restaurantRepository.save(getDefaultRestaurant());
-        UpdateRestaurantDto updateRestaurantDto = getDefaultUpdateRestaurantDto();
+        UpdateRestaurantRequest updateRestaurantRequest = new UpdateRestaurantRequest("Happy Burger");
 
-        HttpEntity<UpdateRestaurantDto> requestUpdate = new HttpEntity<>(updateRestaurantDto);
+        HttpEntity<UpdateRestaurantRequest> requestUpdate = new HttpEntity<>(updateRestaurantRequest);
         String url = String.format(API_RESTAURANTS_RESTAURANT_ID_URL, restaurant.getId());
-        ResponseEntity<RestaurantDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.PUT, requestUpdate, RestaurantDto.class);
+        ResponseEntity<RestaurantResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.PUT, requestUpdate, RestaurantResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(restaurant.getId(), responseEntity.getBody().getId());
-        assertEquals(updateRestaurantDto.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getDishes().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(restaurant.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(updateRestaurantRequest.getName());
+        assertThat(responseEntity.getBody().getDishes().size()).isEqualTo(0);
 
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurant.getId());
-        assertTrue(restaurantOptional.isPresent());
-        restaurantOptional.ifPresent(r -> assertEquals(updateRestaurantDto.getName(), r.getName()));
+        assertThat(restaurantOptional.isPresent()).isTrue();
+        restaurantOptional.ifPresent(r -> assertThat(r.getName()).isEqualTo(updateRestaurantRequest.getName()));
     }
 
     @Test
@@ -96,16 +95,17 @@ class RestaurantDishControllerTest extends AbstractTestcontainers {
         Restaurant restaurant = restaurantRepository.save(getDefaultRestaurant());
 
         String url = String.format(API_RESTAURANTS_RESTAURANT_ID_URL, restaurant.getId());
-        ResponseEntity<RestaurantDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, RestaurantDto.class);
+        ResponseEntity<RestaurantResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.DELETE, null, RestaurantResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(restaurant.getId(), responseEntity.getBody().getId());
-        assertEquals(restaurant.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getDishes().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(restaurant.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(restaurant.getName());
+        assertThat(responseEntity.getBody().getDishes().size()).isEqualTo(0);
 
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurant.getId());
-        assertFalse(restaurantOptional.isPresent());
+        assertThat(restaurantOptional.isPresent()).isFalse();
     }
 
     @Test
@@ -117,39 +117,40 @@ class RestaurantDishControllerTest extends AbstractTestcontainers {
         dish = dishRepository.save(dish);
 
         String url = String.format(API_RESTAURANTS_RESTAURANT_ID_DISHES_DISH_ID_URL, restaurant.getId(), dish.getId());
-        ResponseEntity<DishDto> responseEntity = testRestTemplate.getForEntity(url, DishDto.class);
+        ResponseEntity<DishResponse> responseEntity = testRestTemplate.getForEntity(url, DishResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(dish.getId(), responseEntity.getBody().getId());
-        assertEquals(dish.getName(), responseEntity.getBody().getName());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(dish.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(dish.getName());
     }
 
     @Test
     void testCreateDish() {
         Restaurant restaurant = restaurantRepository.save(getDefaultRestaurant());
-        CreateDishDto createDishDto = getDefaultCreateDishDto();
+        CreateDishRequest createDishRequest = new CreateDishRequest("Pizza Salami");
 
         String url = String.format(API_RESTAURANTS_RESTAURANT_ID_DISHES_URL, restaurant.getId());
-        ResponseEntity<DishDto> responseEntity = testRestTemplate.postForEntity(url, createDishDto, DishDto.class);
+        ResponseEntity<DishResponse> responseEntity = testRestTemplate.postForEntity(
+                url, createDishRequest, DishResponse.class);
 
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertNotNull(responseEntity.getBody().getId());
-        assertEquals(createDishDto.getName(), responseEntity.getBody().getName());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isNotNull();
+        assertThat(responseEntity.getBody().getName()).isEqualTo(createDishRequest.getName());
 
         Optional<Dish> dishOptional = dishRepository.findById(responseEntity.getBody().getId());
-        assertTrue(dishOptional.isPresent());
+        assertThat(dishOptional.isPresent()).isTrue();
         dishOptional.ifPresent(d -> {
-            assertEquals(restaurant.getId(), d.getRestaurant().getId());
-            assertEquals(createDishDto.getName(), d.getName());
+            assertThat(d.getRestaurant().getId()).isEqualTo(restaurant.getId());
+            assertThat(d.getName()).isEqualTo(createDishRequest.getName());
         });
 
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurant.getId());
-        assertTrue(restaurantOptional.isPresent());
+        assertThat(restaurantOptional.isPresent()).isTrue();
         restaurantOptional.ifPresent(r -> {
-            assertEquals(1, r.getDishes().size());
-            dishOptional.ifPresent(d -> assertTrue(r.getDishes().contains(d)));
+            assertThat(r.getDishes().size()).isEqualTo(1);
+            dishOptional.ifPresent(d -> assertThat(r.getDishes().contains(d)).isTrue());
         });
     }
 
@@ -161,20 +162,21 @@ class RestaurantDishControllerTest extends AbstractTestcontainers {
         dish.addRestaurant(restaurant);
         dish = dishRepository.save(dish);
 
-        UpdateDishDto updateDishDto = getDefaultUpdateDishDto();
+        UpdateDishRequest updateDishRequest = new UpdateDishRequest("Pizza Fungi");
 
-        HttpEntity<UpdateDishDto> requestUpdate = new HttpEntity<>(updateDishDto);
+        HttpEntity<UpdateDishRequest> requestUpdate = new HttpEntity<>(updateDishRequest);
         String url = String.format(API_RESTAURANTS_RESTAURANT_ID_DISHES_DISH_ID_URL, restaurant.getId(), dish.getId());
-        ResponseEntity<DishDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.PUT, requestUpdate, DishDto.class);
+        ResponseEntity<DishResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.PUT, requestUpdate, DishResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(dish.getId(), responseEntity.getBody().getId());
-        assertEquals(updateDishDto.getName(), responseEntity.getBody().getName());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(dish.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(updateDishRequest.getName());
 
         Optional<Dish> dishOptional = dishRepository.findById(dish.getId());
-        assertTrue(dishOptional.isPresent());
-        dishOptional.ifPresent(d -> assertEquals(updateDishDto.getName(), d.getName()));
+        assertThat(dishOptional.isPresent()).isTrue();
+        dishOptional.ifPresent(d -> assertThat(d.getName()).isEqualTo(updateDishRequest.getName()));
     }
 
     @Test
@@ -186,21 +188,22 @@ class RestaurantDishControllerTest extends AbstractTestcontainers {
         final Dish dish = dishRepository.save(dishAux);
 
         String url = String.format(API_RESTAURANTS_RESTAURANT_ID_DISHES_DISH_ID_URL, restaurant.getId(), dish.getId());
-        ResponseEntity<DishDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, DishDto.class);
+        ResponseEntity<DishResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.DELETE, null, DishResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(dish.getId(), responseEntity.getBody().getId());
-        assertEquals(dish.getName(), responseEntity.getBody().getName());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(dish.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(dish.getName());
 
         Optional<Dish> dishOptional = dishRepository.findById(dish.getId());
-        assertFalse(dishOptional.isPresent());
+        assertThat(dishOptional.isPresent()).isFalse();
 
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurant.getId());
-        assertTrue(restaurantOptional.isPresent());
+        assertThat(restaurantOptional.isPresent()).isTrue();
         restaurantOptional.ifPresent(r -> {
-            assertEquals(0, r.getDishes().size());
-            assertFalse(r.getDishes().contains(dish));
+            assertThat(r.getDishes().size()).isEqualTo(0);
+            assertThat(r.getDishes().contains(dish)).isFalse();
         });
     }
 
@@ -210,34 +213,10 @@ class RestaurantDishControllerTest extends AbstractTestcontainers {
         return restaurant;
     }
 
-    private CreateRestaurantDto getDefaultCreateRestaurantDto() {
-        CreateRestaurantDto createRestaurantDto = new CreateRestaurantDto();
-        createRestaurantDto.setName("Happy Pizza");
-        return createRestaurantDto;
-    }
-
-    private UpdateRestaurantDto getDefaultUpdateRestaurantDto() {
-        UpdateRestaurantDto updateRestaurantDto = new UpdateRestaurantDto();
-        updateRestaurantDto.setName("Happy Burger");
-        return updateRestaurantDto;
-    }
-
     private Dish getDefaultDish() {
         Dish dish = new Dish();
         dish.setName("Pizza Salami");
         return dish;
-    }
-
-    private CreateDishDto getDefaultCreateDishDto() {
-        CreateDishDto createDishDto = new CreateDishDto();
-        createDishDto.setName("Pizza Salami");
-        return createDishDto;
-    }
-
-    private UpdateDishDto getDefaultUpdateDishDto() {
-        UpdateDishDto updateDishDto = new UpdateDishDto();
-        updateDishDto.setName("Pizza Fungi");
-        return updateDishDto;
     }
 
     private static final String API_RESTAURANTS_URL = "/api/restaurants";

@@ -30,5 +30,4 @@ public class Article {
 
     @Column(nullable = false)
     private String title;
-
 }

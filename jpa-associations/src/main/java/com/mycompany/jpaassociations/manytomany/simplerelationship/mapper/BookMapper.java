@@ -1,10 +1,11 @@
 package com.mycompany.jpaassociations.manytomany.simplerelationship.mapper;
 
 import com.mycompany.jpaassociations.manytomany.simplerelationship.model.Book;
-import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.BookDto;
-import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.CreateBookDto;
-import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.UpdateBookDto;
+import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.BookResponse;
+import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.CreateBookRequest;
+import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.UpdateBookRequest;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -14,10 +15,13 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 )
 public interface BookMapper {
 
-    Book toBook(CreateBookDto createBookDto);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "writers", ignore = true)
+    Book toBook(CreateBookRequest createBookRequest);
 
-    BookDto toBookDto(Book book);
+    BookResponse toBookResponse(Book book);
 
-    void updateBookFromDto(UpdateBookDto updateBookDto, @MappingTarget Book book);
-
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "writers", ignore = true)
+    void updateBookFromRequest(UpdateBookRequest updateBookRequest, @MappingTarget Book book);
 }

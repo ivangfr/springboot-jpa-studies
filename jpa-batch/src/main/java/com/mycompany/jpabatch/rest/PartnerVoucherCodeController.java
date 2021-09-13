@@ -3,9 +3,9 @@ package com.mycompany.jpabatch.rest;
 import com.mycompany.jpabatch.mapper.PartnerMapper;
 import com.mycompany.jpabatch.model.Partner;
 import com.mycompany.jpabatch.model.VoucherCode;
-import com.mycompany.jpabatch.rest.dto.CreatePartnerDto;
-import com.mycompany.jpabatch.rest.dto.CreateVoucherCodeDto;
-import com.mycompany.jpabatch.rest.dto.PartnerDto;
+import com.mycompany.jpabatch.rest.dto.CreatePartnerRequest;
+import com.mycompany.jpabatch.rest.dto.CreateVoucherCodeRequest;
+import com.mycompany.jpabatch.rest.dto.PartnerResponse;
 import com.mycompany.jpabatch.service.PartnerService;
 import com.mycompany.jpabatch.service.VoucherCodeService;
 import lombok.RequiredArgsConstructor;
@@ -38,24 +38,24 @@ public class PartnerVoucherCodeController {
     private final PartnerMapper partnerMapper;
 
     @GetMapping("/{partnerId}")
-    public PartnerDto getPartner(@PathVariable Long partnerId) {
+    public PartnerResponse getPartner(@PathVariable Long partnerId) {
         Partner partner = partnerService.validateAndGetPartner(partnerId);
-        return partnerMapper.toPartnerDto(partner);
+        return partnerMapper.toPartnerResponse(partner);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public PartnerDto createPartner(@Valid @RequestBody CreatePartnerDto createPartnerDto) {
-        Partner partner = partnerMapper.toPartner(createPartnerDto);
+    public PartnerResponse createPartner(@Valid @RequestBody CreatePartnerRequest createPartnerRequest) {
+        Partner partner = partnerMapper.toPartner(createPartnerRequest);
         partner = partnerService.savePartner(partner);
-        return partnerMapper.toPartnerDto(partner);
+        return partnerMapper.toPartnerResponse(partner);
     }
 
     @DeleteMapping("/{partnerId}")
-    public PartnerDto deletePartner(@PathVariable Long partnerId) {
+    public PartnerResponse deletePartner(@PathVariable Long partnerId) {
         Partner partner = partnerService.validateAndGetPartner(partnerId);
         partnerService.deletePartner(partner);
-        return partnerMapper.toPartnerDto(partner);
+        return partnerMapper.toPartnerResponse(partner);
     }
 
     @Transactional
@@ -74,10 +74,10 @@ public class PartnerVoucherCodeController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{partnerId}/insertVoucherCodes")
     public int insertVoucherCodes(@PathVariable Long partnerId,
-                                  @Valid @RequestBody CreateVoucherCodeDto createVoucherCodeDto) {
+                                  @Valid @RequestBody CreateVoucherCodeRequest createVoucherCodeRequest) {
         Partner partner = partnerService.validateAndGetPartner(partnerId);
 
-        List<VoucherCode> voucherCodes = createVoucherCodeDto.getVoucherCodes()
+        List<VoucherCode> voucherCodes = createVoucherCodeRequest.getVoucherCodes()
                 .stream()
                 .map(code -> new VoucherCode(partner, code))
                 .collect(Collectors.toList());
@@ -104,5 +104,4 @@ public class PartnerVoucherCodeController {
 
         return voucherCodes.size();
     }
-
 }

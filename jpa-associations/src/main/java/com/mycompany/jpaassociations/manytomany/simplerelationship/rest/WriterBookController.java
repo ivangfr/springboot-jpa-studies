@@ -4,12 +4,12 @@ import com.mycompany.jpaassociations.manytomany.simplerelationship.mapper.BookMa
 import com.mycompany.jpaassociations.manytomany.simplerelationship.mapper.WriterMapper;
 import com.mycompany.jpaassociations.manytomany.simplerelationship.model.Book;
 import com.mycompany.jpaassociations.manytomany.simplerelationship.model.Writer;
-import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.BookDto;
-import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.CreateBookDto;
-import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.CreateWriterDto;
-import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.UpdateBookDto;
-import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.UpdateWriterDto;
-import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.WriterDto;
+import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.BookResponse;
+import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.CreateBookRequest;
+import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.CreateWriterRequest;
+import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.UpdateBookRequest;
+import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.UpdateWriterRequest;
+import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.WriterResponse;
 import com.mycompany.jpaassociations.manytomany.simplerelationship.service.BookService;
 import com.mycompany.jpaassociations.manytomany.simplerelationship.service.WriterService;
 import lombok.RequiredArgsConstructor;
@@ -40,104 +40,104 @@ public class WriterBookController {
     // Writer
 
     @GetMapping("/writers/{writerId}")
-    public WriterDto getWriter(@PathVariable Long writerId) {
+    public WriterResponse getWriter(@PathVariable Long writerId) {
         Writer writer = writerService.validateAndGetWriter(writerId);
-        return writerMapper.toWriterDto(writer);
+        return writerMapper.toWriterResponse(writer);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/writers")
-    public WriterDto createWriter(@Valid @RequestBody CreateWriterDto createWriterDto) {
-        Writer writer = writerMapper.toWriter(createWriterDto);
+    public WriterResponse createWriter(@Valid @RequestBody CreateWriterRequest createWriterRequest) {
+        Writer writer = writerMapper.toWriter(createWriterRequest);
         writer = writerService.saveWriter(writer);
-        return writerMapper.toWriterDto(writer);
+        return writerMapper.toWriterResponse(writer);
     }
 
     @PutMapping("/writers/{writerId}")
-    public WriterDto updateWriter(@PathVariable Long writerId, @Valid @RequestBody UpdateWriterDto updateWriterDto) {
+    public WriterResponse updateWriter(@PathVariable Long writerId,
+                                       @Valid @RequestBody UpdateWriterRequest updateWriterRequest) {
         Writer writer = writerService.validateAndGetWriter(writerId);
-        writerMapper.updateWriterFromDto(updateWriterDto, writer);
+        writerMapper.updateWriterFromRequest(updateWriterRequest, writer);
         writer = writerService.saveWriter(writer);
-        return writerMapper.toWriterDto(writer);
+        return writerMapper.toWriterResponse(writer);
     }
 
     @DeleteMapping("/writers/{writerId}")
-    public WriterDto deleteWriter(@PathVariable Long writerId) {
+    public WriterResponse deleteWriter(@PathVariable Long writerId) {
         Writer writer = writerService.validateAndGetWriter(writerId);
         writer.getBooks().forEach(book -> book.removeWriter(writer));
         writerService.deleteWriter(writer);
-        return writerMapper.toWriterDto(writer);
+        return writerMapper.toWriterResponse(writer);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/writers/{writerId}/books/{bookId}")
-    public WriterDto addWriterBook(@PathVariable Long writerId, @PathVariable Long bookId) {
+    public WriterResponse addWriterBook(@PathVariable Long writerId, @PathVariable Long bookId) {
         Writer writer = writerService.validateAndGetWriter(writerId);
         Book book = bookService.validateAndGetBook(bookId);
         writer.addBook(book);
         writer = writerService.saveWriter(writer);
-        return writerMapper.toWriterDto(writer);
+        return writerMapper.toWriterResponse(writer);
     }
 
     @DeleteMapping("/writers/{writerId}/books/{bookId}")
-    public WriterDto removeWriterBook(@PathVariable Long writerId, @PathVariable Long bookId) {
+    public WriterResponse removeWriterBook(@PathVariable Long writerId, @PathVariable Long bookId) {
         Writer writer = writerService.validateAndGetWriter(writerId);
         Book book = bookService.validateAndGetBook(bookId);
         writer.removeBook(book);
         writer = writerService.saveWriter(writer);
-        return writerMapper.toWriterDto(writer);
+        return writerMapper.toWriterResponse(writer);
     }
 
     // -----
     // Books
 
     @GetMapping("/books/{bookId}")
-    public BookDto getBook(@PathVariable Long bookId) {
+    public BookResponse getBook(@PathVariable Long bookId) {
         Book book = bookService.validateAndGetBook(bookId);
-        return bookMapper.toBookDto(book);
+        return bookMapper.toBookResponse(book);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/books")
-    public BookDto createBook(@Valid @RequestBody CreateBookDto createBookDto) {
-        Book book = bookMapper.toBook(createBookDto);
+    public BookResponse createBook(@Valid @RequestBody CreateBookRequest createBookRequest) {
+        Book book = bookMapper.toBook(createBookRequest);
         book = bookService.saveBook(book);
-        return bookMapper.toBookDto(book);
+        return bookMapper.toBookResponse(book);
     }
 
     @PutMapping("/books/{bookId}")
-    public BookDto updateBook(@PathVariable Long bookId, @Valid @RequestBody UpdateBookDto updateBookDto) {
+    public BookResponse updateBook(@PathVariable Long bookId, @Valid @RequestBody UpdateBookRequest updateBookRequest) {
         Book book = bookService.validateAndGetBook(bookId);
-        bookMapper.updateBookFromDto(updateBookDto, book);
+        bookMapper.updateBookFromRequest(updateBookRequest, book);
         book = bookService.saveBook(book);
-        return bookMapper.toBookDto(book);
+        return bookMapper.toBookResponse(book);
     }
 
     @DeleteMapping("/books/{bookId}")
-    public BookDto deleteBook(@PathVariable Long bookId) {
+    public BookResponse deleteBook(@PathVariable Long bookId) {
         Book book = bookService.validateAndGetBook(bookId);
         book.getWriters().forEach(writer -> writer.removeBook(book));
         bookService.deleteBook(book);
-        return bookMapper.toBookDto(book);
+        return bookMapper.toBookResponse(book);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/books/{bookId}/writers/{writerId}")
-    public BookDto addBookWriter(@PathVariable Long bookId, @PathVariable Long writerId) {
+    public BookResponse addBookWriter(@PathVariable Long bookId, @PathVariable Long writerId) {
         Book book = bookService.validateAndGetBook(bookId);
         Writer writer = writerService.validateAndGetWriter(writerId);
         book.addWriter(writer);
         book = bookService.saveBook(book);
-        return bookMapper.toBookDto(book);
+        return bookMapper.toBookResponse(book);
     }
 
     @DeleteMapping("/books/{bookId}/writers/{writerId}")
-    public BookDto removeBookWriter(@PathVariable Long bookId, @PathVariable Long writerId) {
+    public BookResponse removeBookWriter(@PathVariable Long bookId, @PathVariable Long writerId) {
         Book book = bookService.validateAndGetBook(bookId);
         Writer writer = writerService.validateAndGetWriter(writerId);
         book.removeWriter(writer);
         book = bookService.saveBook(book);
-        return bookMapper.toBookDto(book);
+        return bookMapper.toBookResponse(book);
     }
-
 }

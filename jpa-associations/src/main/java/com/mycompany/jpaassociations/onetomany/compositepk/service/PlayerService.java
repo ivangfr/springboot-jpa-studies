@@ -9,5 +9,4 @@ public interface PlayerService {
     Player savePlayer(Player player);
 
     void deletePlayer(Player player);
-
 }

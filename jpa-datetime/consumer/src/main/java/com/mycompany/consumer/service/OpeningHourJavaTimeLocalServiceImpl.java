@@ -17,5 +17,4 @@ public class OpeningHourJavaTimeLocalServiceImpl implements OpeningHourJavaTimeL
     public List<OpeningHourJavaTimeLocal> getAll() {
         return openingHourJavaTimeLocalRepository.findAll();
     }
-
 }

@@ -30,5 +30,4 @@ public class Course {
 
     @Column(nullable = false)
     private String name;
-
 }

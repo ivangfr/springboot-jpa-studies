@@ -4,12 +4,12 @@ import com.mycompany.jpaassociations.onetomany.simplepk.mapper.DishMapper;
 import com.mycompany.jpaassociations.onetomany.simplepk.mapper.RestaurantMapper;
 import com.mycompany.jpaassociations.onetomany.simplepk.model.Dish;
 import com.mycompany.jpaassociations.onetomany.simplepk.model.Restaurant;
-import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.CreateDishDto;
-import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.CreateRestaurantDto;
-import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.DishDto;
-import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.RestaurantDto;
-import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.UpdateDishDto;
-import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.UpdateRestaurantDto;
+import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.CreateDishRequest;
+import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.CreateRestaurantRequest;
+import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.DishResponse;
+import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.RestaurantResponse;
+import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.UpdateDishRequest;
+import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.UpdateRestaurantRequest;
 import com.mycompany.jpaassociations.onetomany.simplepk.service.DishService;
 import com.mycompany.jpaassociations.onetomany.simplepk.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
@@ -40,67 +40,70 @@ public class RestaurantDishController {
     // Restaurant
 
     @GetMapping("/{restaurantId}")
-    public RestaurantDto getRestaurant(@PathVariable Long restaurantId) {
+    public RestaurantResponse getRestaurant(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.validateAndGetRestaurant(restaurantId);
-        return restaurantMapper.toRestaurantDto(restaurant);
+        return restaurantMapper.toRestaurantResponse(restaurant);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public RestaurantDto createRestaurant(@Valid @RequestBody CreateRestaurantDto createRestaurantDto) {
-        Restaurant restaurant = restaurantMapper.toRestaurant(createRestaurantDto);
+    public RestaurantResponse createRestaurant(@Valid @RequestBody CreateRestaurantRequest createRestaurantRequest) {
+        Restaurant restaurant = restaurantMapper.toRestaurant(createRestaurantRequest);
         restaurant = restaurantService.saveRestaurant(restaurant);
-        return restaurantMapper.toRestaurantDto(restaurant);
+        return restaurantMapper.toRestaurantResponse(restaurant);
     }
 
     @PutMapping("/{restaurantId}")
-    public RestaurantDto updateRestaurant(@PathVariable Long restaurantId, @Valid @RequestBody UpdateRestaurantDto updateRestaurantDto) {
+    public RestaurantResponse updateRestaurant(@PathVariable Long restaurantId,
+                                               @Valid @RequestBody UpdateRestaurantRequest updateRestaurantRequest) {
         Restaurant restaurant = restaurantService.validateAndGetRestaurant(restaurantId);
-        restaurantMapper.updateRestaurantFromDto(updateRestaurantDto, restaurant);
+        restaurantMapper.updateRestaurantFromRequest(updateRestaurantRequest, restaurant);
         restaurantService.saveRestaurant(restaurant);
-        return restaurantMapper.toRestaurantDto(restaurant);
+        return restaurantMapper.toRestaurantResponse(restaurant);
     }
 
     @DeleteMapping("/{restaurantId}")
-    public RestaurantDto deleteRestaurant(@PathVariable Long restaurantId) {
+    public RestaurantResponse deleteRestaurant(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.validateAndGetRestaurant(restaurantId);
         restaurantService.deleteRestaurant(restaurant);
-        return restaurantMapper.toRestaurantDto(restaurant);
+        return restaurantMapper.toRestaurantResponse(restaurant);
     }
 
     //-----
     // Dish
 
     @GetMapping("/{restaurantId}/dishes/{dishId}")
-    public DishDto getDish(@PathVariable Long restaurantId, @PathVariable Long dishId) {
+    public DishResponse getDish(@PathVariable Long restaurantId, @PathVariable Long dishId) {
         Dish dish = dishService.validateAndGetDish(dishId, restaurantId);
-        return dishMapper.toDishDto(dish);
+        return dishMapper.toDishResponse(dish);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{restaurantId}/dishes")
-    public DishDto createDish(@PathVariable Long restaurantId, @Valid @RequestBody CreateDishDto createDishDto) {
+    public DishResponse createDish(@PathVariable Long restaurantId,
+                                   @Valid @RequestBody CreateDishRequest createDishRequest) {
         Restaurant restaurant = restaurantService.validateAndGetRestaurant(restaurantId);
-        Dish dish = dishMapper.toDish(createDishDto);
+        Dish dish = dishMapper.toDish(createDishRequest);
         dish.addRestaurant(restaurant);
         dish = dishService.saveDish(dish);
-        return dishMapper.toDishDto(dish);
+        return dishMapper.toDishResponse(dish);
     }
 
     @PutMapping("/{restaurantId}/dishes/{dishId}")
-    public DishDto updateDish(@PathVariable Long restaurantId, @PathVariable Long dishId, @Valid @RequestBody UpdateDishDto updateDishDto) {
+    public DishResponse updateDish(@PathVariable Long restaurantId,
+                                   @PathVariable Long dishId,
+                                   @Valid @RequestBody UpdateDishRequest updateDishRequest) {
         Dish dish = dishService.validateAndGetDish(dishId, restaurantId);
-        dishMapper.updateDishFromDto(updateDishDto, dish);
+        dishMapper.updateDishFromRequest(updateDishRequest, dish);
         dish = dishService.saveDish(dish);
-        return dishMapper.toDishDto(dish);
+        return dishMapper.toDishResponse(dish);
     }
 
     @DeleteMapping("/{restaurantId}/dishes/{dishId}")
-    public DishDto deleteDish(@PathVariable Long restaurantId, @PathVariable Long dishId) {
+    public DishResponse deleteDish(@PathVariable Long restaurantId, @PathVariable Long dishId) {
         Dish dish = dishService.validateAndGetDish(dishId, restaurantId);
         dish.removeRestaurant();
         dishService.deleteDish(dish);
-        return dishMapper.toDishDto(dish);
+        return dishMapper.toDishResponse(dish);
     }
-
 }

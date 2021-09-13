@@ -26,5 +26,4 @@ public class OpeningHourJavaTimeZone {
 
     private ZonedDateTime dateTimeBegin;
     private ZonedDateTime dateTimeEnd;
-
 }

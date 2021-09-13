@@ -9,5 +9,4 @@ public interface WriterService {
     Writer saveWriter(Writer writer);
 
     void deleteWriter(Writer writer);
-
 }

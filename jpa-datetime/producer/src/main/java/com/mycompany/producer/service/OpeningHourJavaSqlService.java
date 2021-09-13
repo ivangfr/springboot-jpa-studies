@@ -11,5 +11,4 @@ public interface OpeningHourJavaSqlService {
     OpeningHourJavaSql createNow();
 
     void deleteAll();
-
 }

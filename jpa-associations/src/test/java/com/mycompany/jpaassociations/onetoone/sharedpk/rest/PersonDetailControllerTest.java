@@ -4,11 +4,11 @@ import com.mycompany.jpaassociations.AbstractTestcontainers;
 import com.mycompany.jpaassociations.onetoone.sharedpk.model.Person;
 import com.mycompany.jpaassociations.onetoone.sharedpk.model.PersonDetail;
 import com.mycompany.jpaassociations.onetoone.sharedpk.repository.PersonRepository;
-import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.CreatePersonDetailDto;
-import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.CreatePersonDto;
-import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.PersonDto;
-import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.UpdatePersonDetailDto;
-import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.UpdatePersonDto;
+import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.CreatePersonDetailRequest;
+import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.CreatePersonRequest;
+import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.PersonResponse;
+import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.UpdatePersonDetailRequest;
+import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.UpdatePersonRequest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +22,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
@@ -43,47 +39,49 @@ class PersonDetailControllerTest extends AbstractTestcontainers {
         Person person = personRepository.save(getDefaultPerson());
 
         String url = String.format(API_PERSONS_PERSON_ID_URL, person.getId());
-        ResponseEntity<PersonDto> responseEntity = testRestTemplate.getForEntity(url, PersonDto.class);
+        ResponseEntity<PersonResponse> responseEntity = testRestTemplate.getForEntity(url, PersonResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(person.getId(), responseEntity.getBody().getId());
-        assertEquals(person.getName(), responseEntity.getBody().getName());
-        assertNull(responseEntity.getBody().getPersonDetail());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(person.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(person.getName());
+        assertThat(responseEntity.getBody().getPersonDetail()).isNull();
     }
 
     @Test
     void testCreatePerson() {
-        CreatePersonDto createPersonDto = getDefaultCreatePersonDto();
-        ResponseEntity<PersonDto> responseEntity = testRestTemplate.postForEntity(API_PERSONS_URL, createPersonDto, PersonDto.class);
+        CreatePersonRequest createPersonRequest = new CreatePersonRequest("Ivan Franchin");
+        ResponseEntity<PersonResponse> responseEntity = testRestTemplate.postForEntity(
+                API_PERSONS_URL, createPersonRequest, PersonResponse.class);
 
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertNotNull(responseEntity.getBody().getId());
-        assertEquals(createPersonDto.getName(), responseEntity.getBody().getName());
-        assertNull(responseEntity.getBody().getPersonDetail());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isNotNull();
+        assertThat(responseEntity.getBody().getName()).isEqualTo(createPersonRequest.getName());
+        assertThat(responseEntity.getBody().getPersonDetail()).isNull();
 
         Optional<Person> personOptional = personRepository.findById(responseEntity.getBody().getId());
-        assertTrue(personOptional.isPresent());
-        personOptional.ifPresent(p -> assertEquals(createPersonDto.getName(), p.getName()));
+        assertThat(personOptional.isPresent()).isTrue();
+        personOptional.ifPresent(p -> assertThat(p.getName()).isEqualTo(createPersonRequest.getName()));
     }
 
     @Test
     void testUpdatePerson() {
         Person person = personRepository.save(getDefaultPerson());
-        UpdatePersonDto updatePersonDto = getDefaultUpdatePersonDto();
+        UpdatePersonRequest updatePersonRequest = new UpdatePersonRequest("Ivan Franchin 2");
 
-        HttpEntity<UpdatePersonDto> requestUpdate = new HttpEntity<>(updatePersonDto);
+        HttpEntity<UpdatePersonRequest> requestUpdate = new HttpEntity<>(updatePersonRequest);
         String url = String.format(API_PERSONS_PERSON_ID_URL, person.getId());
-        ResponseEntity<PersonDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.PUT, requestUpdate, PersonDto.class);
+        ResponseEntity<PersonResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.PUT, requestUpdate, PersonResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(updatePersonDto.getName(), responseEntity.getBody().getName());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getName()).isEqualTo(updatePersonRequest.getName());
 
         Optional<Person> personOptional = personRepository.findById(person.getId());
-        assertTrue(personOptional.isPresent());
-        personOptional.ifPresent(p -> assertEquals(updatePersonDto.getName(), p.getName()));
+        assertThat(personOptional.isPresent()).isTrue();
+        personOptional.ifPresent(p -> assertThat(p.getName()).isEqualTo(updatePersonRequest.getName()));
     }
 
     @Test
@@ -91,37 +89,40 @@ class PersonDetailControllerTest extends AbstractTestcontainers {
         Person person = personRepository.save(getDefaultPerson());
 
         String url = String.format(API_PERSONS_PERSON_ID_URL, person.getId());
-        ResponseEntity<PersonDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, PersonDto.class);
+        ResponseEntity<PersonResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.DELETE, null, PersonResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(person.getId(), responseEntity.getBody().getId());
-        assertEquals(person.getName(), responseEntity.getBody().getName());
-        assertNull(responseEntity.getBody().getPersonDetail());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(person.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(person.getName());
+        assertThat(responseEntity.getBody().getPersonDetail()).isNull();
 
         Optional<Person> personOptional = personRepository.findById(person.getId());
-        assertFalse(personOptional.isPresent());
+        assertThat(personOptional.isPresent()).isFalse();
     }
 
     @Test
     void testAddPersonDetail() {
         Person person = personRepository.save(getDefaultPerson());
-        CreatePersonDetailDto createPersonDetailDto = getDefaultCreatePersonDetailDto();
+        CreatePersonDetailRequest createPersonDetailRequest = new CreatePersonDetailRequest("More information about the person");
 
         String url = String.format(API_PERSONS_PERSON_ID_PERSON_DETAILS_URL, person.getId());
-        ResponseEntity<PersonDto> responseEntity = testRestTemplate.postForEntity(url, createPersonDetailDto, PersonDto.class);
+        ResponseEntity<PersonResponse> responseEntity = testRestTemplate.postForEntity(
+                url, createPersonDetailRequest, PersonResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertNotNull(responseEntity.getBody().getPersonDetail());
-        assertEquals(person.getId(), responseEntity.getBody().getPersonDetail().getId());
-        assertEquals(createPersonDetailDto.getDescription(), responseEntity.getBody().getPersonDetail().getDescription());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getPersonDetail()).isNotNull();
+        assertThat(responseEntity.getBody().getPersonDetail().getId()).isEqualTo(person.getId());
+        assertThat(responseEntity.getBody().getPersonDetail().getDescription())
+                .isEqualTo(createPersonDetailRequest.getDescription());
 
         Optional<Person> personOptional = personRepository.findById(responseEntity.getBody().getId());
-        assertTrue(personOptional.isPresent());
+        assertThat(personOptional.isPresent()).isTrue();
         personOptional.ifPresent(p -> {
-            assertEquals(person.getId(), p.getPersonDetail().getId());
-            assertEquals(createPersonDetailDto.getDescription(), p.getPersonDetail().getDescription());
+            assertThat(p.getPersonDetail().getId()).isEqualTo(person.getId());
+            assertThat(p.getPersonDetail().getDescription()).isEqualTo(createPersonDetailRequest.getDescription());
         });
     }
 
@@ -131,22 +132,24 @@ class PersonDetailControllerTest extends AbstractTestcontainers {
         person.addPersonDetail(getDefaultPersonDetail());
         person = personRepository.save(person);
 
-        UpdatePersonDetailDto updatePersonDetailDto = getDefaultUpdatePersonDetailDto();
+        UpdatePersonDetailRequest updatePersonDetailRequest = new UpdatePersonDetailRequest("New information about the person");
 
-        HttpEntity<UpdatePersonDetailDto> requestUpdate = new HttpEntity<>(updatePersonDetailDto);
+        HttpEntity<UpdatePersonDetailRequest> requestUpdate = new HttpEntity<>(updatePersonDetailRequest);
         String url = String.format(API_PERSONS_PERSON_ID_PERSON_DETAILS_URL, person.getId());
-        ResponseEntity<PersonDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.PUT, requestUpdate, PersonDto.class);
+        ResponseEntity<PersonResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.PUT, requestUpdate, PersonResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertNotNull(responseEntity.getBody().getPersonDetail());
-        assertEquals(updatePersonDetailDto.getDescription(), responseEntity.getBody().getPersonDetail().getDescription());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getPersonDetail()).isNotNull();
+        assertThat(responseEntity.getBody().getPersonDetail().getDescription())
+                .isEqualTo(updatePersonDetailRequest.getDescription());
 
         Optional<Person> personOptional = personRepository.findById(person.getId());
-        assertTrue(personOptional.isPresent());
+        assertThat(personOptional.isPresent()).isTrue();
         personOptional.ifPresent(p -> {
-            assertNotNull(p.getPersonDetail());
-            assertEquals(updatePersonDetailDto.getDescription(), p.getPersonDetail().getDescription());
+            assertThat(p.getPersonDetail()).isNotNull();
+            assertThat(p.getPersonDetail().getDescription()).isEqualTo(updatePersonDetailRequest.getDescription());
         });
     }
 
@@ -161,15 +164,16 @@ class PersonDetailControllerTest extends AbstractTestcontainers {
         person = personRepository.save(person);
 
         String url = String.format(API_PERSONS_PERSON_ID_PERSON_DETAILS_URL, person.getId());
-        ResponseEntity<PersonDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, PersonDto.class);
+        ResponseEntity<PersonResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.DELETE, null, PersonResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertNull(responseEntity.getBody().getPersonDetail());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getPersonDetail()).isNull();
 
         Optional<Person> personOptional = personRepository.findById(person.getId());
-        assertTrue(personOptional.isPresent());
-        personOptional.ifPresent(p -> assertNull(p.getPersonDetail()));
+        assertThat(personOptional.isPresent()).isTrue();
+        personOptional.ifPresent(p -> assertThat(p.getPersonDetail()).isNull());
     }
 
     private Person getDefaultPerson() {
@@ -178,34 +182,10 @@ class PersonDetailControllerTest extends AbstractTestcontainers {
         return person;
     }
 
-    private CreatePersonDto getDefaultCreatePersonDto() {
-        CreatePersonDto createPersonDto = new CreatePersonDto();
-        createPersonDto.setName("Ivan Franchin");
-        return createPersonDto;
-    }
-
-    private UpdatePersonDto getDefaultUpdatePersonDto() {
-        UpdatePersonDto updatePersonDto = new UpdatePersonDto();
-        updatePersonDto.setName("Ivan Franchin 2");
-        return updatePersonDto;
-    }
-
     private PersonDetail getDefaultPersonDetail() {
         PersonDetail personDetail = new PersonDetail();
         personDetail.setDescription("More information about the person");
         return personDetail;
-    }
-
-    private CreatePersonDetailDto getDefaultCreatePersonDetailDto() {
-        CreatePersonDetailDto createPersonDetailDto = new CreatePersonDetailDto();
-        createPersonDetailDto.setDescription("More information about the person");
-        return createPersonDetailDto;
-    }
-
-    private UpdatePersonDetailDto getDefaultUpdatePersonDetailDto() {
-        UpdatePersonDetailDto updatePersonDetailDto = new UpdatePersonDetailDto();
-        updatePersonDetailDto.setDescription("New information about the person");
-        return updatePersonDetailDto;
     }
 
     private static final String API_PERSONS_URL = "/api/persons";

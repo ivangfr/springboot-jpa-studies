@@ -9,5 +9,4 @@ public interface CommentService {
     Comment saveComment(Comment comment);
 
     void deleteComment(Comment comment);
-
 }

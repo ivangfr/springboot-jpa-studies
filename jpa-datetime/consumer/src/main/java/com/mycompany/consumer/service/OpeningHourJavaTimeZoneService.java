@@ -7,5 +7,4 @@ import java.util.List;
 public interface OpeningHourJavaTimeZoneService {
 
     List<OpeningHourJavaTimeZone> getAll();
-
 }

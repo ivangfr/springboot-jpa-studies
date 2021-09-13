@@ -6,12 +6,11 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class CourseStudentPk implements Serializable {
 
     private Long course;
     private Long student;
-
 }

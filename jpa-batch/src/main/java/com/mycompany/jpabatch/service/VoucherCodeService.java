@@ -15,5 +15,4 @@ public interface VoucherCodeService {
     List<VoucherCode> saveVoucherCodes(List<VoucherCode> voucherCodes);
 
     void deleteVoucherCodes(List<VoucherCode> voucherCodes);
-
 }

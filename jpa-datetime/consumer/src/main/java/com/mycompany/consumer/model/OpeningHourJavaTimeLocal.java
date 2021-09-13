@@ -26,5 +26,4 @@ public class OpeningHourJavaTimeLocal {
 
     private LocalDateTime dateTimeBegin;
     private LocalDateTime dateTimeEnd;
-
 }

@@ -1,10 +1,11 @@
 package com.mycompany.jpaassociations.onetomany.simplepk.mapper;
 
 import com.mycompany.jpaassociations.onetomany.simplepk.model.Dish;
-import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.CreateDishDto;
-import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.DishDto;
-import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.UpdateDishDto;
+import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.CreateDishRequest;
+import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.DishResponse;
+import com.mycompany.jpaassociations.onetomany.simplepk.rest.dto.UpdateDishRequest;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -14,10 +15,13 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 )
 public interface DishMapper {
 
-    Dish toDish(CreateDishDto createDishDto);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "restaurant", ignore = true)
+    Dish toDish(CreateDishRequest createDishRequest);
 
-    DishDto toDishDto(Dish dish);
+    DishResponse toDishResponse(Dish dish);
 
-    void updateDishFromDto(UpdateDishDto updateDishDto, @MappingTarget Dish dish);
-
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "restaurant", ignore = true)
+    void updateDishFromRequest(UpdateDishRequest updateDishRequest, @MappingTarget Dish dish);
 }

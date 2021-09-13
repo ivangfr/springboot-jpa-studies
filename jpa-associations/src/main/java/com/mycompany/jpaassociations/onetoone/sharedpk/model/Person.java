@@ -39,5 +39,4 @@ public class Person {
         this.personDetail.setPerson(null);
         this.personDetail = null;
     }
-
 }

@@ -3,9 +3,9 @@ package com.mycompany.jpalocking.rest;
 import com.mycompany.jpalocking.exception.RedeemRaceConditionException;
 import com.mycompany.jpalocking.mapper.PlayerMapper;
 import com.mycompany.jpalocking.model.Player;
-import com.mycompany.jpalocking.rest.dto.CreatePlayerDto;
-import com.mycompany.jpalocking.rest.dto.PlayerDto;
-import com.mycompany.jpalocking.rest.dto.StarCollectionDto;
+import com.mycompany.jpalocking.rest.dto.CreatePlayerRequest;
+import com.mycompany.jpalocking.rest.dto.PlayerResponse;
+import com.mycompany.jpalocking.rest.dto.StarCollectionRequest;
 import com.mycompany.jpalocking.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,39 +29,39 @@ public class PlayerController {
     private final PlayerMapper playerMapper;
 
     @PostMapping
-    public PlayerDto createPlayer(@Valid @RequestBody CreatePlayerDto createPlayerDto) {
-        Player player = playerService.savePlayer(playerMapper.toPlayer(createPlayerDto));
-        return playerMapper.toPlayerDto(player);
+    public PlayerResponse createPlayer(@Valid @RequestBody CreatePlayerRequest createPlayerRequest) {
+        Player player = playerService.savePlayer(playerMapper.toPlayer(createPlayerRequest));
+        return playerMapper.toPlayerResponse(player);
     }
 
     @GetMapping("/{id}")
-    public PlayerDto getPlayer(@PathVariable Long id) {
+    public PlayerResponse getPlayer(@PathVariable Long id) {
         Player player = playerService.validateAndGetPlayer(id);
-        return playerMapper.toPlayerDto(player);
+        return playerMapper.toPlayerResponse(player);
     }
 
     @PostMapping("/{id}/stars")
-    public PlayerDto playerCollectStars(@PathVariable Long id, @Valid @RequestBody StarCollectionDto starCollectionDto) {
+    public PlayerResponse playerCollectStars(@PathVariable Long id,
+                                             @Valid @RequestBody StarCollectionRequest starCollectionRequest) {
         Player player = playerService.validateAndGetPlayer(id);
         log.info("==> Player {} collects stars. Number of Stars: {}, Number of Lives: {}", id, player.getStars(), player.getLives());
-        player = playerService.collectStars(player, starCollectionDto.getNumStars());
+        player = playerService.collectStars(player, starCollectionRequest.getNumStars());
         log.info("<== Player {} collected stars. Number of Stars: {}, Number of Lives: {}", id, player.getStars(), player.getLives());
-        return playerMapper.toPlayerDto(player);
+        return playerMapper.toPlayerResponse(player);
     }
 
     @PostMapping("/{id}/lives")
-    public PlayerDto playerRedeemStars(@PathVariable Long id) {
+    public PlayerResponse playerRedeemStars(@PathVariable Long id) {
         Player player = playerService.validateAndGetPlayer(id);
         try {
             log.info("==> Player {} redeems stars. Number of Stars: {}, Number of Lives: {}", id, player.getStars(), player.getLives());
             player = playerService.redeemStars(player);
             log.info("<== Player {} redeemed stars. Number of Stars: {}, Number of Lives: {}", id, player.getStars(), player.getLives());
-            return playerMapper.toPlayerDto(player);
+            return playerMapper.toPlayerResponse(player);
 
         } catch (ObjectOptimisticLockingFailureException e) {
             log.error("An problem occurred while player {} redeems life. Error class: {}, error message: {}", id, e.getClass().getName(), e.getMessage());
             throw new RedeemRaceConditionException(id, e);
         }
     }
-
 }

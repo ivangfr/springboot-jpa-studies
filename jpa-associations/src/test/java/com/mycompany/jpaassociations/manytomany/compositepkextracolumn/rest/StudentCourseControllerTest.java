@@ -8,14 +8,14 @@ import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.model.Stu
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.repository.CourseRepository;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.repository.CourseStudentRepository;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.repository.StudentRepository;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseStudentDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CreateCourseDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CreateStudentDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.StudentDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseStudentDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateStudentDto;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseResponse;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseStudentResponse;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CreateCourseRequest;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CreateStudentRequest;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.StudentResponse;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseRequest;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseStudentRequest;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateStudentRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,11 +28,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
@@ -55,47 +51,49 @@ class StudentCourseControllerTest extends AbstractTestcontainers {
         Student student = studentRepository.save(getDefaultStudent());
 
         String url = String.format(API_STUDENTS_STUDENT_ID_URL, student.getId());
-        ResponseEntity<StudentDto> responseEntity = testRestTemplate.getForEntity(url, StudentDto.class);
+        ResponseEntity<StudentResponse> responseEntity = testRestTemplate.getForEntity(url, StudentResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(student.getId(), responseEntity.getBody().getId());
-        assertEquals(student.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getCourses().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(student.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(student.getName());
+        assertThat(responseEntity.getBody().getCourses().size()).isEqualTo(0);
     }
 
     @Test
     void testCreateStudent() {
-        CreateStudentDto createStudentDto = getDefaultCreateStudentDto();
-        ResponseEntity<StudentDto> responseEntity = testRestTemplate.postForEntity(API_STUDENTS_URL, createStudentDto, StudentDto.class);
+        CreateStudentRequest createStudentRequest = new CreateStudentRequest("Ivan Franchin");
+        ResponseEntity<StudentResponse> responseEntity = testRestTemplate.postForEntity(
+                API_STUDENTS_URL, createStudentRequest, StudentResponse.class);
 
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertNotNull(responseEntity.getBody().getId());
-        assertEquals(createStudentDto.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getCourses().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isNotNull();
+        assertThat(responseEntity.getBody().getName()).isEqualTo(createStudentRequest.getName());
+        assertThat(responseEntity.getBody().getCourses().size()).isEqualTo(0);
 
         Optional<Student> studentOptional = studentRepository.findById(responseEntity.getBody().getId());
-        assertTrue(studentOptional.isPresent());
-        studentOptional.ifPresent(s -> assertEquals(createStudentDto.getName(), s.getName()));
+        assertThat(studentOptional.isPresent()).isTrue();
+        studentOptional.ifPresent(s -> assertThat(s.getName()).isEqualTo(createStudentRequest.getName()));
     }
 
     @Test
     void testUpdateStudent() {
         Student student = studentRepository.save(getDefaultStudent());
-        UpdateStudentDto updateStudentDto = getDefaultUpdateStudentDto();
+        UpdateStudentRequest updateStudentRequest = new UpdateStudentRequest("Steve Jobs");
 
-        HttpEntity<UpdateStudentDto> requestUpdate = new HttpEntity<>(updateStudentDto);
+        HttpEntity<UpdateStudentRequest> requestUpdate = new HttpEntity<>(updateStudentRequest);
         String url = String.format(API_STUDENTS_STUDENT_ID_URL, student.getId());
-        ResponseEntity<StudentDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.PUT, requestUpdate, StudentDto.class);
+        ResponseEntity<StudentResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.PUT, requestUpdate, StudentResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(updateStudentDto.getName(), responseEntity.getBody().getName());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getName()).isEqualTo(updateStudentRequest.getName());
 
         Optional<Student> studentOptional = studentRepository.findById(student.getId());
-        assertTrue(studentOptional.isPresent());
-        studentOptional.ifPresent(s -> assertEquals(updateStudentDto.getName(), s.getName()));
+        assertThat(studentOptional.isPresent()).isTrue();
+        studentOptional.ifPresent(s -> assertThat(s.getName()).isEqualTo(updateStudentRequest.getName()));
     }
 
     @Test
@@ -103,16 +101,17 @@ class StudentCourseControllerTest extends AbstractTestcontainers {
         Student student = studentRepository.save(getDefaultStudent());
 
         String url = String.format(API_STUDENTS_STUDENT_ID_URL, student.getId());
-        ResponseEntity<StudentDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, StudentDto.class);
+        ResponseEntity<StudentResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.DELETE, null, StudentResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(student.getId(), responseEntity.getBody().getId());
-        assertEquals(student.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getCourses().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(student.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(student.getName());
+        assertThat(responseEntity.getBody().getCourses().size()).isEqualTo(0);
 
         Optional<Student> studentOptional = studentRepository.findById(student.getId());
-        assertFalse(studentOptional.isPresent());
+        assertThat(studentOptional.isPresent()).isFalse();
     }
 
     @Test
@@ -120,47 +119,49 @@ class StudentCourseControllerTest extends AbstractTestcontainers {
         Course course = courseRepository.save(getDefaultCourse());
 
         String url = String.format(API_COURSES_COURSE_ID_URL, course.getId());
-        ResponseEntity<CourseDto> responseEntity = testRestTemplate.getForEntity(url, CourseDto.class);
+        ResponseEntity<CourseResponse> responseEntity = testRestTemplate.getForEntity(url, CourseResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(course.getId(), responseEntity.getBody().getId());
-        assertEquals(course.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getStudents().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(course.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(course.getName());
+        assertThat(responseEntity.getBody().getStudents().size()).isEqualTo(0);
     }
 
     @Test
     void testCreateCourse() {
-        CreateCourseDto createCourseDto = getDefaultCreateCourseDto();
-        ResponseEntity<CourseDto> responseEntity = testRestTemplate.postForEntity(API_COURSES_URL, createCourseDto, CourseDto.class);
+        CreateCourseRequest createCourseRequest = new CreateCourseRequest("Java 8");
+        ResponseEntity<CourseResponse> responseEntity = testRestTemplate.postForEntity(
+                API_COURSES_URL, createCourseRequest, CourseResponse.class);
 
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertNotNull(responseEntity.getBody().getId());
-        assertEquals(createCourseDto.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getStudents().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isNotNull();
+        assertThat(responseEntity.getBody().getName()).isEqualTo(createCourseRequest.getName());
+        assertThat(responseEntity.getBody().getStudents().size()).isEqualTo(0);
 
         Optional<Course> courseOptional = courseRepository.findById(responseEntity.getBody().getId());
-        assertTrue(courseOptional.isPresent());
-        courseOptional.ifPresent(c -> assertEquals(createCourseDto.getName(), c.getName()));
+        assertThat(courseOptional.isPresent()).isTrue();
+        courseOptional.ifPresent(c -> assertThat(c.getName()).isEqualTo(createCourseRequest.getName()));
     }
 
     @Test
     void testUpdateCourse() {
         Course course = courseRepository.save(getDefaultCourse());
-        UpdateCourseDto updateCourseDto = getDefaultUpdateCourseDto();
+        UpdateCourseRequest updateCourseRequest = new UpdateCourseRequest("Springboot");
 
-        HttpEntity<UpdateCourseDto> requestUpdate = new HttpEntity<>(updateCourseDto);
+        HttpEntity<UpdateCourseRequest> requestUpdate = new HttpEntity<>(updateCourseRequest);
         String url = String.format(API_COURSES_COURSE_ID_URL, course.getId());
-        ResponseEntity<CourseDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.PUT, requestUpdate, CourseDto.class);
+        ResponseEntity<CourseResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.PUT, requestUpdate, CourseResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(updateCourseDto.getName(), responseEntity.getBody().getName());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getName()).isEqualTo(updateCourseRequest.getName());
 
         Optional<Course> courseOptional = courseRepository.findById(course.getId());
-        assertTrue(courseOptional.isPresent());
-        courseOptional.ifPresent(c -> assertEquals(updateCourseDto.getName(), c.getName()));
+        assertThat(courseOptional.isPresent()).isTrue();
+        courseOptional.ifPresent(c -> assertThat(c.getName()).isEqualTo(updateCourseRequest.getName()));
     }
 
     @Test
@@ -168,16 +169,17 @@ class StudentCourseControllerTest extends AbstractTestcontainers {
         Course course = courseRepository.save(getDefaultCourse());
 
         String url = String.format(API_COURSES_COURSE_ID_URL, course.getId());
-        ResponseEntity<CourseDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, CourseDto.class);
+        ResponseEntity<CourseResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.DELETE, null, CourseResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(course.getId(), responseEntity.getBody().getId());
-        assertEquals(course.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getStudents().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(course.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(course.getName());
+        assertThat(responseEntity.getBody().getStudents().size()).isEqualTo(0);
 
         Optional<Course> courseOptional = courseRepository.findById(course.getId());
-        assertFalse(courseOptional.isPresent());
+        assertThat(courseOptional.isPresent()).isFalse();
     }
 
     @Test
@@ -186,32 +188,33 @@ class StudentCourseControllerTest extends AbstractTestcontainers {
         Student student = studentRepository.save(getDefaultStudent());
 
         String url = String.format(API_COURSES_COURSE_ID_STUDENTS_STUDENT_ID_URL, course.getId(), student.getId());
-        ResponseEntity<CourseStudentDto> responseEntity = testRestTemplate.postForEntity(url, null, CourseStudentDto.class);
+        ResponseEntity<CourseStudentResponse> responseEntity = testRestTemplate.postForEntity(
+                url, null, CourseStudentResponse.class);
 
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(course.getId(), responseEntity.getBody().getCourse().getId());
-        assertEquals(course.getName(), responseEntity.getBody().getCourse().getName());
-        assertEquals(student.getId(), responseEntity.getBody().getStudent().getId());
-        assertEquals(student.getName(), responseEntity.getBody().getStudent().getName());
-        assertNotNull(responseEntity.getBody().getRegistrationDate());
-        assertNull(responseEntity.getBody().getGrade());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getCourse().getId()).isEqualTo(course.getId());
+        assertThat(responseEntity.getBody().getCourse().getName()).isEqualTo(course.getName());
+        assertThat(responseEntity.getBody().getStudent().getId()).isEqualTo(student.getId());
+        assertThat(responseEntity.getBody().getStudent().getName()).isEqualTo(student.getName());
+        assertThat(responseEntity.getBody().getRegistrationDate()).isNotNull();
+        assertThat(responseEntity.getBody().getGrade()).isNull();
 
         Optional<Course> courseOptional = courseRepository.findById(course.getId());
-        assertTrue(courseOptional.isPresent());
-        courseOptional.ifPresent(c -> assertEquals(1, c.getStudents().size()));
+        assertThat(courseOptional.isPresent()).isTrue();
+        courseOptional.ifPresent(c -> assertThat(c.getStudents().size()).isEqualTo(1));
 
         Optional<Student> studentOptional = studentRepository.findById(student.getId());
-        assertTrue(studentOptional.isPresent());
-        studentOptional.ifPresent(s -> assertEquals(1, s.getCourses().size()));
+        assertThat(studentOptional.isPresent()).isTrue();
+        studentOptional.ifPresent(s -> assertThat(s.getCourses().size()).isEqualTo(1));
 
         CourseStudentPk courseStudentPk = new CourseStudentPk(course.getId(), student.getId());
         Optional<CourseStudent> courseStudentOptional = courseStudentRepository.findById(courseStudentPk);
-        assertTrue(courseStudentOptional.isPresent());
+        assertThat(courseStudentOptional.isPresent()).isTrue();
         courseStudentOptional.ifPresent(cs -> {
-            assertEquals(student, cs.getStudent());
-            assertEquals(course, cs.getCourse());
-            assertNotNull(cs.getRegistrationDate());
+            assertThat(cs.getStudent()).isEqualTo(student);
+            assertThat(cs.getCourse()).isEqualTo(course);
+            assertThat(cs.getRegistrationDate()).isNotNull();
         });
     }
 
@@ -226,27 +229,28 @@ class StudentCourseControllerTest extends AbstractTestcontainers {
         courseStudentRepository.save(courseStudent);
 
         String url = String.format(API_COURSES_COURSE_ID_STUDENTS_STUDENT_ID_URL, course.getId(), student.getId());
-        ResponseEntity<CourseStudentDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, CourseStudentDto.class);
+        ResponseEntity<CourseStudentResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.DELETE, null, CourseStudentResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(course.getId(), responseEntity.getBody().getCourse().getId());
-        assertEquals(course.getName(), responseEntity.getBody().getCourse().getName());
-        assertEquals(student.getId(), responseEntity.getBody().getStudent().getId());
-        assertEquals(student.getName(), responseEntity.getBody().getStudent().getName());
-        assertNotNull(responseEntity.getBody().getRegistrationDate());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getCourse().getId()).isEqualTo(course.getId());
+        assertThat(responseEntity.getBody().getCourse().getName()).isEqualTo(course.getName());
+        assertThat(responseEntity.getBody().getStudent().getId()).isEqualTo(student.getId());
+        assertThat(responseEntity.getBody().getStudent().getName()).isEqualTo(student.getName());
+        assertThat(responseEntity.getBody().getRegistrationDate()).isNotNull();
 
         Optional<Course> courseOptional = courseRepository.findById(course.getId());
-        assertTrue(courseOptional.isPresent());
-        courseOptional.ifPresent(c -> assertEquals(0, c.getStudents().size()));
+        assertThat(courseOptional.isPresent()).isTrue();
+        courseOptional.ifPresent(c -> assertThat(c.getStudents().size()).isEqualTo(0));
 
         Optional<Student> studentOptional = studentRepository.findById(student.getId());
-        assertTrue(studentOptional.isPresent());
-        studentOptional.ifPresent(s -> assertEquals(0, s.getCourses().size()));
+        assertThat(studentOptional.isPresent()).isTrue();
+        studentOptional.ifPresent(s -> assertThat(s.getCourses().size()).isEqualTo(0));
 
         CourseStudentPk courseStudentPk = new CourseStudentPk(course.getId(), student.getId());
         Optional<CourseStudent> courseStudentOptional = courseStudentRepository.findById(courseStudentPk);
-        assertFalse(courseStudentOptional.isPresent());
+        assertThat(courseStudentOptional.isPresent()).isFalse();
     }
 
     @Test
@@ -259,29 +263,30 @@ class StudentCourseControllerTest extends AbstractTestcontainers {
         courseStudent.setStudent(student);
         courseStudentRepository.save(courseStudent);
 
-        UpdateCourseStudentDto updateCourseStudentDto = getDefaultUpdateCourseStudentDto();
+        UpdateCourseStudentRequest updateCourseStudentRequest = new UpdateCourseStudentRequest((short) 8);
 
-        HttpEntity<UpdateCourseStudentDto> requestUpdate = new HttpEntity<>(updateCourseStudentDto);
+        HttpEntity<UpdateCourseStudentRequest> requestUpdate = new HttpEntity<>(updateCourseStudentRequest);
         String url = String.format(API_COURSES_COURSE_ID_STUDENTS_STUDENT_ID_URL, course.getId(), student.getId());
-        ResponseEntity<CourseStudentDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.PUT, requestUpdate, CourseStudentDto.class);
+        ResponseEntity<CourseStudentResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.PUT, requestUpdate, CourseStudentResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(course.getId(), responseEntity.getBody().getCourse().getId());
-        assertEquals(course.getName(), responseEntity.getBody().getCourse().getName());
-        assertEquals(student.getId(), responseEntity.getBody().getStudent().getId());
-        assertEquals(student.getName(), responseEntity.getBody().getStudent().getName());
-        assertNotNull(responseEntity.getBody().getRegistrationDate());
-        assertEquals(updateCourseStudentDto.getGrade(), responseEntity.getBody().getGrade());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getCourse().getId()).isEqualTo(course.getId());
+        assertThat(responseEntity.getBody().getCourse().getName()).isEqualTo(course.getName());
+        assertThat(responseEntity.getBody().getStudent().getId()).isEqualTo(student.getId());
+        assertThat(responseEntity.getBody().getStudent().getName()).isEqualTo(student.getName());
+        assertThat(responseEntity.getBody().getRegistrationDate()).isNotNull();
+        assertThat(responseEntity.getBody().getGrade()).isEqualTo(updateCourseStudentRequest.getGrade());
 
         CourseStudentPk courseStudentPk = new CourseStudentPk(course.getId(), student.getId());
         Optional<CourseStudent> courseStudentOptional = courseStudentRepository.findById(courseStudentPk);
-        assertTrue(courseStudentOptional.isPresent());
+        assertThat(courseStudentOptional.isPresent()).isTrue();
         courseStudentOptional.ifPresent(cs -> {
-            assertEquals(student, cs.getStudent());
-            assertEquals(course, cs.getCourse());
-            assertNotNull(cs.getRegistrationDate());
-            assertEquals(updateCourseStudentDto.getGrade(), cs.getGrade());
+            assertThat(cs.getStudent()).isEqualTo(student);
+            assertThat(cs.getCourse()).isEqualTo(course);
+            assertThat(cs.getRegistrationDate()).isNotNull();
+            assertThat(cs.getGrade()).isEqualTo(updateCourseStudentRequest.getGrade());
         });
     }
 
@@ -291,40 +296,10 @@ class StudentCourseControllerTest extends AbstractTestcontainers {
         return student;
     }
 
-    private CreateStudentDto getDefaultCreateStudentDto() {
-        CreateStudentDto createStudentDto = new CreateStudentDto();
-        createStudentDto.setName("Ivan Franchin");
-        return createStudentDto;
-    }
-
-    private UpdateStudentDto getDefaultUpdateStudentDto() {
-        UpdateStudentDto updateStudentDto = new UpdateStudentDto();
-        updateStudentDto.setName("Steve Jobs");
-        return updateStudentDto;
-    }
-
     private Course getDefaultCourse() {
         Course course = new Course();
         course.setName("Java 8");
         return course;
-    }
-
-    private CreateCourseDto getDefaultCreateCourseDto() {
-        CreateCourseDto createCourseDto = new CreateCourseDto();
-        createCourseDto.setName("Java 8");
-        return createCourseDto;
-    }
-
-    private UpdateCourseDto getDefaultUpdateCourseDto() {
-        UpdateCourseDto updateCourseDto = new UpdateCourseDto();
-        updateCourseDto.setName("Springboot");
-        return updateCourseDto;
-    }
-
-    private UpdateCourseStudentDto getDefaultUpdateCourseStudentDto() {
-        UpdateCourseStudentDto updateCourseStudentDto = new UpdateCourseStudentDto();
-        updateCourseStudentDto.setGrade((short) 8);
-        return updateCourseStudentDto;
     }
 
     private static final String API_STUDENTS_URL = "/api/students";
@@ -332,5 +307,4 @@ class StudentCourseControllerTest extends AbstractTestcontainers {
     private static final String API_COURSES_URL = "/api/courses";
     private static final String API_COURSES_COURSE_ID_URL = "/api/courses/%s";
     private static final String API_COURSES_COURSE_ID_STUDENTS_STUDENT_ID_URL = "/api/courses/%s/students/%s";
-
 }

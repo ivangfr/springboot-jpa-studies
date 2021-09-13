@@ -1,10 +1,11 @@
 package com.mycompany.jpaassociations.manytomany.compositepkextracolumn.mapper;
 
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.model.Course;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CreateCourseDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseDto;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseResponse;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CreateCourseRequest;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseRequest;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -14,10 +15,13 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 )
 public interface CourseMapper {
 
-    Course toCourse(CreateCourseDto createCourseDto);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "students", ignore = true)
+    Course toCourse(CreateCourseRequest createCourseRequest);
 
-    CourseDto toCourseDto(Course course);
+    CourseResponse toCourseResponse(Course course);
 
-    void updateCourseFromDto(UpdateCourseDto updateCourseDto, @MappingTarget Course course);
-
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "students", ignore = true)
+    void updateCourseFromRequest(UpdateCourseRequest updateCourseRequest, @MappingTarget Course course);
 }

@@ -33,5 +33,4 @@ public class LifeServiceImpl implements LifeService {
     public Life getAvailableLife() {
         return lifeRepository.findFirstByPlayerIdIsNull().orElseThrow(AllLivesRedeemedException::new);
     }
-
 }

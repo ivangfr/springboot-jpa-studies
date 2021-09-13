@@ -28,5 +28,4 @@ public class TeamDetail {
     private Team team;
 
     private String description;
-
 }

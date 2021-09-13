@@ -49,5 +49,4 @@ public class Book {
         this.writers.remove(writer);
         writer.getBooks().remove(this);
     }
-
 }

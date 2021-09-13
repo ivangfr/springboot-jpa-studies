@@ -18,5 +18,4 @@ public class StarCollectionServiceImpl implements StarCollectionService {
     public List<StarCollection> getAvailableStarCollections(Player player) {
         return starCollectionRepository.findByPlayerIdAndNumAvailableGreaterThanOrderByCreatedAt(player.getId(), 0);
     }
-
 }

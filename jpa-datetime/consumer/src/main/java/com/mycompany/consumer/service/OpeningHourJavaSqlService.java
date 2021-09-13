@@ -7,5 +7,4 @@ import java.util.List;
 public interface OpeningHourJavaSqlService {
 
     List<OpeningHourJavaSql> getAll();
-
 }

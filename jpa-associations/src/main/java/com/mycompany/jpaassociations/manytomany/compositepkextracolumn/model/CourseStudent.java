@@ -11,7 +11,7 @@ import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 @Data
 @ToString(exclude = {"course", "student"})
@@ -32,8 +32,7 @@ public class CourseStudent {
     private Student student;
 
     @Column(nullable = false)
-    private Date registrationDate = new Date();
+    private ZonedDateTime registrationDate = ZonedDateTime.now();
 
     private Short grade;
-
 }

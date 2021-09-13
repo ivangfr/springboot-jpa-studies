@@ -30,5 +30,4 @@ public class Reviewer {
 
     @Column(nullable = false)
     private String name;
-
 }

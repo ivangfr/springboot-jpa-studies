@@ -9,5 +9,4 @@ public interface RestaurantService {
     Restaurant saveRestaurant(Restaurant restaurant);
 
     void deleteRestaurant(Restaurant restaurant);
-
 }

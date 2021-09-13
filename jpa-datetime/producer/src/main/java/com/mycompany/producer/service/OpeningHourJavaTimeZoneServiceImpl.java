@@ -49,5 +49,4 @@ public class OpeningHourJavaTimeZoneServiceImpl implements OpeningHourJavaTimeZo
 
         return openingHourJavaTimeZoneRepository.save(openingHourJavaTimeZone);
     }
-
 }

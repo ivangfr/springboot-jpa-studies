@@ -2,12 +2,13 @@ package com.mycompany.jpaassociations.onetoone.sharedpk.mapper;
 
 import com.mycompany.jpaassociations.onetoone.sharedpk.model.Person;
 import com.mycompany.jpaassociations.onetoone.sharedpk.model.PersonDetail;
-import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.CreatePersonDetailDto;
-import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.CreatePersonDto;
-import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.PersonDto;
-import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.UpdatePersonDetailDto;
-import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.UpdatePersonDto;
+import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.CreatePersonDetailRequest;
+import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.CreatePersonRequest;
+import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.PersonResponse;
+import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.UpdatePersonDetailRequest;
+import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.UpdatePersonRequest;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -17,14 +18,22 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 )
 public interface PersonMapper {
 
-    Person toPerson(CreatePersonDto createPersonDto);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "personDetail", ignore = true)
+    Person toPerson(CreatePersonRequest createPersonRequest);
 
-    PersonDto toPersonDto(Person person);
+    PersonResponse toPersonResponse(Person person);
 
-    void updatePersonFromDto(UpdatePersonDto updatePersonDto, @MappingTarget Person person);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "personDetail", ignore = true)
+    void updatePersonFromRequest(UpdatePersonRequest updatePersonRequest, @MappingTarget Person person);
 
-    PersonDetail toPersonDetail(CreatePersonDetailDto createPersonDetailDto);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "person", ignore = true)
+    PersonDetail toPersonDetail(CreatePersonDetailRequest createPersonDetailRequest);
 
-    void updatePersonDetailFromDto(UpdatePersonDetailDto updatePersonDetailDto, @MappingTarget PersonDetail personDetail);
-
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "person", ignore = true)
+    void updatePersonDetailFromRequest(UpdatePersonDetailRequest updatePersonDetailRequest,
+                                       @MappingTarget PersonDetail personDetail);
 }

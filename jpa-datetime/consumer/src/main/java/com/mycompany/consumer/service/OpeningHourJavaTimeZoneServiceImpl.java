@@ -17,5 +17,4 @@ public class OpeningHourJavaTimeZoneServiceImpl implements OpeningHourJavaTimeZo
     public List<OpeningHourJavaTimeZone> getAll() {
         return openingHourJavaTimeZoneRepository.findAll();
     }
-
 }

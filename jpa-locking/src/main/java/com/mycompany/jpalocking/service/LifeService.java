@@ -13,5 +13,4 @@ public interface LifeService {
     Life saveLife(Life life);
 
     Life getAvailableLife();
-
 }

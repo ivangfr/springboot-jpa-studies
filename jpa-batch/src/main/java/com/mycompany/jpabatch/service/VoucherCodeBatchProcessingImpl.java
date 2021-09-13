@@ -53,5 +53,4 @@ public class VoucherCodeBatchProcessingImpl implements VoucherCodeBatchProcessin
         });
         return voucherCodes;
     }
-
 }

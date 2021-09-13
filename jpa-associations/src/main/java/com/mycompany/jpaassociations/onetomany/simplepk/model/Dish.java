@@ -40,5 +40,4 @@ public class Dish {
         this.restaurant.getDishes().remove(this);
         this.restaurant = null;
     }
-
 }

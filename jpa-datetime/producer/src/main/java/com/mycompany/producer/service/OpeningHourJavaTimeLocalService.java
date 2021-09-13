@@ -9,5 +9,4 @@ public interface OpeningHourJavaTimeLocalService {
     OpeningHourJavaTimeLocal createNow();
 
     void deleteAll();
-
 }

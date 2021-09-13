@@ -25,5 +25,4 @@ public class OpeningHourJavaSql {
 
     private java.util.Date dateTimeBegin;
     private java.util.Date dateTimeEnd;
-
 }

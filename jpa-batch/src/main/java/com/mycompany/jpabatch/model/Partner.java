@@ -31,5 +31,4 @@ public class Partner {
 
     @Column(nullable = false)
     private String name;
-
 }

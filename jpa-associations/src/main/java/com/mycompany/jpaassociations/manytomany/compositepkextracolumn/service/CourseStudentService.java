@@ -9,5 +9,4 @@ public interface CourseStudentService {
     CourseStudent saveCourseStudent(CourseStudent courseStudent);
 
     void deleteCourseStudent(CourseStudent courseStudent);
-
 }

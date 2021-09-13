@@ -1,9 +1,10 @@
 package com.mycompany.jpaassociations.manytomany.compositepkextracolumn.mapper;
 
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.model.CourseStudent;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseStudentDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseStudentDto;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseStudentResponse;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseStudentRequest;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -13,8 +14,11 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 )
 public interface CourseStudentMapper {
 
-    CourseStudentDto toCourseStudentDto(CourseStudent courseStudent);
+    CourseStudentResponse toCourseStudentResponse(CourseStudent courseStudent);
 
-    void updateCourseStudentFromDto(UpdateCourseStudentDto updateCourseStudentDto, @MappingTarget CourseStudent courseStudent);
-
+    @Mapping(target = "course", ignore = true)
+    @Mapping(target = "student", ignore = true)
+    @Mapping(target = "registrationDate", ignore = true)
+    void updateCourseStudentFromRequest(UpdateCourseStudentRequest updateCourseStudentRequest,
+                                        @MappingTarget CourseStudent courseStudent);
 }

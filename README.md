@@ -22,17 +22,9 @@ The goal of this project is to study `JPA Associations` (one-to-one, one-to-many
   docker-compose up -d
   ```
 
-- Wait until all containers are Up (healthy). You can check their status running
+- Wait until all containers are `running (healthy)`. You can check their status running
   ```
   docker-compose ps
-  ```
-
-  You should see something like
-  ```
-    Name                Command                  State                     Ports
-  --------------------------------------------------------------------------------------------
-  mysql      docker-entrypoint.sh mysqld      Up (healthy)   0.0.0.0:3306->3306/tcp, 33060/tcp
-  postgres   docker-entrypoint.sh postg ...   Up (healthy)   0.0.0.0:5432->5432/tcp
   ```
 
 ## Useful Commands

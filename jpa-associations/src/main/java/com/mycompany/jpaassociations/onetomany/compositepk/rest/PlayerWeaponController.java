@@ -4,10 +4,10 @@ import com.mycompany.jpaassociations.onetomany.compositepk.mapper.PlayerMapper;
 import com.mycompany.jpaassociations.onetomany.compositepk.mapper.WeaponMapper;
 import com.mycompany.jpaassociations.onetomany.compositepk.model.Player;
 import com.mycompany.jpaassociations.onetomany.compositepk.model.Weapon;
-import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.CreatePlayerDto;
-import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.CreateWeaponDto;
-import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.PlayerDto;
-import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.WeaponDto;
+import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.CreatePlayerRequest;
+import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.CreateWeaponRequest;
+import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.PlayerResponse;
+import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.WeaponResponse;
 import com.mycompany.jpaassociations.onetomany.compositepk.service.PlayerService;
 import com.mycompany.jpaassociations.onetomany.compositepk.service.WeaponService;
 import lombok.RequiredArgsConstructor;
@@ -37,40 +37,40 @@ public class PlayerWeaponController {
     // Player
 
     @GetMapping("/{playerId}")
-    public PlayerDto getPlayer(@PathVariable Long playerId) {
+    public PlayerResponse getPlayer(@PathVariable Long playerId) {
         Player player = playerService.validateAndGetPlayer(playerId);
-        return playerMapper.toPlayerDto(player);
+        return playerMapper.toPlayerResponse(player);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public PlayerDto createPlayer(@Valid @RequestBody CreatePlayerDto createPlayerDto) {
-        Player player = playerMapper.toPlayer(createPlayerDto);
+    public PlayerResponse createPlayer(@Valid @RequestBody CreatePlayerRequest createPlayerRequest) {
+        Player player = playerMapper.toPlayer(createPlayerRequest);
         player = playerService.savePlayer(player);
-        return playerMapper.toPlayerDto(player);
+        return playerMapper.toPlayerResponse(player);
     }
 
     @DeleteMapping("/{playerId}")
-    public PlayerDto deletePlayer(@PathVariable Long playerId) {
+    public PlayerResponse deletePlayer(@PathVariable Long playerId) {
         Player player = playerService.validateAndGetPlayer(playerId);
         playerService.deletePlayer(player);
-        return playerMapper.toPlayerDto(player);
+        return playerMapper.toPlayerResponse(player);
     }
 
     // ------
     // Weapon
 
     @GetMapping("/{playerId}/weapons/{weaponId}")
-    public WeaponDto getWeapon(@PathVariable Long playerId, @PathVariable Long weaponId) {
+    public WeaponResponse getWeapon(@PathVariable Long playerId, @PathVariable Long weaponId) {
         Weapon weapon = weaponService.validateAndGetWeapon(playerId, weaponId);
-        return weaponMapper.toWeaponDto(weapon);
+        return weaponMapper.toWeaponResponse(weapon);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{playerId}/weapons")
-    public WeaponDto addWeapon(@PathVariable Long playerId, @Valid @RequestBody CreateWeaponDto createWeaponDto) {
+    public WeaponResponse addWeapon(@PathVariable Long playerId, @Valid @RequestBody CreateWeaponRequest createWeaponRequest) {
         Player player = playerService.validateAndGetPlayer(playerId);
-        Weapon weapon = weaponMapper.toWeapon(createWeaponDto);
+        Weapon weapon = weaponMapper.toWeapon(createWeaponRequest);
 
         // to avoid "org.hibernate.HibernateException: No part of a composite identifier may be null"
         // in spite of the fact that it's set a fixed value here, hibernate will generate a new value
@@ -78,14 +78,13 @@ public class PlayerWeaponController {
         weapon.setPlayer(player);
         weapon = weaponService.saveWeapon(weapon);
 
-        return weaponMapper.toWeaponDto(weapon);
+        return weaponMapper.toWeaponResponse(weapon);
     }
 
     @DeleteMapping("/{playerId}/weapons/{weaponId}")
-    public WeaponDto removeWeapon(@PathVariable Long playerId, @PathVariable Long weaponId) {
+    public WeaponResponse removeWeapon(@PathVariable Long playerId, @PathVariable Long weaponId) {
         Weapon weapon = weaponService.validateAndGetWeapon(playerId, weaponId);
         weaponService.deleteWeapon(weapon);
-        return weaponMapper.toWeaponDto(weapon);
+        return weaponMapper.toWeaponResponse(weapon);
     }
-
 }

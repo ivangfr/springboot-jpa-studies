@@ -33,5 +33,4 @@ public class Weapon {
 
     @Column(nullable = false)
     private String name;
-
 }

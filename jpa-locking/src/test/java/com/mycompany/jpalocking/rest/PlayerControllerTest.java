@@ -1,11 +1,11 @@
 package com.mycompany.jpalocking.rest;
 
 import com.mycompany.jpalocking.AbstractTestcontainers;
-import com.mycompany.jpalocking.rest.dto.CreatePlayerDto;
-import com.mycompany.jpalocking.rest.dto.GameDto;
-import com.mycompany.jpalocking.rest.dto.GameSetupDto;
-import com.mycompany.jpalocking.rest.dto.PlayerDto;
-import com.mycompany.jpalocking.rest.dto.StarCollectionDto;
+import com.mycompany.jpalocking.rest.dto.CreatePlayerRequest;
+import com.mycompany.jpalocking.rest.dto.GameResponse;
+import com.mycompany.jpalocking.rest.dto.GameSetupRequest;
+import com.mycompany.jpalocking.rest.dto.PlayerResponse;
+import com.mycompany.jpalocking.rest.dto.StarCollectionRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -70,79 +70,69 @@ class PlayerControllerTest extends AbstractTestcontainers {
         t9.join();
         t10.join();
 
-        PlayerDto playerDto1 = getPlayerInfo(player1);
-        PlayerDto playerDto2 = getPlayerInfo(player2);
-        PlayerDto playerDto3 = getPlayerInfo(player3);
-        GameDto gameInfo = getGameInfo();
+        PlayerResponse playerResponse1 = getPlayerInfo(player1);
+        PlayerResponse playerResponse2 = getPlayerInfo(player2);
+        PlayerResponse playerResponse3 = getPlayerInfo(player3);
+        GameResponse gameInfo = getGameInfo();
 
-        log.info("playerDto1 = {}", playerDto1);
-        log.info("playerDto2 = {}", playerDto2);
-        log.info("playerDto3 = {}", playerDto3);
+        log.info("playerResponse1 = {}", playerResponse1);
+        log.info("playerResponse2 = {}", playerResponse2);
+        log.info("playerResponse3 = {}", playerResponse3);
         log.info("getGameInfo = {}", getGameInfo());
 
-        assertEquals(0, playerDto1.getNumStars());
-        assertEquals(1, playerDto1.getLives().size());
+        assertThat(playerResponse1.getNumStars()).isEqualTo(0);
+        assertThat(playerResponse1.getLives().size()).isEqualTo(1);
 
-        assertEquals(0, playerDto2.getNumStars());
-        assertEquals(1, playerDto2.getLives().size());
+        assertThat(playerResponse2.getNumStars()).isEqualTo(0);
+        assertThat(playerResponse2.getLives().size()).isEqualTo(1);
 
-        assertEquals(10, playerDto3.getNumStars());
-        assertEquals(1, playerDto3.getLives().size());
+        assertThat(playerResponse3.getNumStars()).isEqualTo(10);
+        assertThat(playerResponse3.getLives().size()).isEqualTo(1);
 
-        assertEquals(2, gameInfo.getAvailableLives());
-        assertEquals(3, gameInfo.getLives().stream().filter(lifeDto -> lifeDto.getUsername() != null).count());
-        assertEquals(2, gameInfo.getLives().stream().filter(lifeDto -> lifeDto.getUsername() == null).count());
+        assertThat(gameInfo.getAvailableLives()).isEqualTo(2);
+        assertThat(gameInfo.getLives().stream().filter(lifeResponse -> lifeResponse.getUsername() != null).count())
+                .isEqualTo(3);
+        assertThat(gameInfo.getLives().stream().filter(lifeResponse -> lifeResponse.getUsername() == null).count())
+                .isEqualTo(2);
     }
 
     private void setupGame(int numLives) {
-        GameSetupDto gameSetupDto = getGameSetupDto(numLives);
-        testRestTemplate.postForEntity("/api/games", gameSetupDto, GameDto.class);
+        GameSetupRequest gameSetupRequest = new GameSetupRequest(numLives);
+        testRestTemplate.postForEntity(API_GAMES_URL, gameSetupRequest, GameResponse.class);
     }
 
-    private GameDto getGameInfo() {
-        ResponseEntity<GameDto> responseEntity = testRestTemplate.getForEntity("/api/games", GameDto.class);
+    private GameResponse getGameInfo() {
+        ResponseEntity<GameResponse> responseEntity = testRestTemplate.getForEntity(API_GAMES_URL, GameResponse.class);
         return responseEntity.getBody();
     }
 
-    private PlayerDto createPlayer(String username) {
-        CreatePlayerDto createPlayerDto = getCreatePlayerDto(username);
-        ResponseEntity<PlayerDto> responseEntity = testRestTemplate.postForEntity("/api/players", createPlayerDto, PlayerDto.class);
+    private PlayerResponse createPlayer(String username) {
+        CreatePlayerRequest createPlayerRequest = new CreatePlayerRequest(username);
+        ResponseEntity<PlayerResponse> responseEntity = testRestTemplate.postForEntity(
+                API_PLAYERS_URL, createPlayerRequest, PlayerResponse.class);
         return responseEntity.getBody();
     }
 
     private void collectStars(Long playerId, int numStars) {
-        StarCollectionDto collectStarDto = getCollectStarDto(numStars);
-        String url = String.format("/api/players/%s/stars", playerId);
-        testRestTemplate.postForEntity(url, collectStarDto, PlayerDto.class);
+        StarCollectionRequest collectStarResponse = new StarCollectionRequest(numStars);
+        String url = String.format(API_PLAYERS_ID_STARS_URL, playerId);
+        testRestTemplate.postForEntity(url, collectStarResponse, PlayerResponse.class);
     }
 
     private void redeemStars(Long playerId) {
-        String url = String.format("/api/players/%s/lives", playerId);
-        testRestTemplate.postForEntity(url, null, PlayerDto.class);
+        String url = String.format(API_PLAYERS_ID_LIVES_URL, playerId);
+        testRestTemplate.postForEntity(url, null, PlayerResponse.class);
     }
 
-    private PlayerDto getPlayerInfo(Long playerId) {
-        String url = String.format("/api/players/%s", playerId);
-        ResponseEntity<PlayerDto> responseEntity = testRestTemplate.getForEntity(url, PlayerDto.class);
+    private PlayerResponse getPlayerInfo(Long playerId) {
+        String url = String.format(API_PLAYERS_ID_URL, playerId);
+        ResponseEntity<PlayerResponse> responseEntity = testRestTemplate.getForEntity(url, PlayerResponse.class);
         return responseEntity.getBody();
     }
 
-    private GameSetupDto getGameSetupDto(int numLives) {
-        GameSetupDto gameSetupDto = new GameSetupDto();
-        gameSetupDto.setNumLives(numLives);
-        return gameSetupDto;
-    }
-
-    private CreatePlayerDto getCreatePlayerDto(String username) {
-        CreatePlayerDto createPlayerDto = new CreatePlayerDto();
-        createPlayerDto.setUsername(username);
-        return createPlayerDto;
-    }
-
-    private StarCollectionDto getCollectStarDto(int numStars) {
-        StarCollectionDto starCollectionDto = new StarCollectionDto();
-        starCollectionDto.setNumStars(numStars);
-        return starCollectionDto;
-    }
-
+    private static final String API_GAMES_URL = "/api/games";
+    private static final String API_PLAYERS_URL = "/api/players";
+    private static final String API_PLAYERS_ID_URL = "/api/players/%s";
+    private static final String API_PLAYERS_ID_STARS_URL = "/api/players/%s/stars";
+    private static final String API_PLAYERS_ID_LIVES_URL = "/api/players/%s/lives";
 }

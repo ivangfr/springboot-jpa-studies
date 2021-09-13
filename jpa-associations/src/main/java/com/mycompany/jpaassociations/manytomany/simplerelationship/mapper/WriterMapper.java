@@ -1,10 +1,11 @@
 package com.mycompany.jpaassociations.manytomany.simplerelationship.mapper;
 
 import com.mycompany.jpaassociations.manytomany.simplerelationship.model.Writer;
-import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.CreateWriterDto;
-import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.UpdateWriterDto;
-import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.WriterDto;
+import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.CreateWriterRequest;
+import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.UpdateWriterRequest;
+import com.mycompany.jpaassociations.manytomany.simplerelationship.rest.dto.WriterResponse;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -14,10 +15,13 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 )
 public interface WriterMapper {
 
-    Writer toWriter(CreateWriterDto createWriterDto);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "books", ignore = true)
+    Writer toWriter(CreateWriterRequest createWriterRequest);
 
-    WriterDto toWriterDto(Writer writer);
+    WriterResponse toWriterResponse(Writer writer);
 
-    void updateWriterFromDto(UpdateWriterDto updateWriterDto, @MappingTarget Writer writer);
-
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "books", ignore = true)
+    void updateWriterFromRequest(UpdateWriterRequest updateWriterRequest, @MappingTarget Writer writer);
 }

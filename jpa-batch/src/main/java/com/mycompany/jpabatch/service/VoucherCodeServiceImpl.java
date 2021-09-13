@@ -44,8 +44,7 @@ public class VoucherCodeServiceImpl implements VoucherCodeService {
     @Override
     public void deleteVoucherCodes(List<VoucherCode> voucherCodes) {
         for (List<VoucherCode> subList : partition(voucherCodes, batchSize)) {
-            voucherCodeRepository.deleteInBatch(subList);
+            voucherCodeRepository.deleteAllInBatch(subList);
         }
     }
-
 }

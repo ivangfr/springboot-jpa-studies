@@ -3,14 +3,14 @@ package com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.model.Course;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.model.CourseStudent;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.model.Student;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseStudentDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CreateCourseDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CreateStudentDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.StudentDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseStudentDto;
-import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateStudentDto;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseResponse;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseStudentResponse;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CreateCourseRequest;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CreateStudentRequest;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.StudentResponse;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseRequest;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseStudentRequest;
+import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateStudentRequest;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.service.CourseService;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.service.CourseStudentService;
 import com.mycompany.jpaassociations.manytomany.compositepkextracolumn.service.StudentService;
@@ -47,69 +47,71 @@ public class StudentCourseController {
     // Student
 
     @GetMapping("/students/{studentId}")
-    public StudentDto getStudent(@PathVariable Long studentId) {
+    public StudentResponse getStudent(@PathVariable Long studentId) {
         Student student = studentService.validateAndGetStudent(studentId);
-        return studentMapper.toStudentDto(student);
+        return studentMapper.toStudentResponse(student);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/students")
-    public StudentDto createStudent(@Valid @RequestBody CreateStudentDto createStudentDto) {
-        Student student = studentMapper.toStudent(createStudentDto);
+    public StudentResponse createStudent(@Valid @RequestBody CreateStudentRequest createStudentRequest) {
+        Student student = studentMapper.toStudent(createStudentRequest);
         student = studentService.saveStudent(student);
-        return studentMapper.toStudentDto(student);
+        return studentMapper.toStudentResponse(student);
     }
 
     @PutMapping("/students/{studentId}")
-    public StudentDto updateStudent(@PathVariable Long studentId, @Valid @RequestBody UpdateStudentDto updateStudentDto) {
+    public StudentResponse updateStudent(@PathVariable Long studentId,
+                                         @Valid @RequestBody UpdateStudentRequest updateStudentRequest) {
         Student student = studentService.validateAndGetStudent(studentId);
-        studentMapper.updateStudentFromDto(updateStudentDto, student);
+        studentMapper.updateStudentFromRequest(updateStudentRequest, student);
         student = studentService.saveStudent(student);
-        return studentMapper.toStudentDto(student);
+        return studentMapper.toStudentResponse(student);
     }
 
     @DeleteMapping("/students/{studentId}")
-    public StudentDto deleteStudent(@PathVariable Long studentId) {
+    public StudentResponse deleteStudent(@PathVariable Long studentId) {
         Student student = studentService.validateAndGetStudent(studentId);
         studentService.deleteStudent(student);
-        return studentMapper.toStudentDto(student);
+        return studentMapper.toStudentResponse(student);
     }
 
     // ------
     // Course
 
     @GetMapping("/courses/{courseId}")
-    public CourseDto getCourse(@PathVariable Long courseId) {
+    public CourseResponse getCourse(@PathVariable Long courseId) {
         Course course = courseService.validateAndGetCourse(courseId);
-        return courseMapper.toCourseDto(course);
+        return courseMapper.toCourseResponse(course);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/courses")
-    public CourseDto createCourse(@Valid @RequestBody CreateCourseDto createCourseDto) {
-        Course course = courseMapper.toCourse(createCourseDto);
+    public CourseResponse createCourse(@Valid @RequestBody CreateCourseRequest createCourseRequest) {
+        Course course = courseMapper.toCourse(createCourseRequest);
         course = courseService.saveCourse(course);
-        return courseMapper.toCourseDto(course);
+        return courseMapper.toCourseResponse(course);
     }
 
     @PutMapping("/courses/{courseId}")
-    public CourseDto updateCourse(@PathVariable Long courseId, @Valid @RequestBody UpdateCourseDto updateCourseDto) {
+    public CourseResponse updateCourse(@PathVariable Long courseId,
+                                       @Valid @RequestBody UpdateCourseRequest updateCourseRequest) {
         Course course = courseService.validateAndGetCourse(courseId);
-        courseMapper.updateCourseFromDto(updateCourseDto, course);
+        courseMapper.updateCourseFromRequest(updateCourseRequest, course);
         course = courseService.saveCourse(course);
-        return courseMapper.toCourseDto(course);
+        return courseMapper.toCourseResponse(course);
     }
 
     @DeleteMapping("/courses/{courseId}")
-    public CourseDto deleteCourse(@PathVariable Long courseId) {
+    public CourseResponse deleteCourse(@PathVariable Long courseId) {
         Course course = courseService.validateAndGetCourse(courseId);
         courseService.deleteCourse(course);
-        return courseMapper.toCourseDto(course);
+        return courseMapper.toCourseResponse(course);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/courses/{courseId}/students/{studentId}")
-    public CourseStudentDto enrollStudentInCourse(@PathVariable Long courseId, @PathVariable Long studentId) {
+    public CourseStudentResponse enrollStudentInCourse(@PathVariable Long courseId, @PathVariable Long studentId) {
         Course course = courseService.validateAndGetCourse(courseId);
         Student student = studentService.validateAndGetStudent(studentId);
 
@@ -118,23 +120,22 @@ public class StudentCourseController {
         courseStudent.setCourse(course);
         courseStudent = courseStudentService.saveCourseStudent(courseStudent);
 
-        return courseStudentMapper.toCourseStudentDto(courseStudent);
+        return courseStudentMapper.toCourseStudentResponse(courseStudent);
     }
 
     @DeleteMapping("/courses/{courseId}/students/{studentId}")
-    public CourseStudentDto unregisterStudentOfCourse(@PathVariable Long courseId, @PathVariable Long studentId) {
+    public CourseStudentResponse unregisterStudentOfCourse(@PathVariable Long courseId, @PathVariable Long studentId) {
         CourseStudent courseStudent = courseStudentService.validateAndGetCourseStudent(courseId, studentId);
         courseStudentService.deleteCourseStudent(courseStudent);
-        return courseStudentMapper.toCourseStudentDto(courseStudent);
+        return courseStudentMapper.toCourseStudentResponse(courseStudent);
     }
 
     @PutMapping("/courses/{courseId}/students/{studentId}")
-    public CourseStudentDto updateStudentDataInCourse(@PathVariable Long courseId, @PathVariable Long studentId,
-                                                      @Valid @RequestBody UpdateCourseStudentDto updateCourseStudentDto) {
+    public CourseStudentResponse updateStudentDataInCourse(@PathVariable Long courseId, @PathVariable Long studentId,
+                                                           @Valid @RequestBody UpdateCourseStudentRequest updateCourseStudentRequest) {
         CourseStudent courseStudent = courseStudentService.validateAndGetCourseStudent(courseId, studentId);
-        courseStudentMapper.updateCourseStudentFromDto(updateCourseStudentDto, courseStudent);
+        courseStudentMapper.updateCourseStudentFromRequest(updateCourseStudentRequest, courseStudent);
         courseStudentService.saveCourseStudent(courseStudent);
-        return courseStudentMapper.toCourseStudentDto(courseStudent);
+        return courseStudentMapper.toCourseStudentResponse(courseStudent);
     }
-
 }

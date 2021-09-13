@@ -8,5 +8,4 @@ import java.util.List;
 public interface StarCollectionService {
 
     List<StarCollection> getAvailableStarCollections(Player player);
-
 }

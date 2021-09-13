@@ -3,11 +3,11 @@ package com.mycompany.jpaassociations.onetoone.simplepk.rest;
 import com.mycompany.jpaassociations.onetoone.simplepk.mapper.TeamMapper;
 import com.mycompany.jpaassociations.onetoone.simplepk.model.Team;
 import com.mycompany.jpaassociations.onetoone.simplepk.model.TeamDetail;
-import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.CreateTeamDetailDto;
-import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.CreateTeamDto;
-import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.TeamDto;
-import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.UpdateTeamDetailDto;
-import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.UpdateTeamDto;
+import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.CreateTeamDetailRequest;
+import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.CreateTeamRequest;
+import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.TeamResponse;
+import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.UpdateTeamDetailRequest;
+import com.mycompany.jpaassociations.onetoone.simplepk.rest.dto.UpdateTeamRequest;
 import com.mycompany.jpaassociations.onetoone.simplepk.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,59 +32,60 @@ public class TeamDetailController {
     private final TeamMapper teamMapper;
 
     @GetMapping("/{teamId}")
-    public TeamDto getTeam(@PathVariable Long teamId) {
+    public TeamResponse getTeam(@PathVariable Long teamId) {
         Team team = teamService.validateAndGetTeam(teamId);
-        return teamMapper.toTeamDto(team);
+        return teamMapper.toTeamResponse(team);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public TeamDto createTeam(@Valid @RequestBody CreateTeamDto createTeamDto) {
-        Team team = teamMapper.toTeam(createTeamDto);
+    public TeamResponse createTeam(@Valid @RequestBody CreateTeamRequest createTeamRequest) {
+        Team team = teamMapper.toTeam(createTeamRequest);
         team = teamService.saveTeam(team);
-        return teamMapper.toTeamDto(team);
+        return teamMapper.toTeamResponse(team);
     }
 
     @PutMapping("/{teamId}")
-    public TeamDto updateTeam(@PathVariable Long teamId, @Valid @RequestBody UpdateTeamDto updateTeamDto) {
+    public TeamResponse updateTeam(@PathVariable Long teamId, @Valid @RequestBody UpdateTeamRequest updateTeamRequest) {
         Team team = teamService.validateAndGetTeam(teamId);
-        teamMapper.updateTeamFromDto(updateTeamDto, team);
+        teamMapper.updateTeamFromRequest(updateTeamRequest, team);
         teamService.saveTeam(team);
-        return teamMapper.toTeamDto(team);
+        return teamMapper.toTeamResponse(team);
     }
 
     @DeleteMapping("/{teamId}")
-    public TeamDto deleteTeam(@PathVariable Long teamId) {
+    public TeamResponse deleteTeam(@PathVariable Long teamId) {
         Team team = teamService.validateAndGetTeam(teamId);
         teamService.deleteTeam(team);
-        return teamMapper.toTeamDto(team);
+        return teamMapper.toTeamResponse(team);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{teamId}/team-details")
-    public TeamDto addTeamDetail(@PathVariable Long teamId, @Valid @RequestBody CreateTeamDetailDto createTeamDetailDto) {
+    public TeamResponse addTeamDetail(@PathVariable Long teamId,
+                                      @Valid @RequestBody CreateTeamDetailRequest createTeamDetailRequest) {
         Team team = teamService.validateAndGetTeam(teamId);
-        TeamDetail teamDetail = teamMapper.toTeamDetail(createTeamDetailDto);
+        TeamDetail teamDetail = teamMapper.toTeamDetail(createTeamDetailRequest);
         team.addTeamDetail(teamDetail);
         team = teamService.saveTeam(team);
-        return teamMapper.toTeamDto(team);
+        return teamMapper.toTeamResponse(team);
     }
 
     @PutMapping("/{teamId}/team-details")
-    public TeamDto updateTeamDetail(@PathVariable Long teamId, @Valid @RequestBody UpdateTeamDetailDto updateTeamDetailDto) {
+    public TeamResponse updateTeamDetail(@PathVariable Long teamId,
+                                         @Valid @RequestBody UpdateTeamDetailRequest updateTeamDetailRequest) {
         Team team = teamService.validateAndGetTeam(teamId);
         TeamDetail teamDetail = team.getTeamDetail();
-        teamMapper.updateTeamDetailFromDto(updateTeamDetailDto, teamDetail);
+        teamMapper.updateTeamDetailFromRequest(updateTeamDetailRequest, teamDetail);
         team = teamService.saveTeam(team);
-        return teamMapper.toTeamDto(team);
+        return teamMapper.toTeamResponse(team);
     }
 
     @DeleteMapping("/{teamId}/team-details")
-    public TeamDto deleteTeamDetail(@PathVariable Long teamId) {
+    public TeamResponse deleteTeamDetail(@PathVariable Long teamId) {
         Team team = teamService.validateAndGetTeam(teamId);
         team.removeTeamDetail();
         team = teamService.saveTeam(team);
-        return teamMapper.toTeamDto(team);
+        return teamMapper.toTeamResponse(team);
     }
-
 }

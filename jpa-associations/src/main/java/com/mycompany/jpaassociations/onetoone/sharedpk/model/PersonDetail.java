@@ -26,5 +26,4 @@ public class PersonDetail {
     private Person person;
 
     private String description;
-
 }

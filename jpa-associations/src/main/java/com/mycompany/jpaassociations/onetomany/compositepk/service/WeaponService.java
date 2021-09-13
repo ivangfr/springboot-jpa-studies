@@ -9,5 +9,4 @@ public interface WeaponService {
     Weapon saveWeapon(Weapon weapon);
 
     void deleteWeapon(Weapon weapon);
-
 }

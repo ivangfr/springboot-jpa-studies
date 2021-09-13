@@ -9,5 +9,4 @@ public interface OpeningHourJavaTimeZoneService {
     OpeningHourJavaTimeZone createNow(String zoneId);
 
     void deleteAll();
-
 }

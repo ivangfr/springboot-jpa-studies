@@ -30,5 +30,4 @@ public class Restaurant {
 
     @Column(nullable = false)
     private String name;
-
 }

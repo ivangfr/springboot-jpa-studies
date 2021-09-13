@@ -48,5 +48,4 @@ public class OpeningHourJavaTimeLocalServiceImpl implements OpeningHourJavaTimeL
 
         return openingHourJavaTimeLocalRepository.save(openingHourJavaTimeLocal);
     }
-
 }

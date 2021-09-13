@@ -16,7 +16,7 @@ services:
       start_period: 10s
 
   postgres:
-    image: postgres:13.3
+    image: postgres:13.4
     container_name: postgres
     restart: unless-stopped
     ports:

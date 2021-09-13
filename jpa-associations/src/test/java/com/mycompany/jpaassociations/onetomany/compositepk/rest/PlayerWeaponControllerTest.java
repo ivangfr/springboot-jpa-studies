@@ -6,10 +6,10 @@ import com.mycompany.jpaassociations.onetomany.compositepk.model.Weapon;
 import com.mycompany.jpaassociations.onetomany.compositepk.model.WeaponPk;
 import com.mycompany.jpaassociations.onetomany.compositepk.repository.PlayerRepository;
 import com.mycompany.jpaassociations.onetomany.compositepk.repository.WeaponRepository;
-import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.CreatePlayerDto;
-import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.CreateWeaponDto;
-import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.PlayerDto;
-import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.WeaponDto;
+import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.CreatePlayerRequest;
+import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.CreateWeaponRequest;
+import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.PlayerResponse;
+import com.mycompany.jpaassociations.onetomany.compositepk.rest.dto.WeaponResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,10 +21,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
@@ -44,29 +41,30 @@ class PlayerWeaponControllerTest extends AbstractTestcontainers {
         Player player = playerRepository.save(getDefaultPlayer());
 
         String url = String.format(API_PLAYERS_PLAYER_ID_URL, player.getId());
-        ResponseEntity<PlayerDto> responseEntity = testRestTemplate.getForEntity(url, PlayerDto.class);
+        ResponseEntity<PlayerResponse> responseEntity = testRestTemplate.getForEntity(url, PlayerResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(player.getId(), responseEntity.getBody().getId());
-        assertEquals(player.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getWeapons().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(player.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(player.getName());
+        assertThat(responseEntity.getBody().getWeapons().size()).isEqualTo(0);
     }
 
     @Test
     void testCreatePlayer() {
-        CreatePlayerDto createPlayerDto = getDefaultCreatePlayerDto();
-        ResponseEntity<PlayerDto> responseEntity = testRestTemplate.postForEntity(API_PLAYERS_URL, createPlayerDto, PlayerDto.class);
+        CreatePlayerRequest createPlayerRequest = new CreatePlayerRequest("Ivan Franchin");
+        ResponseEntity<PlayerResponse> responseEntity = testRestTemplate.postForEntity(
+                API_PLAYERS_URL, createPlayerRequest, PlayerResponse.class);
 
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertNotNull(responseEntity.getBody().getId());
-        assertEquals(createPlayerDto.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getWeapons().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isNotNull();
+        assertThat(responseEntity.getBody().getName()).isEqualTo(createPlayerRequest.getName());
+        assertThat(responseEntity.getBody().getWeapons().size()).isEqualTo(0);
 
         Optional<Player> playerOptional = playerRepository.findById(responseEntity.getBody().getId());
-        assertTrue(playerOptional.isPresent());
-        playerOptional.ifPresent(p -> assertEquals(createPlayerDto.getName(), p.getName()));
+        assertThat(playerOptional.isPresent()).isTrue();
+        playerOptional.ifPresent(p -> assertThat(p.getName()).isEqualTo(createPlayerRequest.getName()));
     }
 
     @Test
@@ -74,16 +72,17 @@ class PlayerWeaponControllerTest extends AbstractTestcontainers {
         Player player = playerRepository.save(getDefaultPlayer());
 
         String url = String.format("/api/players/%s", player.getId());
-        ResponseEntity<PlayerDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, PlayerDto.class);
+        ResponseEntity<PlayerResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.DELETE, null, PlayerResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(player.getId(), responseEntity.getBody().getId());
-        assertEquals(player.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getWeapons().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(player.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(player.getName());
+        assertThat(responseEntity.getBody().getWeapons().size()).isEqualTo(0);
 
         Optional<Player> playerOptional = playerRepository.findById(player.getId());
-        assertFalse(playerOptional.isPresent());
+        assertThat(playerOptional.isPresent()).isFalse();
     }
 
     @Test
@@ -95,36 +94,38 @@ class PlayerWeaponControllerTest extends AbstractTestcontainers {
         weapon = weaponRepository.save(weapon);
 
         String url = String.format(API_PLAYERS_PLAYER_ID_WEAPONS_WEAPON_ID_URL, player.getId(), weapon.getId());
-        ResponseEntity<WeaponDto> responseEntity = testRestTemplate.getForEntity(url, WeaponDto.class);
+        ResponseEntity<WeaponResponse> responseEntity = testRestTemplate.getForEntity(url, WeaponResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(weapon.getId(), responseEntity.getBody().getId());
-        assertEquals(weapon.getName(), responseEntity.getBody().getName());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(weapon.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(weapon.getName());
     }
 
     @Test
     void testAddWeapon() {
         Player player = playerRepository.save(getDefaultPlayer());
-        CreateWeaponDto createWeaponDto = getDefaultCreateWeaponDto();
+        CreateWeaponRequest createWeaponRequest = new CreateWeaponRequest("Machine Gun");
 
         String url = String.format(API_PLAYERS_PLAYER_ID_WEAPONS_URL, player.getId());
-        ResponseEntity<WeaponDto> responseEntity = testRestTemplate.postForEntity(url, createWeaponDto, WeaponDto.class);
+        ResponseEntity<WeaponResponse> responseEntity = testRestTemplate.postForEntity(
+                url, createWeaponRequest, WeaponResponse.class);
 
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertNotNull(responseEntity.getBody().getId());
-        assertEquals(createWeaponDto.getName(), responseEntity.getBody().getName());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isNotNull();
+        assertThat(responseEntity.getBody().getName()).isEqualTo(createWeaponRequest.getName());
 
-        Optional<Weapon> weaponOptional = weaponRepository.findById(new WeaponPk(responseEntity.getBody().getId(), player.getId()));
-        assertTrue(weaponOptional.isPresent());
-        weaponOptional.ifPresent(w -> assertEquals(player.getId(), w.getPlayer().getId()));
+        Optional<Weapon> weaponOptional = weaponRepository.findById(
+                new WeaponPk(responseEntity.getBody().getId(), player.getId()));
+        assertThat(weaponOptional.isPresent()).isTrue();
+        weaponOptional.ifPresent(w -> assertThat(w.getPlayer().getId()).isEqualTo(player.getId()));
 
         Optional<Player> playerOptional = playerRepository.findById(player.getId());
-        assertTrue(playerOptional.isPresent());
+        assertThat(playerOptional.isPresent()).isTrue();
         playerOptional.ifPresent(p -> {
-            assertEquals(1, p.getWeapons().size());
-            weaponOptional.ifPresent(w -> assertTrue(p.getWeapons().contains(w)));
+            assertThat(p.getWeapons().size()).isEqualTo(1);
+            weaponOptional.ifPresent(w -> assertThat(p.getWeapons().contains(w)).isTrue());
         });
     }
 
@@ -137,21 +138,22 @@ class PlayerWeaponControllerTest extends AbstractTestcontainers {
         final Weapon weapon = weaponRepository.save(weaponAux);
 
         String url = String.format(API_PLAYERS_PLAYER_ID_WEAPONS_WEAPON_ID_URL, player.getId(), weapon.getId());
-        ResponseEntity<WeaponDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, WeaponDto.class);
+        ResponseEntity<WeaponResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.DELETE, null, WeaponResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(weapon.getId(), responseEntity.getBody().getId());
-        assertEquals(weapon.getName(), responseEntity.getBody().getName());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(weapon.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(weapon.getName());
 
         Optional<Weapon> weaponOptional = weaponRepository.findById(new WeaponPk(player.getId(), weapon.getId()));
-        assertFalse(weaponOptional.isPresent());
+        assertThat(weaponOptional.isPresent()).isFalse();
 
         Optional<Player> playerOptional = playerRepository.findById(player.getId());
-        assertTrue(playerOptional.isPresent());
+        assertThat(playerOptional.isPresent()).isTrue();
         playerOptional.ifPresent(p -> {
-            assertEquals(0, p.getWeapons().size());
-            assertFalse(p.getWeapons().contains(weapon));
+            assertThat(p.getWeapons().size()).isEqualTo(0);
+            assertThat(p.getWeapons().contains(weapon)).isFalse();
         });
     }
 
@@ -161,23 +163,11 @@ class PlayerWeaponControllerTest extends AbstractTestcontainers {
         return player;
     }
 
-    private CreatePlayerDto getDefaultCreatePlayerDto() {
-        CreatePlayerDto createPlayerDto = new CreatePlayerDto();
-        createPlayerDto.setName("Ivan Franchin");
-        return createPlayerDto;
-    }
-
     private Weapon getDefaultWeapon() {
         Weapon weapon = new Weapon();
         weapon.setId(1L);
         weapon.setName("Machine Gun");
         return weapon;
-    }
-
-    private CreateWeaponDto getDefaultCreateWeaponDto() {
-        CreateWeaponDto createWeaponDto = new CreateWeaponDto();
-        createWeaponDto.setName("Machine Gun");
-        return createWeaponDto;
     }
 
     private static final String API_PLAYERS_URL = "/api/players";

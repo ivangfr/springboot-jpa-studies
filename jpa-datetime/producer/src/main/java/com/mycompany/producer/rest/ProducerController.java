@@ -3,7 +3,7 @@ package com.mycompany.producer.rest;
 import com.mycompany.producer.model.OpeningHourJavaSql;
 import com.mycompany.producer.model.OpeningHourJavaTimeLocal;
 import com.mycompany.producer.model.OpeningHourJavaTimeZone;
-import com.mycompany.producer.rest.dto.CreateOpeningHourDto;
+import com.mycompany.producer.rest.dto.CreateOpeningHourRequest;
 import com.mycompany.producer.rest.dto.OpeningHourResponse;
 import com.mycompany.producer.service.OpeningHourJavaSqlService;
 import com.mycompany.producer.service.OpeningHourJavaTimeLocalService;
@@ -38,13 +38,16 @@ public class ProducerController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/opening-hours")
-    public OpeningHourResponse createOpeningHourSpecific(@Valid @RequestBody CreateOpeningHourDto createOpeningHourZoneDto) throws ParseException {
-        OpeningHourJavaSql openingHourJavaSql = openingHourJavaSqlService.create(createOpeningHourZoneDto.getDate(),
-                createOpeningHourZoneDto.getBegin(), createOpeningHourZoneDto.getEnd());
-        OpeningHourJavaTimeLocal openingHourJavaTimeLocal = openingHourJavaTimeLocalService.create(createOpeningHourZoneDto.getDate(),
-                createOpeningHourZoneDto.getBegin(), createOpeningHourZoneDto.getEnd());
-        OpeningHourJavaTimeZone openingHourJavaTimeZone = openingHourJavaTimeZoneService.create(createOpeningHourZoneDto.getDate(),
-                createOpeningHourZoneDto.getBegin(), createOpeningHourZoneDto.getEnd(), createOpeningHourZoneDto.getZoneId());
+    public OpeningHourResponse createOpeningHourSpecific(@Valid @RequestBody CreateOpeningHourRequest request) throws ParseException {
+        OpeningHourJavaSql openingHourJavaSql = openingHourJavaSqlService.create(
+                request.getDate(), request.getBegin(), request.getEnd());
+
+        OpeningHourJavaTimeLocal openingHourJavaTimeLocal = openingHourJavaTimeLocalService.create(
+                request.getDate(), request.getBegin(), request.getEnd());
+
+        OpeningHourJavaTimeZone openingHourJavaTimeZone = openingHourJavaTimeZoneService.create(
+                request.getDate(), request.getBegin(), request.getEnd(), request.getZoneId());
+
         return new OpeningHourResponse(openingHourJavaSql, openingHourJavaTimeLocal, openingHourJavaTimeZone);
     }
 
@@ -63,5 +66,4 @@ public class ProducerController {
         openingHourJavaTimeLocalService.deleteAll();
         openingHourJavaTimeZoneService.deleteAll();
     }
-
 }

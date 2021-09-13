@@ -1,15 +1,17 @@
 package com.mycompany.jpaassociations.manytomany.simplepkextracolumn.mapper;
 
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.model.Article;
-import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.ArticleDto;
-import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateArticleDto;
+import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.ArticleResponse;
+import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateArticleRequest;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ArticleMapper {
 
-    Article toArticle(CreateArticleDto createArticleDto);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "comments", ignore = true)
+    Article toArticle(CreateArticleRequest createArticleRequest);
 
-    ArticleDto toArticleDto(Article article);
-
+    ArticleResponse toArticleResponse(Article article);
 }

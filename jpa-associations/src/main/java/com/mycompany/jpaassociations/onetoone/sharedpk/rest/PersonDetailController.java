@@ -3,11 +3,11 @@ package com.mycompany.jpaassociations.onetoone.sharedpk.rest;
 import com.mycompany.jpaassociations.onetoone.sharedpk.mapper.PersonMapper;
 import com.mycompany.jpaassociations.onetoone.sharedpk.model.Person;
 import com.mycompany.jpaassociations.onetoone.sharedpk.model.PersonDetail;
-import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.CreatePersonDetailDto;
-import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.CreatePersonDto;
-import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.PersonDto;
-import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.UpdatePersonDetailDto;
-import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.UpdatePersonDto;
+import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.CreatePersonDetailRequest;
+import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.CreatePersonRequest;
+import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.PersonResponse;
+import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.UpdatePersonDetailRequest;
+import com.mycompany.jpaassociations.onetoone.sharedpk.rest.dto.UpdatePersonRequest;
 import com.mycompany.jpaassociations.onetoone.sharedpk.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,60 +32,62 @@ public class PersonDetailController {
     private final PersonMapper personMapper;
 
     @GetMapping("/{personId}")
-    public PersonDto getPerson(@PathVariable Long personId) {
+    public PersonResponse getPerson(@PathVariable Long personId) {
         Person person = personService.validateAndGetPerson(personId);
-        return personMapper.toPersonDto(person);
+        return personMapper.toPersonResponse(person);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public PersonDto createPerson(@Valid @RequestBody CreatePersonDto createPersonDto) {
-        Person person = personMapper.toPerson(createPersonDto);
+    public PersonResponse createPerson(@Valid @RequestBody CreatePersonRequest createPersonRequest) {
+        Person person = personMapper.toPerson(createPersonRequest);
         person = personService.savePerson(person);
-        return personMapper.toPersonDto(person);
+        return personMapper.toPersonResponse(person);
     }
 
     @PutMapping("/{personId}")
-    public PersonDto updatePerson(@PathVariable Long personId, @Valid @RequestBody UpdatePersonDto updatePersonDto) {
+    public PersonResponse updatePerson(@PathVariable Long personId,
+                                       @Valid @RequestBody UpdatePersonRequest updatePersonRequest) {
         Person person = personService.validateAndGetPerson(personId);
-        personMapper.updatePersonFromDto(updatePersonDto, person);
+        personMapper.updatePersonFromRequest(updatePersonRequest, person);
         person = personService.savePerson(person);
-        return personMapper.toPersonDto(person);
+        return personMapper.toPersonResponse(person);
     }
 
     @DeleteMapping("/{personId}")
-    public PersonDto deletePerson(@PathVariable Long personId) {
+    public PersonResponse deletePerson(@PathVariable Long personId) {
         Person person = personService.validateAndGetPerson(personId);
         personService.deletePerson(person);
-        return personMapper.toPersonDto(person);
+        return personMapper.toPersonResponse(person);
     }
 
     @PostMapping("/{personId}/person-details")
-    public PersonDto addPersonDetail(@PathVariable Long personId, @Valid @RequestBody CreatePersonDetailDto createPersonDetailDto) {
+    public PersonResponse addPersonDetail(@PathVariable Long personId,
+                                          @Valid @RequestBody CreatePersonDetailRequest createPersonDetailRequest) {
         Person person = personService.validateAndGetPerson(personId);
-        PersonDetail personDetail = personMapper.toPersonDetail(createPersonDetailDto);
+        PersonDetail personDetail = personMapper.toPersonDetail(createPersonDetailRequest);
         person.addPersonDetail(personDetail);
         person = personService.savePerson(person);
-        return personMapper.toPersonDto(person);
+        return personMapper.toPersonResponse(person);
     }
 
     @PutMapping("/{personId}/person-details")
-    public PersonDto updatePersonDetail(@PathVariable Long personId, @Valid @RequestBody UpdatePersonDetailDto updatePersonDetailDto) {
+    public PersonResponse updatePersonDetail(@PathVariable Long personId,
+                                             @Valid @RequestBody UpdatePersonDetailRequest updatePersonDetailRequest) {
         Person person = personService.validateAndGetPerson(personId);
         PersonDetail personDetail = person.getPersonDetail();
-        personMapper.updatePersonDetailFromDto(updatePersonDetailDto, personDetail);
+        personMapper.updatePersonDetailFromRequest(updatePersonDetailRequest, personDetail);
         person = personService.savePerson(person);
-        return personMapper.toPersonDto(person);
+        return personMapper.toPersonResponse(person);
     }
 
     // Hibernate doesn't allow to delete the person-details
     // WARN [jpa-associations,d3b5b66bb91df6da,d3b5b66bb91df6da,true] 2346 --- [nio-8080-exec-6] o.h.p.entity.AbstractEntityPersister     : HHH000502: The [person] property of the [com.mycompany.jpaassociations.onetoone.sharedpk.model.PersonDetail] entity was modified, but it won't be updated because the property is immutable.
     @DeleteMapping("/{personId}/person-details")
-    public PersonDto deletePersonDetail(@PathVariable Long personId) {
+    public PersonResponse deletePersonDetail(@PathVariable Long personId) {
         Person person = personService.validateAndGetPerson(personId);
         person.removePersonDetail();
         person = personService.savePerson(person);
-        return personMapper.toPersonDto(person);
+        return personMapper.toPersonResponse(person);
     }
-
 }

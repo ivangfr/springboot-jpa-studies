@@ -9,5 +9,4 @@ public interface ArticleService {
     Article createArticle(Article article);
 
     void deleteArticle(Article article);
-
 }

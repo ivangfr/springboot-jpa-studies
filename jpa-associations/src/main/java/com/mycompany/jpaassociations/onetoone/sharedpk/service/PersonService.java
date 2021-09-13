@@ -9,5 +9,4 @@ public interface PersonService {
     Person savePerson(Person person);
 
     void deletePerson(Person person);
-
 }

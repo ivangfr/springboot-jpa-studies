@@ -17,5 +17,4 @@ public class OpeningHourJavaSqlServiceImpl implements OpeningHourJavaSqlService 
     public List<OpeningHourJavaSql> getAll() {
         return openingHourJavaSqlRepository.findAll();
     }
-
 }

@@ -7,12 +7,12 @@ import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.model.Review
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.repository.ArticleRepository;
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.repository.CommentRepository;
 import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.repository.ReviewerRepository;
-import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.ArticleDto;
-import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CommentDto;
-import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateArticleDto;
-import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateCommentDto;
-import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateReviewerDto;
-import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.ReviewerDto;
+import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.ArticleResponse;
+import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CommentResponse;
+import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateArticleRequest;
+import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateCommentRequest;
+import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateReviewerRequest;
+import com.mycompany.jpaassociations.manytomany.simplepkextracolumn.rest.dto.ReviewerResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,10 +24,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
@@ -50,29 +47,30 @@ class ReviewerArticleControllerTest extends AbstractTestcontainers {
         Reviewer reviewer = reviewerRepository.save(getDefaultReviewer());
 
         String url = String.format(API_REVIEWERS_REVIEWER_ID_URL, reviewer.getId());
-        ResponseEntity<ReviewerDto> responseEntity = testRestTemplate.getForEntity(url, ReviewerDto.class);
+        ResponseEntity<ReviewerResponse> responseEntity = testRestTemplate.getForEntity(url, ReviewerResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(reviewer.getId(), responseEntity.getBody().getId());
-        assertEquals(reviewer.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getComments().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(reviewer.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(reviewer.getName());
+        assertThat(responseEntity.getBody().getComments().size()).isEqualTo(0);
     }
 
     @Test
     void testCreateReviewer() {
-        CreateReviewerDto createReviewerDto = getDefaultCreateReviewerDto();
-        ResponseEntity<ReviewerDto> responseEntity = testRestTemplate.postForEntity(API_REVIEWERS_URL, createReviewerDto, ReviewerDto.class);
+        CreateReviewerRequest createReviewerRequest = new CreateReviewerRequest("Ivan Franchin");
+        ResponseEntity<ReviewerResponse> responseEntity = testRestTemplate.postForEntity(
+                API_REVIEWERS_URL, createReviewerRequest, ReviewerResponse.class);
 
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertNotNull(responseEntity.getBody().getId());
-        assertEquals(createReviewerDto.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getComments().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isNotNull();
+        assertThat(responseEntity.getBody().getName()).isEqualTo(createReviewerRequest.getName());
+        assertThat(responseEntity.getBody().getComments().size()).isEqualTo(0);
 
         Optional<Reviewer> reviewerOptional = reviewerRepository.findById(responseEntity.getBody().getId());
-        assertTrue(reviewerOptional.isPresent());
-        reviewerOptional.ifPresent(r -> assertEquals(createReviewerDto.getName(), r.getName()));
+        assertThat(reviewerOptional.isPresent()).isTrue();
+        reviewerOptional.ifPresent(r -> assertThat(r.getName()).isEqualTo(createReviewerRequest.getName()));
     }
 
     @Test
@@ -80,16 +78,17 @@ class ReviewerArticleControllerTest extends AbstractTestcontainers {
         Reviewer reviewer = reviewerRepository.save(getDefaultReviewer());
 
         String url = String.format(API_REVIEWERS_REVIEWER_ID_URL, reviewer.getId());
-        ResponseEntity<ReviewerDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, ReviewerDto.class);
+        ResponseEntity<ReviewerResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.DELETE, null, ReviewerResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(reviewer.getId(), responseEntity.getBody().getId());
-        assertEquals(reviewer.getName(), responseEntity.getBody().getName());
-        assertEquals(0, responseEntity.getBody().getComments().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(reviewer.getId());
+        assertThat(responseEntity.getBody().getName()).isEqualTo(reviewer.getName());
+        assertThat(responseEntity.getBody().getComments().size()).isEqualTo(0);
 
         Optional<Reviewer> reviewerOptional = reviewerRepository.findById(reviewer.getId());
-        assertFalse(reviewerOptional.isPresent());
+        assertThat(reviewerOptional.isPresent()).isFalse();
     }
 
     @Test
@@ -97,29 +96,30 @@ class ReviewerArticleControllerTest extends AbstractTestcontainers {
         Article article = articleRepository.save(getDefaultArticle());
 
         String url = String.format(API_ARTICLES_ARTICLE_ID_URL, article.getId());
-        ResponseEntity<ArticleDto> responseEntity = testRestTemplate.getForEntity(url, ArticleDto.class);
+        ResponseEntity<ArticleResponse> responseEntity = testRestTemplate.getForEntity(url, ArticleResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(article.getId(), responseEntity.getBody().getId());
-        assertEquals(article.getTitle(), responseEntity.getBody().getTitle());
-        assertEquals(0, responseEntity.getBody().getComments().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(article.getId());
+        assertThat(responseEntity.getBody().getTitle()).isEqualTo(article.getTitle());
+        assertThat(responseEntity.getBody().getComments().size()).isEqualTo(0);
     }
 
     @Test
     void testCreateArticle() {
-        CreateArticleDto createArticleDto = getDefaultCreateArticleDto();
-        ResponseEntity<ArticleDto> responseEntity = testRestTemplate.postForEntity(API_ARTICLES_URL, createArticleDto, ArticleDto.class);
+        CreateArticleRequest createArticleRequest = new CreateArticleRequest("MySQL, new features");
+        ResponseEntity<ArticleResponse> responseEntity = testRestTemplate.postForEntity(
+                API_ARTICLES_URL, createArticleRequest, ArticleResponse.class);
 
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertNotNull(responseEntity.getBody().getId());
-        assertEquals(createArticleDto.getTitle(), responseEntity.getBody().getTitle());
-        assertEquals(0, responseEntity.getBody().getComments().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isNotNull();
+        assertThat(responseEntity.getBody().getTitle()).isEqualTo(createArticleRequest.getTitle());
+        assertThat(responseEntity.getBody().getComments().size()).isEqualTo(0);
 
         Optional<Article> articleOptional = articleRepository.findById(responseEntity.getBody().getId());
-        assertTrue(articleOptional.isPresent());
-        articleOptional.ifPresent(a -> assertEquals(createArticleDto.getTitle(), a.getTitle()));
+        assertThat(articleOptional.isPresent()).isTrue();
+        articleOptional.ifPresent(a -> assertThat(a.getTitle()).isEqualTo(createArticleRequest.getTitle()));
     }
 
     @Test
@@ -127,16 +127,17 @@ class ReviewerArticleControllerTest extends AbstractTestcontainers {
         Article article = articleRepository.save(getDefaultArticle());
 
         String url = String.format(API_ARTICLES_ARTICLE_ID_URL, article.getId());
-        ResponseEntity<ArticleDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, ArticleDto.class);
+        ResponseEntity<ArticleResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.DELETE, null, ArticleResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(article.getId(), responseEntity.getBody().getId());
-        assertEquals(article.getTitle(), responseEntity.getBody().getTitle());
-        assertEquals(0, responseEntity.getBody().getComments().size());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(article.getId());
+        assertThat(responseEntity.getBody().getTitle()).isEqualTo(article.getTitle());
+        assertThat(responseEntity.getBody().getComments().size()).isEqualTo(0);
 
         Optional<Article> articleOptional = articleRepository.findById(article.getId());
-        assertFalse(articleOptional.isPresent());
+        assertThat(articleOptional.isPresent()).isFalse();
     }
 
     @Test
@@ -150,16 +151,16 @@ class ReviewerArticleControllerTest extends AbstractTestcontainers {
         comment = commentRepository.save(comment);
 
         String url = String.format(API_COMMENTS_COMMENT_ID_URL, comment.getId());
-        ResponseEntity<CommentDto> responseEntity = testRestTemplate.getForEntity(url, CommentDto.class);
+        ResponseEntity<CommentResponse> responseEntity = testRestTemplate.getForEntity(url, CommentResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(comment.getId(), responseEntity.getBody().getId());
-        assertEquals(comment.getText(), responseEntity.getBody().getText());
-        assertEquals(reviewer.getId(), responseEntity.getBody().getReviewer().getId());
-        assertEquals(reviewer.getName(), responseEntity.getBody().getReviewer().getName());
-        assertEquals(article.getId(), responseEntity.getBody().getArticle().getId());
-        assertEquals(article.getTitle(), responseEntity.getBody().getArticle().getTitle());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(comment.getId());
+        assertThat(responseEntity.getBody().getText()).isEqualTo(comment.getText());
+        assertThat(responseEntity.getBody().getReviewer().getId()).isEqualTo(reviewer.getId());
+        assertThat(responseEntity.getBody().getReviewer().getName()).isEqualTo(reviewer.getName());
+        assertThat(responseEntity.getBody().getArticle().getId()).isEqualTo(article.getId());
+        assertThat(responseEntity.getBody().getArticle().getTitle()).isEqualTo(article.getTitle());
     }
 
     @Test
@@ -167,36 +168,38 @@ class ReviewerArticleControllerTest extends AbstractTestcontainers {
         Reviewer reviewer = reviewerRepository.save(getDefaultReviewer());
         Article article = articleRepository.save(getDefaultArticle());
 
-        CreateCommentDto createCommentDto = getDefaultCreateCommentDto(reviewer.getId(), article.getId());
-        ResponseEntity<CommentDto> responseEntity = testRestTemplate.postForEntity(API_COMMENTS_URL, createCommentDto, CommentDto.class);
+        CreateCommentRequest createCommentRequest = new CreateCommentRequest(
+                reviewer.getId(), article.getId(), "This is a very good article");
+        ResponseEntity<CommentResponse> responseEntity = testRestTemplate.postForEntity(
+                API_COMMENTS_URL, createCommentRequest, CommentResponse.class);
 
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertNotNull(responseEntity.getBody().getId());
-        assertEquals(createCommentDto.getText(), responseEntity.getBody().getText());
-        assertEquals(reviewer.getId(), responseEntity.getBody().getReviewer().getId());
-        assertEquals(article.getId(), responseEntity.getBody().getArticle().getId());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isNotNull();
+        assertThat(responseEntity.getBody().getText()).isEqualTo(createCommentRequest.getText());
+        assertThat(responseEntity.getBody().getReviewer().getId()).isEqualTo(reviewer.getId());
+        assertThat(responseEntity.getBody().getArticle().getId()).isEqualTo(article.getId());
 
         Optional<Comment> commentOptional = commentRepository.findById(responseEntity.getBody().getId());
-        assertTrue(commentOptional.isPresent());
+        assertThat(commentOptional.isPresent()).isTrue();
         commentOptional.ifPresent(c -> {
-            assertEquals(createCommentDto.getText(), c.getText());
-            assertEquals(reviewer.getId(), c.getReviewer().getId());
-            assertEquals(article.getId(), c.getArticle().getId());
+            assertThat(c.getText()).isEqualTo(createCommentRequest.getText());
+            assertThat(c.getReviewer().getId()).isEqualTo(reviewer.getId());
+            assertThat(c.getArticle().getId()).isEqualTo(article.getId());
         });
 
         Optional<Reviewer> reviewerOptional = reviewerRepository.findById(reviewer.getId());
-        assertTrue(reviewerOptional.isPresent());
+        assertThat(reviewerOptional.isPresent()).isTrue();
         reviewerOptional.ifPresent(r -> {
-            assertEquals(1, r.getComments().size());
-            commentOptional.ifPresent(c -> assertTrue(r.getComments().contains(c)));
+            assertThat(r.getComments().size()).isEqualTo(1);
+            commentOptional.ifPresent(c -> assertThat(r.getComments().contains(c)).isTrue());
         });
 
         Optional<Article> articleOptional = articleRepository.findById(article.getId());
-        assertTrue(articleOptional.isPresent());
+        assertThat(articleOptional.isPresent()).isTrue();
         articleOptional.ifPresent(a -> {
-            assertEquals(1, a.getComments().size());
-            commentOptional.ifPresent(c -> assertTrue(a.getComments().contains(c)));
+            assertThat(a.getComments().size()).isEqualTo(1);
+            commentOptional.ifPresent(c -> assertThat(a.getComments().contains(c)).isTrue());
         });
     }
 
@@ -211,24 +214,25 @@ class ReviewerArticleControllerTest extends AbstractTestcontainers {
         comment = commentRepository.save(comment);
 
         String url = String.format(API_COMMENTS_COMMENT_ID_URL, comment.getId());
-        ResponseEntity<CommentDto> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, CommentDto.class);
+        ResponseEntity<CommentResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.DELETE, null, CommentResponse.class);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals(comment.getId(), responseEntity.getBody().getId());
-        assertEquals(comment.getReviewer().getId(), responseEntity.getBody().getReviewer().getId());
-        assertEquals(comment.getArticle().getId(), responseEntity.getBody().getArticle().getId());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().getId()).isEqualTo(comment.getId());
+        assertThat(responseEntity.getBody().getReviewer().getId()).isEqualTo(comment.getReviewer().getId());
+        assertThat(responseEntity.getBody().getArticle().getId()).isEqualTo(comment.getArticle().getId());
 
         Optional<Comment> commentOptional = commentRepository.findById(comment.getId());
-        assertFalse(commentOptional.isPresent());
+        assertThat(commentOptional.isPresent()).isFalse();
 
         Optional<Reviewer> reviewerOptional = reviewerRepository.findById(reviewer.getId());
-        assertTrue(reviewerOptional.isPresent());
-        reviewerOptional.ifPresent(r -> assertEquals(0, r.getComments().size()));
+        assertThat(reviewerOptional.isPresent()).isTrue();
+        reviewerOptional.ifPresent(r -> assertThat(r.getComments().size()).isEqualTo(0));
 
         Optional<Article> articleOptional = articleRepository.findById(article.getId());
-        assertTrue(articleOptional.isPresent());
-        articleOptional.ifPresent(a -> assertEquals(0, a.getComments().size()));
+        assertThat(articleOptional.isPresent()).isTrue();
+        articleOptional.ifPresent(a -> assertThat(a.getComments().size()).isEqualTo(0));
     }
 
     private Reviewer getDefaultReviewer() {
@@ -237,22 +241,10 @@ class ReviewerArticleControllerTest extends AbstractTestcontainers {
         return reviewer;
     }
 
-    private CreateReviewerDto getDefaultCreateReviewerDto() {
-        CreateReviewerDto createReviewerDto = new CreateReviewerDto();
-        createReviewerDto.setName("Ivan Franchin");
-        return createReviewerDto;
-    }
-
     private Article getDefaultArticle() {
         Article article = new Article();
         article.setTitle("Article about Springboot test");
         return article;
-    }
-
-    private CreateArticleDto getDefaultCreateArticleDto() {
-        CreateArticleDto createArticleDto = new CreateArticleDto();
-        createArticleDto.setTitle("MySQL, new features");
-        return createArticleDto;
     }
 
     private Comment getDefaultComment() {
@@ -261,19 +253,10 @@ class ReviewerArticleControllerTest extends AbstractTestcontainers {
         return comment;
     }
 
-    private CreateCommentDto getDefaultCreateCommentDto(Long reviewerId, Long articleId) {
-        CreateCommentDto createCommentDto = new CreateCommentDto();
-        createCommentDto.setText("This is a very good article");
-        createCommentDto.setReviewerId(reviewerId);
-        createCommentDto.setArticleId(articleId);
-        return createCommentDto;
-    }
-
     private static final String API_REVIEWERS_URL = "/api/reviewers";
     private static final String API_REVIEWERS_REVIEWER_ID_URL = "/api/reviewers/%s";
     private static final String API_ARTICLES_URL = "/api/articles";
     private static final String API_ARTICLES_ARTICLE_ID_URL = "/api/articles/%s";
     private static final String API_COMMENTS_URL = "/api/comments";
     private static final String API_COMMENTS_COMMENT_ID_URL = "/api/comments/%s";
-
 }
