@@ -3,7 +3,7 @@ version: "3.8"
 services:
 
   mysql:
-    image: mysql:8.0.26
+    image: mysql:8.0.27
     container_name: mysql
     restart: unless-stopped
     ports:
@@ -13,10 +13,9 @@ services:
       - MYSQL_DATABASE=studiesdb
     healthcheck:
       test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
-      start_period: 10s
 
   postgres:
-    image: postgres:13.4
+    image: postgres:14.1
     container_name: postgres
     restart: unless-stopped
     ports:
@@ -32,4 +31,3 @@ services:
     # --
     healthcheck:
       test: "pg_isready -U postgres"
-      start_period: 10s

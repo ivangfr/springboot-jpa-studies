@@ -11,7 +11,7 @@ The goal of this project is to study `JPA Associations` (one-to-one, one-to-many
 
 ## Prerequisites
 
-- [`Java 11+`](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+- [`Java 11+`](https://www.oracle.com/java/technologies/downloads/#java11)
 - [`Docker`](https://www.docker.com/)
 - [`Docker-Compose`](https://docs.docker.com/compose/install/)
 
@@ -22,7 +22,7 @@ The goal of this project is to study `JPA Associations` (one-to-one, one-to-many
   docker-compose up -d
   ```
 
-- Wait until all containers are `running (healthy)`. You can check their status running
+- Wait for Docker containers to be up and running. To check it, run
   ```
   docker-compose ps
   ```
