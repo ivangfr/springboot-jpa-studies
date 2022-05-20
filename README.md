@@ -33,7 +33,7 @@ The goal of this project is to study `JPA Associations` (one-to-one, one-to-many
 
   - Run `MySQL` interactive terminal (`mysql`)
     ```
-    docker exec -it mysql mysql -uroot -psecret --database studiesdb
+    docker exec -it -e MYSQL_PWD=secret mysql mysql -uroot --database studiesdb
     ```
     > Type `exit` to exit
     
