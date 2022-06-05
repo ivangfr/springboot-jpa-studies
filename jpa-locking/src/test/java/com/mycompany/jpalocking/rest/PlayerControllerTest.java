@@ -52,10 +52,8 @@ class PlayerControllerTest extends AbstractTestcontainers {
 
         Thread t6 = new Thread(() -> redeemStars(player1));
         Thread t7 = new Thread(() -> redeemStars(player1));
-
         Thread t8 = new Thread(() -> redeemStars(player2));
         Thread t9 = new Thread(() -> redeemStars(player2));
-
         Thread t10 = new Thread(() -> redeemStars(player3));
 
         t6.start();
@@ -78,7 +76,7 @@ class PlayerControllerTest extends AbstractTestcontainers {
         log.info("playerResponse1 = {}", playerResponse1);
         log.info("playerResponse2 = {}", playerResponse2);
         log.info("playerResponse3 = {}", playerResponse3);
-        log.info("getGameInfo = {}", getGameInfo());
+        log.info("getGameInfo = {}", gameInfo);
 
         assertThat(playerResponse1.getNumStars()).isEqualTo(0);
         assertThat(playerResponse1.getLives().size()).isEqualTo(1);

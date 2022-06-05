@@ -256,7 +256,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
 
   - Run `MySQL` interactive terminal (`mysql`), describe `persons` table and select all `persons`
     ```
-    docker exec -it mysql mysql -uroot -psecret --database studiesdb
+    docker exec -it -e MYSQL_PWD=secret mysql mysql -uroot --database studiesdb
     describe persons;
     select * from persons;
     ```

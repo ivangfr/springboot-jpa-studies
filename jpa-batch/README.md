@@ -60,7 +60,7 @@ The idea of this module is to study how to insert/update/delete a set of records
 
   - Run `MySQL` interactive terminal (`mysql`) inside docker container
     ```
-    docker exec -it mysql mysql -uroot -psecret --database studiesdb
+    docker exec -it -e MYSQL_PWD=secret mysql mysql -uroot --database studiesdb
     ```
 
   - Enable log for all queries
@@ -463,12 +463,12 @@ In another terminal, run the following commands
 
   - Dumping the database structure for all tables with no data
     ```
-    docker exec -it mysql mysqldump --no-data -uroot -psecret studiesdb
+    docker exec -it -e MYSQL_PWD=secret mysql mysqldump --no-data -uroot studiesdb
     ```
   
   - Run `MySQL` interactive terminal (`mysql`), describe `partners` table and select all `partners`
     ```
-    docker exec -it mysql mysql -uroot -psecret --database studiesdb
+    docker exec -it -e MYSQL_PWD=secret mysql mysql -uroot --database studiesdb
     describe partners;
     select * from partners;
     ```

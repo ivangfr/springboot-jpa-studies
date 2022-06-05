@@ -113,7 +113,7 @@ The goal of this example is to study how `Date`, `Time` and `DateTime` work with
 
   - Access `MySQL` client inside `mysql` docker container
     ```
-    docker exec -it mysql mysql -uroot -psecret --database studiesdb
+    docker exec -it -e MYSQL_PWD=secret mysql mysql -uroot --database studiesdb
     ```
 
   - Select rows in the tables
