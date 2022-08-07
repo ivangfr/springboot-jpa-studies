@@ -21,7 +21,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
     ./mvnw clean spring-boot:run --projects jpa-associations -Dspring-boot.run.profiles=postgres
     ```
 
-- Once the application is running, you can access its Swagger website at http://localhost:8080/swagger-ui.html
+- Once the application is running, you can access its Swagger website at http://localhost:8080/swagger-ui/index/index.html
 
 ## Running Tests
 
@@ -41,7 +41,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
 
 ## One to One
 
-### [Shared PK](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/mycompany/jpaassociations/onetoone/sharedpk)
+### [Shared PK](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/ivanfranchin/jpaassociations/onetoone/sharedpk)
 
 #### `persons 1 : 1 person_details`
 
@@ -65,7 +65,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
   +-------------+--------------+------+-----+---------+-------+
   ```
 
-### [Simple PK with Auto Increment](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/mycompany/jpaassociations/onetoone/simplepk)
+### [Simple PK with Auto Increment](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/ivanfranchin/jpaassociations/onetoone/simplepk)
 
 #### `teams 1 : 1 team_details`
 
@@ -92,7 +92,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
 
 ## One to Many
 
-### [Simple relationship](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/mycompany/jpaassociations/onetomany/simplepk)
+### [Simple relationship](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/ivanfranchin/jpaassociations/onetomany/simplepk)
 
 #### `restaurants 1 : N dishes`
 
@@ -117,7 +117,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
   +---------------+--------------+------+-----+---------+-------+
   ```
 
-### [Relationship with Composite PK](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/mycompany/jpaassociations/onetomany/compositepk)
+### [Relationship with Composite PK](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/ivanfranchin/jpaassociations/onetomany/compositepk)
 
 #### `players 1 : N weapons`
 
@@ -144,7 +144,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
 
 ## Many to Many
 
-### [Simple relationship](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/mycompany/jpaassociations/manytomany/simplerelationship)
+### [Simple relationship](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/ivanfranchin/jpaassociations/manytomany/simplerelationship)
 
 #### `writers N : N books`
 
@@ -178,7 +178,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
   +-----------+------------+------+-----+---------+-------+
   ```
 
-### [Relationship with Composite PK and extra column](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/mycompany/jpaassociations/manytomany/compositepkextracolumn)
+### [Relationship with Composite PK and extra column](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/ivanfranchin/jpaassociations/manytomany/compositepkextracolumn)
 
 #### `students N : N courses`
 
@@ -214,7 +214,7 @@ The goal of this module is to study the three associations that JPA and Hibernat
   +-------------------+-------------+------+-----+---------+-------+
   ```
 
-### [Relationship with Simple PK and extra column](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/mycompany/jpaassociations/manytomany/simplepkextracolumn)
+### [Relationship with Simple PK and extra column](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-associations/src/main/java/com/ivanfranchin/jpaassociations/manytomany/simplepkextracolumn)
 
 #### `reviewer N : N article`
 

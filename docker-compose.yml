@@ -15,7 +15,7 @@ services:
       test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
 
   postgres:
-    image: postgres:14.3
+    image: postgres:14.4
     container_name: postgres
     restart: unless-stopped
     ports:

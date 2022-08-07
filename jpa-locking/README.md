@@ -21,7 +21,7 @@ The idea of this module is to study jpa locking.
     ./mvnw clean spring-boot:run --projects jpa-locking -Dspring-boot.run.profiles=postgres
     ```
 
-- Once the application is running, you can access its Swagger website at http://localhost:8082/swagger-ui.html
+- Once the application is running, you can access its Swagger website at http://localhost:8082/swagger-ui/index.html
 
 ## Running Tests
 

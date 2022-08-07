@@ -16,7 +16,7 @@ The goal of this example is to study how `Date`, `Time` and `DateTime` work with
     ./mvnw clean spring-boot:run --projects jpa-datetime/producer
     ```
   
-    The `producer` Swagger link is http://localhost:8084/swagger-ui.html
+    The `producer` Swagger link is http://localhost:8084/swagger-ui/index.html
 
 - **consumer**
 
@@ -27,7 +27,7 @@ The goal of this example is to study how `Date`, `Time` and `DateTime` work with
     ./mvnw clean spring-boot:run --projects jpa-datetime/consumer
     ```
 
-    The `consumer` Swagger link is http://localhost:8085/swagger-ui.html
+    The `consumer` Swagger link is http://localhost:8085/swagger-ui/index.html
 
 ## Sample of execution
 
