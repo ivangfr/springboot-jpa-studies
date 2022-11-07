@@ -5,7 +5,7 @@ The idea of this module is to study how to insert/update/delete a set of records
 
 ## Start application
 
-> **Note:** before starting the application, the services present in `docker-compose.yml` file must be up and running as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment)
+> **Note**: before starting the application, the services present in `docker-compose.yml` file must be up and running as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment)
 
 - Open a terminal and navigate to `sprinboot-jpa-studies` root folder
 
@@ -21,7 +21,7 @@ The idea of this module is to study how to insert/update/delete a set of records
     ./mvnw clean spring-boot:run --projects jpa-batch -Dspring-boot.run.profiles=postgres
     ```
 
-- Once the application is running, you can access its Swagger website at http://localhost:8081/swagger-ui/index.html
+- Once the application is running, you can access its Swagger website at http://localhost:8081/swagger-ui.html
 
 ## Running Tests
 

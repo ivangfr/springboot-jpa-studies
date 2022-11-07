@@ -5,7 +5,7 @@ The goal of this example is to study how `Date`, `Time` and `DateTime` work with
 
 ## Start applications
 
-> **Note:** before starting the application, the services present in `docker-compose.yml` file must be up and running as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment)
+> **Note**: before starting the application, the services present in `docker-compose.yml` file must be up and running as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment)
 
 - **producer**
 
@@ -16,7 +16,7 @@ The goal of this example is to study how `Date`, `Time` and `DateTime` work with
     ./mvnw clean spring-boot:run --projects jpa-datetime/producer
     ```
   
-    The `producer` Swagger link is http://localhost:8084/swagger-ui/index.html
+    The `producer` Swagger link is http://localhost:8084/swagger-ui.html
 
 - **consumer**
 
@@ -27,7 +27,7 @@ The goal of this example is to study how `Date`, `Time` and `DateTime` work with
     ./mvnw clean spring-boot:run --projects jpa-datetime/consumer
     ```
 
-    The `consumer` Swagger link is http://localhost:8085/swagger-ui/index.html
+    The `consumer` Swagger link is http://localhost:8085/swagger-ui.html
 
 ## Sample of execution
 

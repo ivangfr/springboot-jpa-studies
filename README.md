@@ -62,7 +62,7 @@ The goal of this project is to study `JPA Associations` (one-to-one, one-to-many
 
   During the tests, [`Testcontainers`](https://www.testcontainers.org/) starts automatically Docker containers of the databases before the tests begin and shuts the containers down when the tests finish.
 
-  > **Note:** jpa-datetime producer and consumer don't have test cases
+  > **Note**: jpa-datetime producer and consumer don't have test cases
 
   - **Using MySQL**
     ```
@@ -73,7 +73,7 @@ The goal of this project is to study `JPA Associations` (one-to-one, one-to-many
     ```
     ./mvnw clean test -DargLine="-Dspring.profiles.active=postgres-test"
     ```
-    > **Warning:** jpa-locking test is failing. The problem is while calling `getAvailableLife` in `redeemStars` of `PlayerServiceImpl` class. It's always returning a `life` with id `1`. It's different when using `mysql-test` profile that returns different ids.
+    > **Warning**: jpa-locking test is failing. The problem is while calling `getAvailableLife` in `redeemStars` of `PlayerServiceImpl` class. It's always returning a `life` with id `1`. It's different when using `mysql-test` profile that returns different ids.
 
 ## TODO
 
