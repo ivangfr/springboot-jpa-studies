@@ -1,5 +1,6 @@
 package com.ivanfranchin.jpaassociations.onetomany.simplepk.rest;
 
+import com.ivanfranchin.jpaassociations.AbstractTestcontainers;
 import com.ivanfranchin.jpaassociations.onetomany.simplepk.model.Dish;
 import com.ivanfranchin.jpaassociations.onetomany.simplepk.model.Restaurant;
 import com.ivanfranchin.jpaassociations.onetomany.simplepk.repository.DishRepository;
@@ -10,7 +11,7 @@ import com.ivanfranchin.jpaassociations.onetomany.simplepk.rest.dto.DishResponse
 import com.ivanfranchin.jpaassociations.onetomany.simplepk.rest.dto.RestaurantResponse;
 import com.ivanfranchin.jpaassociations.onetomany.simplepk.rest.dto.UpdateDishRequest;
 import com.ivanfranchin.jpaassociations.onetomany.simplepk.rest.dto.UpdateRestaurantRequest;
-import com.ivanfranchin.jpaassociations.AbstractTestcontainers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,14 +20,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class RestaurantDishControllerTest extends AbstractTestcontainers {
 
     @Autowired
@@ -37,6 +36,12 @@ class RestaurantDishControllerTest extends AbstractTestcontainers {
 
     @Autowired
     private DishRepository dishRepository;
+
+    @BeforeEach
+    void setUp() {
+        restaurantRepository.deleteAll();
+        dishRepository.deleteAll();
+    }
 
     @Test
     void testGetRestaurant() {

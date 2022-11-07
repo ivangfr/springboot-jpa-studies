@@ -1,5 +1,6 @@
 package com.ivanfranchin.jpabatch.rest;
 
+import com.ivanfranchin.jpabatch.AbstractTestcontainers;
 import com.ivanfranchin.jpabatch.model.Partner;
 import com.ivanfranchin.jpabatch.model.VoucherCode;
 import com.ivanfranchin.jpabatch.repository.PartnerRepository;
@@ -7,7 +8,7 @@ import com.ivanfranchin.jpabatch.repository.VoucherCodeRepository;
 import com.ivanfranchin.jpabatch.rest.dto.CreatePartnerRequest;
 import com.ivanfranchin.jpabatch.rest.dto.CreateVoucherCodeRequest;
 import com.ivanfranchin.jpabatch.rest.dto.PartnerResponse;
-import com.ivanfranchin.jpabatch.AbstractTestcontainers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +16,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class PartnerVoucherCodeControllerTest extends AbstractTestcontainers {
 
     @Autowired
@@ -37,6 +36,12 @@ class PartnerVoucherCodeControllerTest extends AbstractTestcontainers {
 
     @Autowired
     private VoucherCodeRepository voucherCodeRepository;
+
+    @BeforeEach
+    void setUp() {
+        partnerRepository.deleteAll();
+        voucherCodeRepository.deleteAll();
+    }
 
     @Test
     void testGetPartner() {

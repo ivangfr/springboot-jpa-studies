@@ -9,6 +9,7 @@ import com.ivanfranchin.jpaassociations.onetoone.simplepk.rest.dto.CreateTeamReq
 import com.ivanfranchin.jpaassociations.onetoone.simplepk.rest.dto.TeamResponse;
 import com.ivanfranchin.jpaassociations.onetoone.simplepk.rest.dto.UpdateTeamDetailRequest;
 import com.ivanfranchin.jpaassociations.onetoone.simplepk.rest.dto.UpdateTeamRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,14 +18,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class TeamDetailControllerTest extends AbstractTestcontainers {
 
     @Autowired
@@ -32,6 +31,11 @@ class TeamDetailControllerTest extends AbstractTestcontainers {
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @BeforeEach
+    void setUp() {
+        teamRepository.deleteAll();
+    }
 
     @Test
     void testGetTeam() {

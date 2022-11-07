@@ -1,5 +1,6 @@
 package com.ivanfranchin.jpaassociations.manytomany.simplerelationship.rest;
 
+import com.ivanfranchin.jpaassociations.AbstractTestcontainers;
 import com.ivanfranchin.jpaassociations.manytomany.simplerelationship.model.Book;
 import com.ivanfranchin.jpaassociations.manytomany.simplerelationship.model.Writer;
 import com.ivanfranchin.jpaassociations.manytomany.simplerelationship.repository.BookRepository;
@@ -10,7 +11,7 @@ import com.ivanfranchin.jpaassociations.manytomany.simplerelationship.rest.dto.C
 import com.ivanfranchin.jpaassociations.manytomany.simplerelationship.rest.dto.UpdateBookRequest;
 import com.ivanfranchin.jpaassociations.manytomany.simplerelationship.rest.dto.UpdateWriterRequest;
 import com.ivanfranchin.jpaassociations.manytomany.simplerelationship.rest.dto.WriterResponse;
-import com.ivanfranchin.jpaassociations.AbstractTestcontainers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,14 +20,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class WriterBookControllerTest extends AbstractTestcontainers {
 
     @Autowired
@@ -37,6 +36,12 @@ class WriterBookControllerTest extends AbstractTestcontainers {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @BeforeEach
+    void setUp() {
+        bookRepository.deleteAll();
+        writerRepository.deleteAll();
+    }
 
     @Test
     void testGetWriter() {

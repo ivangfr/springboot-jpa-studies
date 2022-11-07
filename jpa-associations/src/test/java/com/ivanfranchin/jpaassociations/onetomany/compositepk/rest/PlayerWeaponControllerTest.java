@@ -1,5 +1,6 @@
 package com.ivanfranchin.jpaassociations.onetomany.compositepk.rest;
 
+import com.ivanfranchin.jpaassociations.AbstractTestcontainers;
 import com.ivanfranchin.jpaassociations.onetomany.compositepk.model.Player;
 import com.ivanfranchin.jpaassociations.onetomany.compositepk.model.Weapon;
 import com.ivanfranchin.jpaassociations.onetomany.compositepk.model.WeaponPk;
@@ -9,7 +10,7 @@ import com.ivanfranchin.jpaassociations.onetomany.compositepk.rest.dto.CreatePla
 import com.ivanfranchin.jpaassociations.onetomany.compositepk.rest.dto.CreateWeaponRequest;
 import com.ivanfranchin.jpaassociations.onetomany.compositepk.rest.dto.PlayerResponse;
 import com.ivanfranchin.jpaassociations.onetomany.compositepk.rest.dto.WeaponResponse;
-import com.ivanfranchin.jpaassociations.AbstractTestcontainers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,14 +18,12 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class PlayerWeaponControllerTest extends AbstractTestcontainers {
 
     @Autowired
@@ -35,6 +34,12 @@ class PlayerWeaponControllerTest extends AbstractTestcontainers {
 
     @Autowired
     private WeaponRepository weaponRepository;
+
+    @BeforeEach
+    void setUp() {
+        playerRepository.deleteAll();
+        weaponRepository.deleteAll();
+    }
 
     @Test
     void testGetPlayer() {

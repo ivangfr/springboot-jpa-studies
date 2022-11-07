@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface DishRepository extends CrudRepository<Dish, Long> {
+
     Optional<Dish> findByIdAndRestaurantId(Long id, Long restaurantId);
 }

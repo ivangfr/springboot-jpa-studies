@@ -16,6 +16,7 @@ import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.rest.d
 import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseRequest;
 import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseStudentRequest;
 import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateStudentRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,14 +25,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class StudentCourseControllerTest extends AbstractTestcontainers {
 
     @Autowired
@@ -45,6 +44,13 @@ class StudentCourseControllerTest extends AbstractTestcontainers {
 
     @Autowired
     private CourseStudentRepository courseStudentRepository;
+
+    @BeforeEach
+    void setUp() {
+        studentRepository.deleteAll();
+        courseRepository.deleteAll();
+        courseStudentRepository.deleteAll();
+    }
 
     @Test
     void testGetStudent() {

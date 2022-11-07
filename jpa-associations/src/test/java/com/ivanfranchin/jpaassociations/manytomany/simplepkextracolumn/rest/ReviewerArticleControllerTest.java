@@ -13,6 +13,7 @@ import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.rest.dto.
 import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateCommentRequest;
 import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateReviewerRequest;
 import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.rest.dto.ReviewerResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,14 +21,12 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class ReviewerArticleControllerTest extends AbstractTestcontainers {
 
     @Autowired
@@ -41,6 +40,13 @@ class ReviewerArticleControllerTest extends AbstractTestcontainers {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @BeforeEach
+    void setUp() {
+        reviewerRepository.deleteAll();
+        articleRepository.deleteAll();
+        commentRepository.deleteAll();
+    }
 
     @Test
     void testGetReviewer() {
