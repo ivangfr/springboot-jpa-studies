@@ -1,16 +1,16 @@
 package com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.model;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -26,7 +26,7 @@ public class Article {
     private Long id;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
-    private Set<Comment> comments  = new LinkedHashSet<>();
+    private Set<Comment> comments = new LinkedHashSet<>();
 
     @Column(nullable = false)
     private String title;

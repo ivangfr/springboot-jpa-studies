@@ -4,19 +4,20 @@ import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.mapper
 import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.mapper.CourseStudentMapper;
 import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.mapper.StudentMapper;
 import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.model.Course;
-import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseResponse;
-import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseStudentResponse;
-import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseStudentRequest;
-import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.service.CourseService;
-import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.service.CourseStudentService;
-import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.service.StudentService;
 import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.model.CourseStudent;
 import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.model.Student;
+import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseResponse;
+import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CourseStudentResponse;
 import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CreateCourseRequest;
 import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.rest.dto.CreateStudentRequest;
 import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.rest.dto.StudentResponse;
 import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseRequest;
+import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateCourseStudentRequest;
 import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.rest.dto.UpdateStudentRequest;
+import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.service.CourseService;
+import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.service.CourseStudentService;
+import com.ivanfranchin.jpaassociations.manytomany.compositepkextracolumn.service.StudentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,8 +29,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController

@@ -8,6 +8,7 @@ import com.ivanfranchin.producer.rest.dto.OpeningHourResponse;
 import com.ivanfranchin.producer.service.OpeningHourJavaSqlService;
 import com.ivanfranchin.producer.service.OpeningHourJavaTimeLocalService;
 import com.ivanfranchin.producer.service.OpeningHourJavaTimeZoneService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.text.ParseException;
 import java.time.ZoneId;
 

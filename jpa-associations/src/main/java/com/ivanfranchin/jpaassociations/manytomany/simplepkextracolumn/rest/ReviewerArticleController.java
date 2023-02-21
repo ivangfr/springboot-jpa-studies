@@ -1,20 +1,21 @@
 package com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.rest;
 
-import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.mapper.ReviewerMapper;
-import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateCommentRequest;
-import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateReviewerRequest;
-import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.rest.dto.ReviewerResponse;
-import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.service.ArticleService;
-import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.service.CommentService;
-import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.service.ReviewerService;
 import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.mapper.ArticleMapper;
 import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.mapper.CommentMapper;
+import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.mapper.ReviewerMapper;
 import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.model.Article;
 import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.model.Comment;
 import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.model.Reviewer;
 import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.rest.dto.ArticleResponse;
 import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CommentResponse;
 import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateArticleRequest;
+import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateCommentRequest;
+import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.rest.dto.CreateReviewerRequest;
+import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.rest.dto.ReviewerResponse;
+import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.service.ArticleService;
+import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.service.CommentService;
+import com.ivanfranchin.jpaassociations.manytomany.simplepkextracolumn.service.ReviewerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,8 +26,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController

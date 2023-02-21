@@ -10,6 +10,7 @@ import com.ivanfranchin.jpaassociations.onetomany.compositepk.rest.dto.PlayerRes
 import com.ivanfranchin.jpaassociations.onetomany.compositepk.rest.dto.WeaponResponse;
 import com.ivanfranchin.jpaassociations.onetomany.compositepk.service.PlayerService;
 import com.ivanfranchin.jpaassociations.onetomany.compositepk.service.WeaponService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController

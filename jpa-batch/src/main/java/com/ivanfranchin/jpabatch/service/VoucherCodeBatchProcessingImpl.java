@@ -1,13 +1,13 @@
 package com.ivanfranchin.jpabatch.service;
 
 import com.ivanfranchin.jpabatch.model.VoucherCode;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import java.sql.BatchUpdateException;
 import java.sql.PreparedStatement;
 import java.util.List;

@@ -1,12 +1,12 @@
 package com.ivanfranchin.jpalocking.repository;
 
 import com.ivanfranchin.jpalocking.model.Life;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.LockModeType;
 import java.util.Optional;
 
 @Repository

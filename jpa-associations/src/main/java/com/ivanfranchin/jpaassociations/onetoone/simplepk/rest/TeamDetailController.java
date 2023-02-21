@@ -9,6 +9,7 @@ import com.ivanfranchin.jpaassociations.onetoone.simplepk.rest.dto.TeamResponse;
 import com.ivanfranchin.jpaassociations.onetoone.simplepk.rest.dto.UpdateTeamDetailRequest;
 import com.ivanfranchin.jpaassociations.onetoone.simplepk.rest.dto.UpdateTeamRequest;
 import com.ivanfranchin.jpaassociations.onetoone.simplepk.service.TeamService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
