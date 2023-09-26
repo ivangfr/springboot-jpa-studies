@@ -75,7 +75,6 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
     ```
     ./mvnw clean test -DargLine="-Dspring.profiles.active=postgres-test"
     ```
-    > **Warning**: jpa-locking test is failing. The problem is while calling `getAvailableLife` in `redeemStars` of `PlayerServiceImpl` class. It's always returning a `life` with id `1`. It's different when using `mysql-test` profile that returns different ids.
 
 ## TODO
 
