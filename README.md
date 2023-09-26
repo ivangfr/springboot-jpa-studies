@@ -16,18 +16,17 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - [`Java 17+`](https://www.oracle.com/java/technologies/downloads/#java17)
 - [`Docker`](https://www.docker.com/)
-- [`Docker-Compose`](https://docs.docker.com/compose/install/)
 
 ## Start Environment
 
 - Open one terminal and inside `springboot-jpa-studies` root folder run
   ```
-  docker-compose up -d
+  docker compose up -d
   ```
 
 - Wait for Docker containers to be up and running. To check it, run
   ```
-  docker-compose ps
+  docker compose ps
   ```
 
 ## Useful Commands
@@ -52,9 +51,9 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - In a terminal, make sure you are in `springboot-jpa-studies` root folder
 
-- To stop and remove docker-compose containers, networks and volumes run
+- To stop and remove docker compose containers, networks and volumes run
   ```
-  docker-compose down -v
+  docker compose down -v
   ```
 
 ## Running tests
