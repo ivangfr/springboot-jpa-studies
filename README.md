@@ -19,12 +19,12 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## Start Environment
 
-- Open one terminal and inside `springboot-jpa-studies` root folder run
+- Open one terminal and inside `springboot-jpa-studies` root folder run:
   ```
   docker compose up -d
   ```
 
-- Wait for Docker containers to be up and running. To check it, run
+- Wait for Docker containers to be up and running. To check it, run:
   ```
   docker compose ps
   ```
@@ -49,20 +49,20 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## Shutdown
 
-- In a terminal, make sure you are in `springboot-jpa-studies` root folder
+- In a terminal, make sure you are in `springboot-jpa-studies` root folder;
 
-- To stop and remove docker compose containers, networks and volumes run
+- To stop and remove docker compose containers, networks and volumes run:
   ```
   docker compose down -v
   ```
 
 ## Running tests
 
-- In a terminal, make sure you are in `springboot-jpa-studies` root folder  
+- In a terminal, make sure you are in `springboot-jpa-studies` root folder;
 
-- The commands below will run the test cases of all modules. In order to run just the tests of a specific module check the module README.
+- The commands below will run the test cases of all modules. In order to run just the tests of a specific module check the module README;
 
-  During the tests, [`Testcontainers`](https://www.testcontainers.org/) starts automatically Docker containers of the databases before the tests begin and shuts the containers down when the tests finish.
+  During the tests, [`Testcontainers`](https://www.testcontainers.org/) starts automatically Docker containers of the databases before the tests begin and shuts the containers down when the tests finish;
 
   > **Note**: jpa-datetime producer and consumer don't have test cases
 
@@ -78,4 +78,4 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## TODO
 
-- Fix `jpa-locking` tests when using PostgreSQL
+- Fix `jpa-locking` tests when using PostgreSQL.
