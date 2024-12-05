@@ -1,6 +1,6 @@
 # springboot-jpa-studies
 
-The goal of this project is to study `JPA Batch Processing` (i.e, insert/update/delete a set of records in a single command), `JPA Locking` and `Datetime in JPA`.
+The goal of this project is to study `JPA Batch Processing` (i.e, insert/update/delete a set of records in a single command) and `JPA Locking`.
 
 ## Proof-of-Concepts & Articles
 
@@ -10,16 +10,15 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - ### [jpa-batch](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-batch#jpa-batch)
 - ### [jpa-locking](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-locking#jpa-locking)
-- ### [jpa-datetime](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-datetime#jpa-datetime)
 
 ## Prerequisites
 
-- [`Java 17+`](https://www.oracle.com/java/technologies/downloads/#java17)
-- [`Docker`](https://www.docker.com/)
+- [`Java 21+`](https://www.oracle.com/java/technologies/downloads/#java21)
+- Some containerization tool [`Docker`](https://www.docker.com), [`Podman`](https://podman.io), etc.
 
 ## Start Environment
 
-- Open one terminal and inside `springboot-jpa-studies` root folder run:
+- Open one terminal and inside the `springboot-jpa-studies` root folder run:
   ```
   docker compose up -d
   ```
@@ -49,7 +48,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## Shutdown
 
-- In a terminal, make sure you are in `springboot-jpa-studies` root folder;
+- In a terminal, make sure you are inside the `springboot-jpa-studies` root folder;
 
 - To stop and remove docker compose containers, networks and volumes run:
   ```
@@ -62,9 +61,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - The commands below will run the test cases of all modules. In order to run just the tests of a specific module check the module README;
 
-  During the tests, [`Testcontainers`](https://www.testcontainers.org/) starts automatically Docker containers of the databases before the tests begin and shuts the containers down when the tests finish;
-
-  > **Note**: jpa-datetime producer and consumer don't have test cases
+  During the tests, [`Testcontainers`](https://testcontainers.com) starts automatically Docker containers of the databases before the tests begin and shuts the containers down when the tests finish;
 
   - **Using MySQL**
     ```
@@ -75,7 +72,3 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
     ```
     ./mvnw clean test -DargLine="-Dspring.profiles.active=postgres-test"
     ```
-
-## TODO
-
-- Fix `jpa-locking` tests when using PostgreSQL.

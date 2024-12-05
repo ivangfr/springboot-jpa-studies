@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -91,7 +92,13 @@ public class PartnerVoucherCodeController {
         Partner partner = partnerService.validateAndGetPartner(partnerId);
 
         try (Stream<VoucherCode> voucherCodes = voucherCodeService.getStreamOfVoucherCodesByPartner(partner)) {
-            return voucherCodes.peek(voucherCode -> voucherCode.setDeleted(true)).count();
+            List<VoucherCode> deletedVoucherCodes = new ArrayList<>();
+            voucherCodes.forEach(voucherCode -> {
+                voucherCode.setDeleted(true);
+                deletedVoucherCodes.add(voucherCode);
+            });
+
+            return deletedVoucherCodes.size();
         }
     }
 

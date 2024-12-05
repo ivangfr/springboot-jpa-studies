@@ -7,7 +7,7 @@ The idea of this module is to study how to insert/update/delete a set of records
 
 > **Note**: before starting the application, the services present in `docker-compose.yml` file must be up and running as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment)
 
-- Open a terminal and navigate to `sprinboot-jpa-studies` root folder
+- Open a terminal and navigate to the `sprinboot-jpa-studies` root folder;
 
 - You can use `MySQL` or `PostgreSQL`
 
@@ -25,7 +25,7 @@ The idea of this module is to study how to insert/update/delete a set of records
 
 ## Running Tests
 
-- In a terminal, make sure you are in `sprinboot-jpa-studies` root folder
+- In a terminal, make sure you are in the `sprinboot-jpa-studies` root folder;
 
 - You can use `MySQL` or `PostgreSQL`
 
@@ -81,7 +81,7 @@ The idea of this module is to study how to insert/update/delete a set of records
 
 ### Using MySQL
 
-In a terminal, run the following commands
+In a terminal, run the following commands:
 
 - **Create partner**
   ```
@@ -492,5 +492,5 @@ In another terminal, run the following commands
 ## Reference
 
 - https://clarkdo.js.org/spring/jpa/java/2017/09/14/79/
-- https://thoughts-on-java.org/jpa-generate-primary-keys/
-- https://thoughts-on-java.org/5-things-you-need-to-know-when-using-hibernate-with-mysql/
+- https://thorben-janssen.com/jpa-generate-primary-keys/
+- https://thorben-janssen.com/5-things-you-need-to-know-when-using-hibernate-with-mysql/

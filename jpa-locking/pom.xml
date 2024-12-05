@@ -8,9 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-
     <artifactId>jpa-locking</artifactId>
     <name>jpa-locking</name>
     <description>Demo project for Spring Boot</description>
-
 </project>

@@ -14,7 +14,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -49,18 +49,18 @@ public class Player {
     }
 
     @Column(nullable = false)
-    private ZonedDateTime createdAt;
+    private Instant createdAt;
 
     @Column(nullable = false)
-    private ZonedDateTime updatedAt;
+    private Instant updatedAt;
 
     @PrePersist
     public void onPrePersist() {
-        createdAt = updatedAt = ZonedDateTime.now();
+        createdAt = updatedAt = Instant.now();
     }
 
     @PreUpdate
     public void onPreUpdate() {
-        updatedAt = ZonedDateTime.now();
+        updatedAt = Instant.now();
     }
 }

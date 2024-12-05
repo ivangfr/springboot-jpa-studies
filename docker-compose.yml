@@ -1,31 +1,31 @@
 services:
 
   mysql:
-    image: mysql:8.3.0
-    container_name: mysql
-    restart: unless-stopped
+    image: 'mysql:9.1.0'
+    container_name: 'mysql'
+    restart: 'unless-stopped'
     ports:
-      - "3306:3306"
+      - '3306:3306'
     environment:
-      - MYSQL_ROOT_PASSWORD=secret
-      - MYSQL_DATABASE=studiesdb
+      - 'MYSQL_ROOT_PASSWORD=secret'
+      - 'MYSQL_DATABASE=studiesdb'
     healthcheck:
-      test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
+      test: 'mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}'
 
   postgres:
-    image: postgres:16.1
-    container_name: postgres
-    restart: unless-stopped
+    image: 'postgres:17.2'
+    container_name: 'postgres'
+    restart: 'unless-stopped'
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
-      - POSTGRES_DB=studiesdb
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
+      - 'POSTGRES_DB=studiesdb'
+      - 'POSTGRES_PASSWORD=postgres'
+      - 'POSTGRES_USER=postgres'
     # -- enabling logs
     volumes:
-      - ./postgres/postgresql.conf:/etc/postgresql.conf
-    command: postgres -c config_file=/etc/postgresql.conf
+      - './postgres/postgresql.conf:/etc/postgresql.conf'
+    command: 'postgres -c config_file=/etc/postgresql.conf'
     # --
     healthcheck:
-      test: "pg_isready -U postgres"
+      test: 'pg_isready -U postgres'

@@ -12,9 +12,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public abstract class AbstractTestcontainers {
 
-    private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:16.1");
+    private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:17.2");
 
-    private static final MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:8.3.0")
+    private static final MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:9.1.0")
             .withUrlParam("characterEncoding", "UTF-8")
             .withUrlParam("serverTimezone", "UTC");
 

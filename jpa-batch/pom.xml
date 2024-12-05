@@ -8,15 +8,12 @@
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-
     <artifactId>jpa-batch</artifactId>
     <name>jpa-batch</name>
     <description>Demo project for Spring Boot</description>
-
     <properties>
-        <guava.version>33.1.0-jre</guava.version>
+        <guava.version>33.3.1-jre</guava.version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -24,5 +21,4 @@
             <version>${guava.version}</version>
         </dependency>
     </dependencies>
-
 </project>
