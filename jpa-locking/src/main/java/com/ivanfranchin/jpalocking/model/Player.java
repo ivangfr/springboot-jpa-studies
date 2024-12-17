@@ -1,5 +1,6 @@
 package com.ivanfranchin.jpalocking.model;
 
+import com.ivanfranchin.jpalocking.rest.dto.CreatePlayerRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -62,5 +63,11 @@ public class Player {
     @PreUpdate
     public void onPreUpdate() {
         updatedAt = Instant.now();
+    }
+
+    public static Player from(CreatePlayerRequest createPlayerRequest) {
+        Player player = new Player();
+        player.setUsername(createPlayerRequest.username());
+        return player;
     }
 }

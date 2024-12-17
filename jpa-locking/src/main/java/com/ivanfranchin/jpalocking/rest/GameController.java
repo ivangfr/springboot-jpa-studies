@@ -1,6 +1,5 @@
 package com.ivanfranchin.jpalocking.rest;
 
-import com.ivanfranchin.jpalocking.mapper.LifeMapper;
 import com.ivanfranchin.jpalocking.model.Life;
 import com.ivanfranchin.jpalocking.model.Player;
 import com.ivanfranchin.jpalocking.rest.dto.GameResponse;
@@ -27,7 +26,6 @@ public class GameController {
 
     private final LifeService lifeService;
     private final PlayerService playerService;
-    private final LifeMapper lifeMapper;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -46,7 +44,7 @@ public class GameController {
     private GameResponse getGameInfoResponse() {
         int availableLives = lifeService.countAvailableLives();
         List<GameResponse.LifeResponse> lives = lifeService.getAllLives().stream()
-                .map(lifeMapper::toLifeResponse).collect(Collectors.toList());
+                .map(GameResponse.LifeResponse::from).collect(Collectors.toList());
         List<String> players = playerService.getAllPlayers().stream()
                 .map(Player::getUsername).collect(Collectors.toList());
         return new GameResponse(availableLives, players, lives);

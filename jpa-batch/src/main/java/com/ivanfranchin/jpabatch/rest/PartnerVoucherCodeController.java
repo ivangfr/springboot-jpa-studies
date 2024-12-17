@@ -1,6 +1,5 @@
 package com.ivanfranchin.jpabatch.rest;
 
-import com.ivanfranchin.jpabatch.mapper.PartnerMapper;
 import com.ivanfranchin.jpabatch.model.Partner;
 import com.ivanfranchin.jpabatch.model.VoucherCode;
 import com.ivanfranchin.jpabatch.rest.dto.CreatePartnerRequest;
@@ -36,27 +35,26 @@ public class PartnerVoucherCodeController {
 
     private final PartnerService partnerService;
     private final VoucherCodeService voucherCodeService;
-    private final PartnerMapper partnerMapper;
 
     @GetMapping("/{partnerId}")
     public PartnerResponse getPartner(@PathVariable Long partnerId) {
         Partner partner = partnerService.validateAndGetPartner(partnerId);
-        return partnerMapper.toPartnerResponse(partner);
+        return PartnerResponse.from(partner);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public PartnerResponse createPartner(@Valid @RequestBody CreatePartnerRequest createPartnerRequest) {
-        Partner partner = partnerMapper.toPartner(createPartnerRequest);
+        Partner partner = Partner.from(createPartnerRequest);
         partner = partnerService.savePartner(partner);
-        return partnerMapper.toPartnerResponse(partner);
+        return PartnerResponse.from(partner);
     }
 
     @DeleteMapping("/{partnerId}")
     public PartnerResponse deletePartner(@PathVariable Long partnerId) {
         Partner partner = partnerService.validateAndGetPartner(partnerId);
         partnerService.deletePartner(partner);
-        return partnerMapper.toPartnerResponse(partner);
+        return PartnerResponse.from(partner);
     }
 
     @Transactional

@@ -26,9 +26,9 @@ class PlayerControllerTest extends AbstractTestcontainers {
     void testStarsRedemption() throws InterruptedException {
         setupGame(5);
 
-        Long player1 = createPlayer("player1").getId();
-        Long player2 = createPlayer("player2").getId();
-        Long player3 = createPlayer("player3").getId();
+        Long player1 = createPlayer("player1").id();
+        Long player2 = createPlayer("player2").id();
+        Long player3 = createPlayer("player3").id();
 
         Thread t1 = new Thread(() -> collectStars(player1, 30));
         Thread t2 = new Thread(() -> collectStars(player1, 20));
@@ -76,14 +76,14 @@ class PlayerControllerTest extends AbstractTestcontainers {
         log.info("playerResponse3 = {}", playerResponse3);
         log.info("getGameInfo = {}", gameInfo);
 
-        assertThat(playerResponse1.getNumStars()).isEqualTo(0);
-        assertThat(playerResponse1.getLives().size()).isEqualTo(1);
+        assertThat(playerResponse1.numStars()).isEqualTo(0);
+        assertThat(playerResponse1.lives().size()).isEqualTo(1);
 
-        assertThat(playerResponse2.getNumStars()).isEqualTo(0);
-        assertThat(playerResponse2.getLives().size()).isEqualTo(1);
+        assertThat(playerResponse2.numStars()).isEqualTo(0);
+        assertThat(playerResponse2.lives().size()).isEqualTo(1);
 
-        assertThat(playerResponse3.getNumStars()).isEqualTo(10);
-        assertThat(playerResponse3.getLives().size()).isEqualTo(1);
+        assertThat(playerResponse3.numStars()).isEqualTo(10);
+        assertThat(playerResponse3.lives().size()).isEqualTo(1);
 
         assertThat(gameInfo.availableLives()).isEqualTo(2);
         assertThat(gameInfo.lives().stream().filter(lifeResponse -> lifeResponse.username() != null).count())

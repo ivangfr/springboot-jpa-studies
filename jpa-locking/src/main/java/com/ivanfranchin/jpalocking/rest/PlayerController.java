@@ -1,7 +1,6 @@
 package com.ivanfranchin.jpalocking.rest;
 
 import com.ivanfranchin.jpalocking.exception.RedeemRaceConditionException;
-import com.ivanfranchin.jpalocking.mapper.PlayerMapper;
 import com.ivanfranchin.jpalocking.model.Player;
 import com.ivanfranchin.jpalocking.rest.dto.CreatePlayerRequest;
 import com.ivanfranchin.jpalocking.rest.dto.PlayerResponse;
@@ -25,18 +24,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class PlayerController {
 
     private final PlayerService playerService;
-    private final PlayerMapper playerMapper;
 
     @PostMapping
     public PlayerResponse createPlayer(@Valid @RequestBody CreatePlayerRequest createPlayerRequest) {
-        Player player = playerService.savePlayer(playerMapper.toPlayer(createPlayerRequest));
-        return playerMapper.toPlayerResponse(player);
+        Player player = playerService.savePlayer(Player.from(createPlayerRequest));
+        return PlayerResponse.from(player);
     }
 
     @GetMapping("/{id}")
     public PlayerResponse getPlayer(@PathVariable Long id) {
         Player player = playerService.validateAndGetPlayer(id);
-        return playerMapper.toPlayerResponse(player);
+        return PlayerResponse.from(player);
     }
 
     @PostMapping("/{id}/stars")
@@ -46,7 +44,7 @@ public class PlayerController {
         log.info("==> Player {} collects stars. Number of Stars: {}, Number of Lives: {}", id, player.getStars(), player.getLives());
         player = playerService.collectStars(player, starCollectionRequest.numStars());
         log.info("<== Player {} collected stars. Number of Stars: {}, Number of Lives: {}", id, player.getStars(), player.getLives());
-        return playerMapper.toPlayerResponse(player);
+        return PlayerResponse.from(player);
     }
 
     @PostMapping("/{id}/lives")
@@ -56,7 +54,7 @@ public class PlayerController {
             log.info("==> Player {} redeems stars. Number of Stars: {}, Number of Lives: {}", id, player.getStars(), player.getLives());
             player = playerService.redeemStars(player);
             log.info("<== Player {} redeemed stars. Number of Stars: {}, Number of Lives: {}", id, player.getStars(), player.getLives());
-            return playerMapper.toPlayerResponse(player);
+            return PlayerResponse.from(player);
 
         } catch (ObjectOptimisticLockingFailureException e) {
             log.error("An problem occurred while player {} redeems life. Error class: {}, error message: {}", id, e.getClass().getName(), e.getMessage());

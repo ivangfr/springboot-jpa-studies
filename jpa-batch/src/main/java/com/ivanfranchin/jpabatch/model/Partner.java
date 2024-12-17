@@ -1,5 +1,6 @@
 package com.ivanfranchin.jpabatch.model;
 
+import com.ivanfranchin.jpabatch.rest.dto.CreatePartnerRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,4 +32,10 @@ public class Partner {
 
     @Column(nullable = false)
     private String name;
+
+    public static Partner from(CreatePartnerRequest createPartnerRequest) {
+        Partner partner = new Partner();
+        partner.setName(createPartnerRequest.name());
+        return partner;
+    }
 }

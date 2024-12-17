@@ -1,19 +1,30 @@
 package com.ivanfranchin.jpalocking.rest.dto;
 
-import lombok.Data;
+import com.ivanfranchin.jpalocking.model.Player;
+import com.ivanfranchin.jpalocking.model.StarCollection;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
-@Data
-public class PlayerResponse {
+public record PlayerResponse(long id, String username, int numStars, Set<LifeResponse> lives) {
 
-    private long id;
-    private String username;
-    private int numStars;
-    private Set<LifeResponse> lives;
+    public record LifeResponse(long id) {
+    }
 
-    @Data
-    public static class LifeResponse {
-        private long id;
+    public static PlayerResponse from(Player player) {
+        int numStars = player.getStars()
+                .stream()
+                .mapToInt(StarCollection::getNumAvailable).sum();
+
+        Set<LifeResponse> lives = player.getLives().stream()
+                .map(life -> new LifeResponse(life.getId()))
+                .collect(Collectors.toSet());
+
+        return new PlayerResponse(
+                player.getId(),
+                player.getUsername(),
+                numStars,
+                lives
+        );
     }
 }
