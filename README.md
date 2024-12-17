@@ -57,7 +57,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## Running tests
 
-- In a terminal, make sure you are in `springboot-jpa-studies` root folder;
+- In a terminal, make sure you are in the `springboot-jpa-studies` root folder;
 
 - The commands below will run the test cases of all modules. In order to run just the tests of a specific module check the module README;
 
