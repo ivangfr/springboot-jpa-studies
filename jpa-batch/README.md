@@ -280,7 +280,7 @@ In a terminal, run the following commands:
 
 In order to see `PostgreSQL` logs, open a new terminal and run
 ```
-docker logs postgres -f
+docker logs -f postgres
 ```
 
 In another terminal, run the following commands

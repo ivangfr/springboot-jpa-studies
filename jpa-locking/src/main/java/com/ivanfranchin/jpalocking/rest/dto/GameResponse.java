@@ -1,7 +1,7 @@
 package com.ivanfranchin.jpalocking.rest.dto;
 
-import com.ivanfranchin.jpalocking.model.Life;
-import com.ivanfranchin.jpalocking.model.Player;
+import com.ivanfranchin.jpalocking.life.Life;
+import com.ivanfranchin.jpalocking.player.Player;
 
 import java.util.List;
 

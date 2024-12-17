@@ -1,11 +1,11 @@
 package com.ivanfranchin.jpalocking.rest;
 
-import com.ivanfranchin.jpalocking.model.Life;
-import com.ivanfranchin.jpalocking.model.Player;
+import com.ivanfranchin.jpalocking.life.Life;
+import com.ivanfranchin.jpalocking.player.Player;
 import com.ivanfranchin.jpalocking.rest.dto.GameResponse;
 import com.ivanfranchin.jpalocking.rest.dto.GameSetupRequest;
-import com.ivanfranchin.jpalocking.service.LifeService;
-import com.ivanfranchin.jpalocking.service.PlayerService;
+import com.ivanfranchin.jpalocking.life.LifeService;
+import com.ivanfranchin.jpalocking.player.PlayerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

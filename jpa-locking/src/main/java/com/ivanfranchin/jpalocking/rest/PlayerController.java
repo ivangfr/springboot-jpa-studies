@@ -1,11 +1,11 @@
 package com.ivanfranchin.jpalocking.rest;
 
-import com.ivanfranchin.jpalocking.exception.RedeemRaceConditionException;
-import com.ivanfranchin.jpalocking.model.Player;
+import com.ivanfranchin.jpalocking.star.RedeemRaceConditionException;
+import com.ivanfranchin.jpalocking.player.Player;
 import com.ivanfranchin.jpalocking.rest.dto.CreatePlayerRequest;
 import com.ivanfranchin.jpalocking.rest.dto.PlayerResponse;
 import com.ivanfranchin.jpalocking.rest.dto.StarCollectionRequest;
-import com.ivanfranchin.jpalocking.service.PlayerService;
+import com.ivanfranchin.jpalocking.player.PlayerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +57,7 @@ public class PlayerController {
             return PlayerResponse.from(player);
 
         } catch (ObjectOptimisticLockingFailureException e) {
-            log.error("An problem occurred while player {} redeems life. Error class: {}, error message: {}", id, e.getClass().getName(), e.getMessage());
+            log.error("An problem occurred while player {} redeems stars. Error class: {}, error message: {}", id, e.getClass().getName(), e.getMessage());
             throw new RedeemRaceConditionException(id, e);
         }
     }

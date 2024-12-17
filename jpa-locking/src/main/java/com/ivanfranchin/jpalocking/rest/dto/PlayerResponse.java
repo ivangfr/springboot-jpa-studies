@@ -1,7 +1,7 @@
 package com.ivanfranchin.jpalocking.rest.dto;
 
-import com.ivanfranchin.jpalocking.model.Player;
-import com.ivanfranchin.jpalocking.model.StarCollection;
+import com.ivanfranchin.jpalocking.player.Player;
+import com.ivanfranchin.jpalocking.star.StarCollection;
 
 import java.util.Set;
 import java.util.stream.Collectors;

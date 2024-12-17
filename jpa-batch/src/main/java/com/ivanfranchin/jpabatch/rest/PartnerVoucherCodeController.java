@@ -1,12 +1,12 @@
 package com.ivanfranchin.jpabatch.rest;
 
-import com.ivanfranchin.jpabatch.model.Partner;
-import com.ivanfranchin.jpabatch.model.VoucherCode;
+import com.ivanfranchin.jpabatch.partner.Partner;
+import com.ivanfranchin.jpabatch.voucher.VoucherCode;
 import com.ivanfranchin.jpabatch.rest.dto.CreatePartnerRequest;
 import com.ivanfranchin.jpabatch.rest.dto.CreateVoucherCodeRequest;
 import com.ivanfranchin.jpabatch.rest.dto.PartnerResponse;
-import com.ivanfranchin.jpabatch.service.PartnerService;
-import com.ivanfranchin.jpabatch.service.VoucherCodeService;
+import com.ivanfranchin.jpabatch.partner.PartnerService;
+import com.ivanfranchin.jpabatch.voucher.VoucherCodeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

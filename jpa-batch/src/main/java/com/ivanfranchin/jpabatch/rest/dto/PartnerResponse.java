@@ -1,6 +1,6 @@
 package com.ivanfranchin.jpabatch.rest.dto;
 
-import com.ivanfranchin.jpabatch.model.Partner;
+import com.ivanfranchin.jpabatch.partner.Partner;
 
 public record PartnerResponse(Long id, String name) {
 

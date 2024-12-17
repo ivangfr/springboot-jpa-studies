@@ -1,10 +1,10 @@
 package com.ivanfranchin.jpabatch.rest;
 
 import com.ivanfranchin.jpabatch.AbstractTestcontainers;
-import com.ivanfranchin.jpabatch.model.Partner;
-import com.ivanfranchin.jpabatch.model.VoucherCode;
-import com.ivanfranchin.jpabatch.repository.PartnerRepository;
-import com.ivanfranchin.jpabatch.repository.VoucherCodeRepository;
+import com.ivanfranchin.jpabatch.partner.Partner;
+import com.ivanfranchin.jpabatch.voucher.VoucherCode;
+import com.ivanfranchin.jpabatch.partner.PartnerRepository;
+import com.ivanfranchin.jpabatch.voucher.VoucherCodeRepository;
 import com.ivanfranchin.jpabatch.rest.dto.CreatePartnerRequest;
 import com.ivanfranchin.jpabatch.rest.dto.CreateVoucherCodeRequest;
 import com.ivanfranchin.jpabatch.rest.dto.PartnerResponse;
