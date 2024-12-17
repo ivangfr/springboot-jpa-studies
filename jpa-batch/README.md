@@ -3,6 +3,21 @@
 
 The idea of this module is to study how to insert/update/delete a set of records in batch (bulk)
 
+## Spring JPA Hibernate - JpaRepository (Batch)
+
+### What to configure
+
+- Add `spring.jpa.properties.hibernate.jdbc.batch_size: 10` to `application.yml`
+- Append `&rewriteBatchedStatements=true` to `spring.datasource.url`
+- Use `saveAll` to save entities
+  ```
+  <S extends T> List<S> saveAll(Iterable<S> entities);
+  ```
+- Use `deleteInBatch` to delete entities
+  ```
+  void deleteInBatch(Iterable<T> entities);
+  ```
+
 ## Start application
 
 > **Note**: before starting the application, the services present in `docker-compose.yml` file must be up and running as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment)
@@ -23,37 +38,6 @@ The idea of this module is to study how to insert/update/delete a set of records
 
 - Once the application is running, you can access its Swagger website at http://localhost:8081/swagger-ui.html
 
-## Running Tests
-
-- In a terminal, make sure you are in the `springboot-jpa-studies` root folder;
-
-- You can use `MySQL` or `PostgreSQL`
-
-  - **Using MySQL**
-    ```
-    ./mvnw clean test --projects jpa-batch -DargLine="-Dspring.profiles.active=mysql-test"
-    ```
-  
-  - **Using PostgreSQL**
-    ```
-    ./mvnw clean test --projects jpa-batch -DargLine="-Dspring.profiles.active=postgres-test"
-    ```
-
-## Spring JPA Hibernate - JpaRepository (Batch)
-
-### What to configure
-
-- Add `spring.jpa.properties.hibernate.jdbc.batch_size: 10` to `application.yml`
-- Append `&rewriteBatchedStatements=true` to `spring.datasource.url`
-- Use `saveAll` to save entities
-  ```
-  <S extends T> List<S> saveAll(Iterable<S> entities);
-  ```
-- Use `deleteInBatch` to delete entities
-  ```
-  void deleteInBatch(Iterable<T> entities);
-  ```
-
 ### Enable database logs
 
 - **MySQL**
@@ -67,8 +51,6 @@ The idea of this module is to study how to insert/update/delete a set of records
     ```
     SET GLOBAL general_log = 'ON';
     SET global log_output = 'table';
-     
-    SELECT event_time, command_type, SUBSTRING(argument,1,150) FROM mysql.general_log;
     ```
   
 - **PostgreSQL**
@@ -80,6 +62,11 @@ The idea of this module is to study how to insert/update/delete a set of records
 ## Execution examples
 
 ### Using MySQL
+
+> **Note**: In order to see the logs in `MySQL` interactive terminal, run the following `SELECT`
+> ```
+> SELECT event_time, command_type, CONVERT(SUBSTRING(argument,1,150) USING UTF8) FROM mysql.general_log;
+> ```
 
 In a terminal, run the following commands:
 
@@ -98,10 +85,10 @@ In a terminal, run the following commands:
 
   Logs
   ```
-  | Query | SET autocommit=0
-  | Query | insert into partners (name) values ('partner1')
-  | Query | commit
-  | Query | SET autocommit=1
+  | Query        | SET autocommit=0                                                                                                                                       |
+  | Query        | insert into partners (name) values ('partner1')                                                                                                        |
+  | Query        | COMMIT                                                                                                                                                 |
+  | Query        | SET autocommit=1
   ```
 
 - **Insert 15 voucher codes to partner with id 1 (batch_size = 10)**
@@ -119,94 +106,29 @@ In a terminal, run the following commands:
 
   Logs
   ```
-  | Query | SET autocommit=0
-  | Query | select partner0_.id as id1_0_0_, partner0_.name as name2_0_0_ from partners partner0_ where partner0_.id=1
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SELECT @@session.transaction_read_only
-  | Query | set session transaction read write
-  | Query | SET autocommit=0
-  | Query | SET autocommit=0
-  | Query | select next_val as id_val from hibernate_sequence for update
-  | Query | update hibernate_sequence set next_val= 1 where next_val=0
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SET autocommit=0
-  | Query | select next_val as id_val from hibernate_sequence for update
-  | Query | update hibernate_sequence set next_val= 2 where next_val=1
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SET autocommit=0
-  | Query | select next_val as id_val from hibernate_sequence for update
-  | Query | update hibernate_sequence set next_val= 3 where next_val=2
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SET autocommit=0
-  | Query | select next_val as id_val from hibernate_sequence for update
-  | Query | update hibernate_sequence set next_val= 4 where next_val=3
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SET autocommit=0
-  | Query | select next_val as id_val from hibernate_sequence for update
-  | Query | update hibernate_sequence set next_val= 5 where next_val=4
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SET autocommit=0
-  | Query | select next_val as id_val from hibernate_sequence for update
-  | Query | update hibernate_sequence set next_val= 6 where next_val=5
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SET autocommit=0
-  | Query | select next_val as id_val from hibernate_sequence for update
-  | Query | update hibernate_sequence set next_val= 7 where next_val=6
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SET autocommit=0
-  | Query | select next_val as id_val from hibernate_sequence for update
-  | Query | update hibernate_sequence set next_val= 8 where next_val=7
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SET autocommit=0
-  | Query | select next_val as id_val from hibernate_sequence for update
-  | Query | update hibernate_sequence set next_val= 9 where next_val=8
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SET autocommit=0
-  | Query | select next_val as id_val from hibernate_sequence for update
-  | Query | update hibernate_sequence set next_val= 10 where next_val=9
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SET autocommit=0
-  | Query | select next_val as id_val from hibernate_sequence for update
-  | Query | update hibernate_sequence set next_val= 11 where next_val=10
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SET autocommit=0
-  | Query | select next_val as id_val from hibernate_sequence for update
-  | Query | update hibernate_sequence set next_val= 12 where next_val=11
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SET autocommit=0
-  | Query | select next_val as id_val from hibernate_sequence for update
-  | Query | update hibernate_sequence set next_val= 13 where next_val=12
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SET autocommit=0
-  | Query | select next_val as id_val from hibernate_sequence for update
-  | Query | update hibernate_sequence set next_val= 14 where next_val=13
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SET autocommit=0
-  | Query | select next_val as id_val from hibernate_sequence for update
-  | Query | update hibernate_sequence set next_val= 15 where next_val=14
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SELECT @@session.transaction_read_only
-  | Query | insert into voucher_codes (code, deleted, partner_id, id) values ('110', 0, 1, 0),('111', 0, 1, 1),('101', 0, 1, 2),('112', 0, 1, 3),('102', 0, 1, 4),('113', 0, 1, 5),('103', 0, 1, 6),('114', 0, 1, 7),('104', 0, 1, 8),('115', 0, 1, 9)
-  | Query | SELECT @@session.transaction_read_only
-  | Query | insert into voucher_codes (code, deleted, partner_id, id) values ('105', 0, 1, 10),('106', 0, 1, 11),('107', 0, 1, 12),('108', 0, 1, 13),('109', 0, 1, 14)
-  | Query | commit
-  | Query | SET autocommit=1  
+  | Query        | SET SESSION TRANSACTION READ ONLY                                                                                                                      |
+  | Query        | SET autocommit=0                                                                                                                                       |
+  | Query        | select p1_0.id,p1_0.name from partners p1_0 where p1_0.id=1                                                                                            |
+  | Query        | COMMIT                                                                                                                                                 |
+  | Query        | SET autocommit=1                                                                                                                                       |
+  | Query        | SET SESSION TRANSACTION READ WRITE                                                                                                                     |
+  | Query        | SET autocommit=0                                                                                                                                       |
+  | Query        | SET autocommit=0                                                                                                                                       |
+  | Query        | select next_val as id_val from voucher_codes_seq for update                                                                                            |
+  | Query        | update voucher_codes_seq set next_val= 51 where next_val=1                                                                                             |
+  | Query        | COMMIT                                                                                                                                                 |
+  | Query        | SET autocommit=1                                                                                                                                       |
+  | Query        | SET autocommit=0                                                                                                                                       |
+  | Query        | select next_val as id_val from voucher_codes_seq for update                                                                                            |
+  | Query        | update voucher_codes_seq set next_val= 101 where next_val=51                                                                                           |
+  | Query        | COMMIT                                                                                                                                                 |
+  | Query        | SET autocommit=1                                                                                                                                       |
+  | Query        | SELECT @@session.transaction_read_only                                                                                                                 |
+  | Query        | insert into voucher_codes (code,deleted,partner_id,id) values ('110',0,1,1),('111',0,1,2),('101',0,1,3),('112',0,1,4),('102',0,1,5),('113',0,1,6),('10 |
+  | Query        | SELECT @@session.transaction_read_only                                                                                                                 |
+  | Query        | insert into voucher_codes (code,deleted,partner_id,id) values ('105',0,1,11),('106',0,1,12),('107',0,1,13),('108',0,1,14),('109',0,1,15)               |
+  | Query        | COMMIT                                                                                                                                                 |
+  | Query        | SET autocommit=1
   ```
 
 - **Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)**
@@ -222,30 +144,30 @@ In a terminal, run the following commands:
 
   Logs
   ```
-  | Query | SET autocommit=0
-  | Query | select partner0_.id as id1_0_0_, partner0_.name as name2_0_0_ from partners partner0_ where partner0_.id=1
-  | Query | select vouchercod0_.id as id1_1_, vouchercod0_.code as code2_1_, vouchercod0_.deleted as deleted3_1_, vouchercod0_.partner_id as partner_4_1_ from voucher_codes vouchercod0_ where vouchercod0_.partner_id=1
-  | Query | SELECT @@session.transaction_read_only
-  | Query | SELECT @@session.transaction_read_only
-  | Query | update voucher_codes set code='110', deleted=1, partner_id=1 where id=0;
-  | Query | update voucher_codes set code='111', deleted=1, partner_id=1 where id=1;
-  | Query | update voucher_codes set code='101', deleted=1, partner_id=1 where id=2;
-  | Query | update voucher_codes set code='112', deleted=1, partner_id=1 where id=3;
-  | Query | update voucher_codes set code='102', deleted=1, partner_id=1 where id=4;
-  | Query | update voucher_codes set code='113', deleted=1, partner_id=1 where id=5;
-  | Query | update voucher_codes set code='103', deleted=1, partner_id=1 where id=6;
-  | Query | update voucher_codes set code='114', deleted=1, partner_id=1 where id=7;
-  | Query | update voucher_codes set code='104', deleted=1, partner_id=1 where id=8;
-  | Query | update voucher_codes set code='115', deleted=1, partner_id=1 where id=9 
-  | Query | SELECT @@session.transaction_read_only
-  | Query | SELECT @@session.transaction_read_only
-  | Query | update voucher_codes set code='105', deleted=1, partner_id=1 where id=10;
-  | Query | update voucher_codes set code='106', deleted=1, partner_id=1 where id=11;
-  | Query | update voucher_codes set code='107', deleted=1, partner_id=1 where id=12;
-  | Query | update voucher_codes set code='108', deleted=1, partner_id=1 where id=13;
-  | Query | update voucher_codes set code='109', deleted=1, partner_id=1 where id=14
-  | Query | commit                                                                  
-  | Query | SET autocommit=1
+  | Query        | SET autocommit=0                                                                                                                                       |
+  | Query        | select p1_0.id,p1_0.name from partners p1_0 where p1_0.id=1                                                                                            |
+  | Query        | select vc1_0.id,vc1_0.code,vc1_0.deleted,vc1_0.partner_id from voucher_codes vc1_0 where vc1_0.partner_id=1                                            |
+  | Query        | SELECT @@session.transaction_read_only                                                                                                                 |
+  | Query        | SELECT @@session.transaction_read_only                                                                                                                 |
+  | Query        | update voucher_codes set code='110',deleted=1,partner_id=1 where id=1;                                                                                 |
+  | Query        | update voucher_codes set code='111',deleted=1,partner_id=1 where id=2;                                                                                 |
+  | Query        | update voucher_codes set code='101',deleted=1,partner_id=1 where id=3;                                                                                 |
+  | Query        | update voucher_codes set code='112',deleted=1,partner_id=1 where id=4;                                                                                 |
+  | Query        | update voucher_codes set code='102',deleted=1,partner_id=1 where id=5;                                                                                 |
+  | Query        | update voucher_codes set code='113',deleted=1,partner_id=1 where id=6;                                                                                 |
+  | Query        | update voucher_codes set code='103',deleted=1,partner_id=1 where id=7;                                                                                 |
+  | Query        | update voucher_codes set code='114',deleted=1,partner_id=1 where id=8;                                                                                 |
+  | Query        | update voucher_codes set code='104',deleted=1,partner_id=1 where id=9;                                                                                 |
+  | Query        | update voucher_codes set code='115',deleted=1,partner_id=1 where id=10                                                                                 |
+  | Query        | SELECT @@session.transaction_read_only                                                                                                                 |
+  | Query        | SELECT @@session.transaction_read_only                                                                                                                 |
+  | Query        | update voucher_codes set code='105',deleted=1,partner_id=1 where id=11;                                                                                |
+  | Query        | update voucher_codes set code='106',deleted=1,partner_id=1 where id=12;                                                                                |
+  | Query        | update voucher_codes set code='107',deleted=1,partner_id=1 where id=13;                                                                                |
+  | Query        | update voucher_codes set code='108',deleted=1,partner_id=1 where id=14;                                                                                |
+  | Query        | update voucher_codes set code='109',deleted=1,partner_id=1 where id=15                                                                                 |
+  | Query        | COMMIT                                                                                                                                                 |
+  | Query        | SET autocommit=1
   ```
 
 - **Hard delete voucher codes of the partner with id 1 (batch_size = 10)**
@@ -261,19 +183,18 @@ In a terminal, run the following commands:
 
   Logs
   ```
-  | Query | set session transaction read only
-  | Query | SET autocommit=0
-  | Query | select partner0_.id as id1_0_0_, partner0_.name as name2_0_0_ from partners partner0_ where partner0_.id=1
-  | Query | commit
-  | Query | SET autocommit=1
-  | Query | SELECT @@session.transaction_read_only
-  | Query | set session transaction read write
-  | Query | select vouchercod0_.id as id1_1_, vouchercod0_.code as code2_1_, vouchercod0_.deleted as deleted3_1_, vouchercod0_.partner_id as partner_4_1_ from voucher_codes vouchercod0_ where vouchercod0_.partner_id=1
-  | Query | SET autocommit=0
-  | Query | delete from voucher_codes where id=0 or id=1 or id=2 or id=3 or id=4 or id=5 or id=6 or id=7 or id=8 or id=9
-  | Query | delete from voucher_codes where id=10 or id=11 or id=12 or id=13 or id=14
-  | Query | commit
-  | Query | SET autocommit=1
+  | Query        | SET SESSION TRANSACTION READ ONLY                                                                                                                      |
+  | Query        | SET autocommit=0                                                                                                                                       |
+  | Query        | select p1_0.id,p1_0.name from partners p1_0 where p1_0.id=1                                                                                            |
+  | Query        | COMMIT                                                                                                                                                 |
+  | Query        | SET autocommit=1                                                                                                                                       |
+  | Query        | SET SESSION TRANSACTION READ WRITE                                                                                                                     |
+  | Query        | select vc1_0.id,vc1_0.code,vc1_0.deleted,vc1_0.partner_id from voucher_codes vc1_0 where vc1_0.partner_id=1                                            |
+  | Query        | SET autocommit=0                                                                                                                                       |
+  | Query        | delete vc1_0 from voucher_codes vc1_0 where vc1_0.id=1 or vc1_0.id=2 or vc1_0.id=3 or vc1_0.id=4 or vc1_0.id=5 or vc1_0.id=6 or vc1_0.id=7 or vc1_0.id |
+  | Query        | delete vc1_0 from voucher_codes vc1_0 where vc1_0.id=11 or vc1_0.id=12 or vc1_0.id=13 or vc1_0.id=14 or vc1_0.id=15                                    |
+  | Query        | COMMIT                                                                                                                                                 |
+  | Query        | SET autocommit=1
   ```
 
 ### Using PostgreSQL
@@ -300,11 +221,11 @@ In another terminal, run the following commands
 
   Logs
   ```
-  [125] LOG:  execute <unnamed>: BEGIN
-  [125] LOG:  execute <unnamed>: insert into partners (name) values ($1)
-  [125] DETAIL:  parameters: $1 = 'partner1'
-  [125] LOG:  execute <unnamed>: select currval('partners_id_seq')
-  [125] LOG:  execute S_1: COMMIT
+  [73] LOG:  execute <unnamed>: BEGIN
+  [73] LOG:  execute <unnamed>: insert into partners (name) values ($1)
+  RETURNING *
+  [73] DETAIL:  Parameters: $1 = 'partner1'
+  [73] LOG:  execute S_1: COMMIT
   ```
 
 - **Insert 15 voucher codes to partner with id 1 (batch_size = 10)**
@@ -322,59 +243,44 @@ In another terminal, run the following commands
 
   Logs
   ```
-  [125] LOG:  execute <unnamed>: SET SESSION CHARACTERISTICS AS TRANSACTION READ ONLY
-  [125] LOG:  execute <unnamed>: BEGIN
-  [125] LOG:  execute <unnamed>: select partner0_.id as id1_0_0_, partner0_.name as name2_0_0_ from partners partner0_ where partner0_.id=$1
-  [125] DETAIL:  parameters: $1 = '1'
-  [125] LOG:  execute S_1: COMMIT
-  [125] LOG:  execute <unnamed>: SET SESSION CHARACTERISTICS AS TRANSACTION READ WRITE
-  [125] LOG:  execute <unnamed>: BEGIN
-  [125] LOG:  execute <unnamed>: select nextval ('hibernate_sequence')
-  [125] LOG:  execute <unnamed>: select nextval ('hibernate_sequence')
-  [125] LOG:  execute <unnamed>: select nextval ('hibernate_sequence')
-  [125] LOG:  execute <unnamed>: select nextval ('hibernate_sequence')
-  [125] LOG:  execute S_2: select nextval ('hibernate_sequence')
-  [125] LOG:  execute S_2: select nextval ('hibernate_sequence')
-  [125] LOG:  execute S_2: select nextval ('hibernate_sequence')
-  [125] LOG:  execute S_2: select nextval ('hibernate_sequence')
-  [125] LOG:  execute S_2: select nextval ('hibernate_sequence')
-  [125] LOG:  execute S_2: select nextval ('hibernate_sequence')
-  [125] LOG:  execute S_2: select nextval ('hibernate_sequence')
-  [125] LOG:  execute S_2: select nextval ('hibernate_sequence')
-  [125] LOG:  execute S_2: select nextval ('hibernate_sequence')
-  [125] LOG:  execute S_2: select nextval ('hibernate_sequence')
-  [125] LOG:  execute S_2: select nextval ('hibernate_sequence')
-  [125] LOG:  execute S_3: insert into voucher_codes (code, deleted, partner_id, id) values ($1, $2, $3, $4)
-  [125] DETAIL:  parameters: $1 = '110', $2 = 'f', $3 = '1', $4 = '1'
-  [125] LOG:  execute S_3: insert into voucher_codes (code, deleted, partner_id, id) values ($1, $2, $3, $4)
-  [125] DETAIL:  parameters: $1 = '111', $2 = 'f', $3 = '1', $4 = '2'
-  [125] LOG:  execute S_3: insert into voucher_codes (code, deleted, partner_id, id) values ($1, $2, $3, $4)
-  [125] DETAIL:  parameters: $1 = '101', $2 = 'f', $3 = '1', $4 = '3'
-  [125] LOG:  execute S_3: insert into voucher_codes (code, deleted, partner_id, id) values ($1, $2, $3, $4)
-  [125] DETAIL:  parameters: $1 = '112', $2 = 'f', $3 = '1', $4 = '4'
-  [125] LOG:  execute S_3: insert into voucher_codes (code, deleted, partner_id, id) values ($1, $2, $3, $4)
-  [125] DETAIL:  parameters: $1 = '102', $2 = 'f', $3 = '1', $4 = '5'
-  [125] LOG:  execute S_3: insert into voucher_codes (code, deleted, partner_id, id) values ($1, $2, $3, $4)
-  [125] DETAIL:  parameters: $1 = '113', $2 = 'f', $3 = '1', $4 = '6'
-  [125] LOG:  execute S_3: insert into voucher_codes (code, deleted, partner_id, id) values ($1, $2, $3, $4)
-  [125] DETAIL:  parameters: $1 = '103', $2 = 'f', $3 = '1', $4 = '7'
-  [125] LOG:  execute S_3: insert into voucher_codes (code, deleted, partner_id, id) values ($1, $2, $3, $4)
-  [125] DETAIL:  parameters: $1 = '114', $2 = 'f', $3 = '1', $4 = '8'
-  [125] LOG:  execute S_3: insert into voucher_codes (code, deleted, partner_id, id) values ($1, $2, $3, $4)
-  [125] DETAIL:  parameters: $1 = '104', $2 = 'f', $3 = '1', $4 = '9'
-  [125] LOG:  execute S_3: insert into voucher_codes (code, deleted, partner_id, id) values ($1, $2, $3, $4)
-  [125] DETAIL:  parameters: $1 = '115', $2 = 'f', $3 = '1', $4 = '10'
-  [125] LOG:  execute S_3: insert into voucher_codes (code, deleted, partner_id, id) values ($1, $2, $3, $4)
-  [125] DETAIL:  parameters: $1 = '105', $2 = 'f', $3 = '1', $4 = '11'
-  [125] LOG:  execute S_3: insert into voucher_codes (code, deleted, partner_id, id) values ($1, $2, $3, $4)
-  [125] DETAIL:  parameters: $1 = '106', $2 = 'f', $3 = '1', $4 = '12'
-  [125] LOG:  execute S_3: insert into voucher_codes (code, deleted, partner_id, id) values ($1, $2, $3, $4)
-  [125] DETAIL:  parameters: $1 = '107', $2 = 'f', $3 = '1', $4 = '13'
-  [125] LOG:  execute S_3: insert into voucher_codes (code, deleted, partner_id, id) values ($1, $2, $3, $4)
-  [125] DETAIL:  parameters: $1 = '108', $2 = 'f', $3 = '1', $4 = '14'
-  [125] LOG:  execute S_3: insert into voucher_codes (code, deleted, partner_id, id) values ($1, $2, $3, $4)
-  [125] DETAIL:  parameters: $1 = '109', $2 = 'f', $3 = '1', $4 = '15'
-  [125] LOG:  execute S_1: COMMIT
+  [73] LOG:  execute <unnamed>: BEGIN READ ONLY
+  [73] LOG:  execute <unnamed>: select p1_0.id,p1_0.name from partners p1_0 where p1_0.id=$1
+  [73] DETAIL:  Parameters: $1 = '1'
+  [73] LOG:  execute S_1: COMMIT
+  [73] LOG:  execute <unnamed>: BEGIN
+  [73] LOG:  execute <unnamed>: select nextval('voucher_codes_seq')
+  [73] LOG:  execute <unnamed>: select nextval('voucher_codes_seq')
+  [73] LOG:  execute S_2: insert into voucher_codes (code,deleted,partner_id,id) values ($1,$2,$3,$4)
+  [73] DETAIL:  Parameters: $1 = '110', $2 = 'f', $3 = '1', $4 = '1'
+  [73] LOG:  execute S_2: insert into voucher_codes (code,deleted,partner_id,id) values ($1,$2,$3,$4)
+  [73] DETAIL:  Parameters: $1 = '111', $2 = 'f', $3 = '1', $4 = '2'
+  [73] LOG:  execute S_2: insert into voucher_codes (code,deleted,partner_id,id) values ($1,$2,$3,$4)
+  [73] DETAIL:  Parameters: $1 = '101', $2 = 'f', $3 = '1', $4 = '3'
+  [73] LOG:  execute S_2: insert into voucher_codes (code,deleted,partner_id,id) values ($1,$2,$3,$4)
+  [73] DETAIL:  Parameters: $1 = '112', $2 = 'f', $3 = '1', $4 = '4'
+  [73] LOG:  execute S_2: insert into voucher_codes (code,deleted,partner_id,id) values ($1,$2,$3,$4)
+  [73] DETAIL:  Parameters: $1 = '102', $2 = 'f', $3 = '1', $4 = '5'
+  [73] LOG:  execute S_2: insert into voucher_codes (code,deleted,partner_id,id) values ($1,$2,$3,$4)
+  [73] DETAIL:  Parameters: $1 = '113', $2 = 'f', $3 = '1', $4 = '6'
+  [73] LOG:  execute S_2: insert into voucher_codes (code,deleted,partner_id,id) values ($1,$2,$3,$4)
+  [73] DETAIL:  Parameters: $1 = '103', $2 = 'f', $3 = '1', $4 = '7'
+  [73] LOG:  execute S_2: insert into voucher_codes (code,deleted,partner_id,id) values ($1,$2,$3,$4)
+  [73] DETAIL:  Parameters: $1 = '114', $2 = 'f', $3 = '1', $4 = '8'
+  [73] LOG:  execute S_2: insert into voucher_codes (code,deleted,partner_id,id) values ($1,$2,$3,$4)
+  [73] DETAIL:  Parameters: $1 = '104', $2 = 'f', $3 = '1', $4 = '9'
+  [73] LOG:  execute S_2: insert into voucher_codes (code,deleted,partner_id,id) values ($1,$2,$3,$4)
+  [73] DETAIL:  Parameters: $1 = '115', $2 = 'f', $3 = '1', $4 = '10'
+  [73] LOG:  execute S_2: insert into voucher_codes (code,deleted,partner_id,id) values ($1,$2,$3,$4)
+  [73] DETAIL:  Parameters: $1 = '105', $2 = 'f', $3 = '1', $4 = '11'
+  [73] LOG:  execute S_2: insert into voucher_codes (code,deleted,partner_id,id) values ($1,$2,$3,$4)
+  [73] DETAIL:  Parameters: $1 = '106', $2 = 'f', $3 = '1', $4 = '12'
+  [73] LOG:  execute S_2: insert into voucher_codes (code,deleted,partner_id,id) values ($1,$2,$3,$4)
+  [73] DETAIL:  Parameters: $1 = '107', $2 = 'f', $3 = '1', $4 = '13'
+  [73] LOG:  execute S_2: insert into voucher_codes (code,deleted,partner_id,id) values ($1,$2,$3,$4)
+  [73] DETAIL:  Parameters: $1 = '108', $2 = 'f', $3 = '1', $4 = '14'
+  [73] LOG:  execute S_2: insert into voucher_codes (code,deleted,partner_id,id) values ($1,$2,$3,$4)
+  [73] DETAIL:  Parameters: $1 = '109', $2 = 'f', $3 = '1', $4 = '15'
+  [73] LOG:  execute S_1: COMMIT
   ```
 
 - **Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)**
@@ -390,42 +296,42 @@ In another terminal, run the following commands
 
   Logs
   ```
-  [113] LOG:  execute <unnamed>: BEGIN
-  [113] LOG:  execute <unnamed>: select partner0_.id as id1_0_0_, partner0_.name as name2_0_0_ from partners partner0_ where partner0_.id=$1
-  [113] DETAIL:  parameters: $1 = '1'
-  [113] LOG:  execute <unnamed>: select vouchercod0_.id as id1_1_, vouchercod0_.code as code2_1_, vouchercod0_.deleted as deleted3_1_, vouchercod0_.partner_id as partner_4_1_ from voucher_codes vouchercod0_ where vouchercod0_.partner_id=$1
-  [113] DETAIL:  parameters: $1 = '1'
-  [113] LOG:  execute S_4: update voucher_codes set code=$1, deleted=$2, partner_id=$3 where id=$4
-  [113] DETAIL:  parameters: $1 = '110', $2 = 't', $3 = '1', $4 = '1'
-  [113] LOG:  execute S_4: update voucher_codes set code=$1, deleted=$2, partner_id=$3 where id=$4
-  [113] DETAIL:  parameters: $1 = '111', $2 = 't', $3 = '1', $4 = '2'
-  [113] LOG:  execute S_4: update voucher_codes set code=$1, deleted=$2, partner_id=$3 where id=$4
-  [113] DETAIL:  parameters: $1 = '101', $2 = 't', $3 = '1', $4 = '3'
-  [113] LOG:  execute S_4: update voucher_codes set code=$1, deleted=$2, partner_id=$3 where id=$4
-  [113] DETAIL:  parameters: $1 = '112', $2 = 't', $3 = '1', $4 = '4'
-  [113] LOG:  execute S_4: update voucher_codes set code=$1, deleted=$2, partner_id=$3 where id=$4
-  [113] DETAIL:  parameters: $1 = '102', $2 = 't', $3 = '1', $4 = '5'
-  [113] LOG:  execute S_4: update voucher_codes set code=$1, deleted=$2, partner_id=$3 where id=$4
-  [113] DETAIL:  parameters: $1 = '113', $2 = 't', $3 = '1', $4 = '6'
-  [113] LOG:  execute S_4: update voucher_codes set code=$1, deleted=$2, partner_id=$3 where id=$4
-  [113] DETAIL:  parameters: $1 = '103', $2 = 't', $3 = '1', $4 = '7'
-  [113] LOG:  execute S_4: update voucher_codes set code=$1, deleted=$2, partner_id=$3 where id=$4
-  [113] DETAIL:  parameters: $1 = '114', $2 = 't', $3 = '1', $4 = '8'
-  [113] LOG:  execute S_4: update voucher_codes set code=$1, deleted=$2, partner_id=$3 where id=$4
-  [113] DETAIL:  parameters: $1 = '104', $2 = 't', $3 = '1', $4 = '9'
-  [113] LOG:  execute S_4: update voucher_codes set code=$1, deleted=$2, partner_id=$3 where id=$4
-  [113] DETAIL:  parameters: $1 = '115', $2 = 't', $3 = '1', $4 = '10'
-  [113] LOG:  execute S_4: update voucher_codes set code=$1, deleted=$2, partner_id=$3 where id=$4
-  [113] DETAIL:  parameters: $1 = '105', $2 = 't', $3 = '1', $4 = '11'
-  [113] LOG:  execute S_4: update voucher_codes set code=$1, deleted=$2, partner_id=$3 where id=$4
-  [113] DETAIL:  parameters: $1 = '106', $2 = 't', $3 = '1', $4 = '12'
-  [113] LOG:  execute S_4: update voucher_codes set code=$1, deleted=$2, partner_id=$3 where id=$4
-  [113] DETAIL:  parameters: $1 = '107', $2 = 't', $3 = '1', $4 = '13'
-  [113] LOG:  execute S_4: update voucher_codes set code=$1, deleted=$2, partner_id=$3 where id=$4
-  [113] DETAIL:  parameters: $1 = '108', $2 = 't', $3 = '1', $4 = '14'
-  [113] LOG:  execute S_4: update voucher_codes set code=$1, deleted=$2, partner_id=$3 where id=$4
-  [113] DETAIL:  parameters: $1 = '109', $2 = 't', $3 = '1', $4 = '15'
-  [113] LOG:  execute S_1: COMMIT
+  [73] LOG:  execute <unnamed>: BEGIN
+  [73] LOG:  execute <unnamed>: select p1_0.id,p1_0.name from partners p1_0 where p1_0.id=$1
+  [73] DETAIL:  Parameters: $1 = '1'
+  [73] LOG:  execute <unnamed>: select vc1_0.id,vc1_0.code,vc1_0.deleted,vc1_0.partner_id from voucher_codes vc1_0 where vc1_0.partner_id=$1
+  [73] DETAIL:  Parameters: $1 = '1'
+  [73] LOG:  execute S_3: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '110', $2 = 't', $3 = '1', $4 = '1'
+  [73] LOG:  execute S_3: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '111', $2 = 't', $3 = '1', $4 = '2'
+  [73] LOG:  execute S_3: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '101', $2 = 't', $3 = '1', $4 = '3'
+  [73] LOG:  execute S_3: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '112', $2 = 't', $3 = '1', $4 = '4'
+  [73] LOG:  execute S_3: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '102', $2 = 't', $3 = '1', $4 = '5'
+  [73] LOG:  execute S_3: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '113', $2 = 't', $3 = '1', $4 = '6'
+  [73] LOG:  execute S_3: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '103', $2 = 't', $3 = '1', $4 = '7'
+  [73] LOG:  execute S_3: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '114', $2 = 't', $3 = '1', $4 = '8'
+  [73] LOG:  execute S_3: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '104', $2 = 't', $3 = '1', $4 = '9'
+  [73] LOG:  execute S_3: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '115', $2 = 't', $3 = '1', $4 = '10'
+  [73] LOG:  execute S_3: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '105', $2 = 't', $3 = '1', $4 = '11'
+  [73] LOG:  execute S_3: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '106', $2 = 't', $3 = '1', $4 = '12'
+  [73] LOG:  execute S_3: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '107', $2 = 't', $3 = '1', $4 = '13'
+  [73] LOG:  execute S_3: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '108', $2 = 't', $3 = '1', $4 = '14'
+  [73] LOG:  execute S_3: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '109', $2 = 't', $3 = '1', $4 = '15'
+  [73] LOG:  execute S_1: COMMIT
   ```
 
 - **Hard delete voucher codes of the partner with id 1 (batch_size = 10)**
@@ -441,20 +347,18 @@ In another terminal, run the following commands
 
   Logs
   ```
-  [113] LOG:  execute <unnamed>: SET SESSION CHARACTERISTICS AS TRANSACTION READ ONLY
-  [113] LOG:  execute <unnamed>: BEGIN
-  [113] LOG:  execute <unnamed>: select partner0_.id as id1_0_0_, partner0_.name as name2_0_0_ from partners partner0_ where partner0_.id=$1
-  [113] DETAIL:  parameters: $1 = '1'
-  [113] LOG:  execute S_1: COMMIT
-  [113] LOG:  execute <unnamed>: SET SESSION CHARACTERISTICS AS TRANSACTION READ WRITE
-  [113] LOG:  execute <unnamed>: select vouchercod0_.id as id1_1_, vouchercod0_.code as code2_1_, vouchercod0_.deleted as deleted3_1_, vouchercod0_.partner_id as partner_4_1_ from voucher_codes vouchercod0_ where vouchercod0_.partner_id=$1
-  [113] DETAIL:  parameters: $1 = '1'
-  [113] LOG:  execute <unnamed>: BEGIN
-  [113] LOG:  execute <unnamed>: delete from voucher_codes where id=$1 or id=$2 or id=$3 or id=$4 or id=$5 or id=$6 or id=$7 or id=$8 or id=$9 or id=$10
-  [113] DETAIL:  parameters: $1 = '1', $2 = '2', $3 = '3', $4 = '4', $5 = '5', $6 = '6', $7 = '7', $8 = '8', $9 = '9', $10 = '10'
-  [113] LOG:  execute <unnamed>: delete from voucher_codes where id=$1 or id=$2 or id=$3 or id=$4 or id=$5
-  [113] DETAIL:  parameters: $1 = '11', $2 = '12', $3 = '13', $4 = '14', $5 = '15'
-  [113] LOG:  execute S_1: COMMIT
+  [73] LOG:  execute <unnamed>: BEGIN READ ONLY
+  [73] LOG:  execute <unnamed>: select p1_0.id,p1_0.name from partners p1_0 where p1_0.id=$1
+  [73] DETAIL:  Parameters: $1 = '1'
+  [73] LOG:  execute S_1: COMMIT
+  [73] LOG:  execute <unnamed>: select vc1_0.id,vc1_0.code,vc1_0.deleted,vc1_0.partner_id from voucher_codes vc1_0 where vc1_0.partner_id=$1
+  [73] DETAIL:  Parameters: $1 = '1'
+  [73] LOG:  execute <unnamed>: BEGIN
+  [73] LOG:  execute <unnamed>: delete from voucher_codes vc1_0 where vc1_0.id=$1 or vc1_0.id=$2 or vc1_0.id=$3 or vc1_0.id=$4 or vc1_0.id=$5 or vc1_0.id=$6 or vc1_0.id=$7 or vc1_0.id=$8 or vc1_0.id=$9 or vc1_0.id=$10
+  [73] DETAIL:  Parameters: $1 = '1', $2 = '2', $3 = '3', $4 = '4', $5 = '5', $6 = '6', $7 = '7', $8 = '8', $9 = '9', $10 = '10'
+  [73] LOG:  execute <unnamed>: delete from voucher_codes vc1_0 where vc1_0.id=$1 or vc1_0.id=$2 or vc1_0.id=$3 or vc1_0.id=$4 or vc1_0.id=$5
+  [73] DETAIL:  Parameters: $1 = '11', $2 = '12', $3 = '13', $4 = '14', $5 = '15'
+  [73] LOG:  execute S_1: COMMIT
   ```
 
 ## Useful Commands
@@ -488,6 +392,28 @@ In another terminal, run the following commands
     select * from partners;
     ```
     > Type `\q` to exit
+
+## Shutdown
+
+- To stop `jpa-batch` application, go to the terminal where it is running and press `Ctrl+C`.
+
+- To stop and remove docker compose containers, network and volumes, please refer to [Shutdown Environment](https://github.com/ivangfr/springboot-jpa-studies#shutdown-environment) present in the main README.
+
+## Running Tests
+
+- In a terminal, make sure you are in the `springboot-jpa-studies` root folder;
+
+- You can use `MySQL` or `PostgreSQL`
+
+  - **Using MySQL**
+    ```
+    ./mvnw clean test --projects jpa-batch -DargLine="-Dspring.profiles.active=mysql-test"
+    ```
+
+  - **Using PostgreSQL**
+    ```
+    ./mvnw clean test --projects jpa-batch -DargLine="-Dspring.profiles.active=postgres-test"
+    ```
 
 ## Reference
 

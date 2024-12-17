@@ -46,7 +46,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
     ```
     > Type `\q` to exit
 
-## Shutdown
+## Shutdown Environment
 
 - In a terminal, make sure you are inside the `springboot-jpa-studies` root folder;
 

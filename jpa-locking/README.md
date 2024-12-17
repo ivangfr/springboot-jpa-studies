@@ -23,6 +23,12 @@ The idea of this module is to study jpa locking.
 
 - Once the application is running, you can access its Swagger website at http://localhost:8082/swagger-ui.html
 
+## Shutdown
+
+- To stop `jpa-locking` application, go to the terminal where it is running and press `Ctrl+C`.
+
+- To stop and remove docker compose containers, network and volumes, please refer to [Shutdown Environment](https://github.com/ivangfr/springboot-jpa-studies#shutdown-environment) present in the main README.
+
 ## Running Tests
 
 - In a terminal, make sure you are in the `springboot-jpa-studies` root folder;

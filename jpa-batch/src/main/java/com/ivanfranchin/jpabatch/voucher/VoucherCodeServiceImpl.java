@@ -34,7 +34,8 @@ public class VoucherCodeServiceImpl implements VoucherCodeService {
     @Transactional
     @Override
     public List<VoucherCode> saveVoucherCodes(List<VoucherCode> voucherCodes) {
-//        return voucherCodeBatchProcessing.saveInBatch(voucherCodes);
+        /* If you want to use VoucherCodeBatchProcessing class instead of VoucherCodeRepository */
+        //return voucherCodeBatchProcessing.saveInBatch(voucherCodes);
         return voucherCodeRepository.saveAll(voucherCodes);
     }
 

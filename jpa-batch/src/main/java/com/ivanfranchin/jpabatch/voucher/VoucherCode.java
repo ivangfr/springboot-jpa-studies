@@ -21,8 +21,7 @@ import lombok.NoArgsConstructor;
 public class VoucherCode {
 
     @Id
-    //-- If you want to use VoucherCodeBatchProcessing class instead of VoucherCodeRepository to save voucher codes in
-    //-- batch, set the strategy to IDENTITY.
+    /* If you want to use VoucherCodeBatchProcessing class instead of VoucherCodeRepository */
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

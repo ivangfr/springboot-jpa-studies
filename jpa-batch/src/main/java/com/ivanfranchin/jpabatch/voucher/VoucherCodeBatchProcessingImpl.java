@@ -11,6 +11,14 @@ import java.sql.BatchUpdateException;
 import java.sql.PreparedStatement;
 import java.util.List;
 
+/* This implementation provides an alternative method for saving voucher codes in batch, rather than using the VoucherCodeRepository.
+   In order to use it:
+   1. In the VoucherCode class:
+   1.1. Uncomment `@GeneratedValue(strategy = GenerationType.IDENTITY)`
+   1.2. Comment out `@GeneratedValue(strategy = GenerationType.AUTO)`
+   2. In the saveVoucherCodes method of the VoucherCodeServiceImpl class:
+   2.1. Uncomment `return voucherCodeBatchProcessing.saveInBatch(voucherCodes);`
+   2.2. Comment out `return voucherCodeRepository.saveAll(voucherCodes);`*/
 @Slf4j
 @RequiredArgsConstructor
 @Service
