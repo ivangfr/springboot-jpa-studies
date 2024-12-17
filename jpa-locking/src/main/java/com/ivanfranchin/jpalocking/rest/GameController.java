@@ -32,7 +32,7 @@ public class GameController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public GameResponse setupGame(@Valid @RequestBody GameSetupRequest gameSetupRequest) {
-        for (int i = 0; i < gameSetupRequest.getNumLives(); i++) {
+        for (int i = 0; i < gameSetupRequest.numLives(); i++) {
             lifeService.saveLife(new Life());
         }
         return getGameInfo();

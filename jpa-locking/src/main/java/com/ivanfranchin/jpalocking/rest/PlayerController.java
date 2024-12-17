@@ -44,7 +44,7 @@ public class PlayerController {
                                              @Valid @RequestBody StarCollectionRequest starCollectionRequest) {
         Player player = playerService.validateAndGetPlayer(id);
         log.info("==> Player {} collects stars. Number of Stars: {}, Number of Lives: {}", id, player.getStars(), player.getLives());
-        player = playerService.collectStars(player, starCollectionRequest.getNumStars());
+        player = playerService.collectStars(player, starCollectionRequest.numStars());
         log.info("<== Player {} collected stars. Number of Stars: {}, Number of Lives: {}", id, player.getStars(), player.getLives());
         return playerMapper.toPlayerResponse(player);
     }

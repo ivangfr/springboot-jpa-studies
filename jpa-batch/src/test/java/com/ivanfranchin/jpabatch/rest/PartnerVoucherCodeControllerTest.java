@@ -65,11 +65,11 @@ class PartnerVoucherCodeControllerTest extends AbstractTestcontainers {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(responseEntity.getBody()).isNotNull();
         assertThat(responseEntity.getBody().id()).isNotNull();
-        assertThat(responseEntity.getBody().name()).isEqualTo(createPartnerRequest.getName());
+        assertThat(responseEntity.getBody().name()).isEqualTo(createPartnerRequest.name());
 
         Optional<Partner> partnerOptional = partnerRepository.findById(responseEntity.getBody().id());
         assertThat(partnerOptional.isPresent()).isTrue();
-        partnerOptional.ifPresent(p -> assertThat(p.getName()).isEqualTo(createPartnerRequest.getName()));
+        partnerOptional.ifPresent(p -> assertThat(p.getName()).isEqualTo(createPartnerRequest.name()));
     }
 
     @Test
@@ -100,12 +100,12 @@ class PartnerVoucherCodeControllerTest extends AbstractTestcontainers {
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(responseEntity.getBody()).isNotNull();
-        assertThat(responseEntity.getBody().intValue()).isEqualTo(createVoucherCodeRequest.getVoucherCodes().size());
+        assertThat(responseEntity.getBody().intValue()).isEqualTo(createVoucherCodeRequest.voucherCodes().size());
 
         Optional<Partner> partnerOptional = partnerRepository.findById(partner.getId());
         assertThat(partnerOptional.isPresent()).isTrue();
         partnerOptional.ifPresent(p ->
-                assertThat(p.getVoucherCodes().size()).isEqualTo(createVoucherCodeRequest.getVoucherCodes().size()));
+                assertThat(p.getVoucherCodes().size()).isEqualTo(createVoucherCodeRequest.voucherCodes().size()));
     }
 
     @Test

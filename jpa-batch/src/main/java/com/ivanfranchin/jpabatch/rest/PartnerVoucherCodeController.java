@@ -78,7 +78,7 @@ public class PartnerVoucherCodeController {
                                   @Valid @RequestBody CreateVoucherCodeRequest createVoucherCodeRequest) {
         Partner partner = partnerService.validateAndGetPartner(partnerId);
 
-        List<VoucherCode> voucherCodes = createVoucherCodeRequest.getVoucherCodes()
+        List<VoucherCode> voucherCodes = createVoucherCodeRequest.voucherCodes()
                 .stream()
                 .map(code -> new VoucherCode(partner, code))
                 .collect(Collectors.toList());
