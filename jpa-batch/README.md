@@ -1,38 +1,38 @@
 # springboot-jpa-studies
 ## `> jpa-batch`
 
-The idea of this module is to study how to insert/update/delete a set of records in batch (bulk)
+The purpose of this module is to study how to insert, update, or delete a set of records in batch (bulk)
 
 ## Spring JPA Hibernate - JpaRepository (Batch)
 
 ### What to configure
 
 - Add `spring.jpa.properties.hibernate.jdbc.batch_size: 10` to `application.yml`
-- Append `&rewriteBatchedStatements=true` to `spring.datasource.url`
+- Append `&rewriteBatchedStatements=true` to the `spring.datasource.url`
 - Use `saveAll` to save entities
-  ```
+  ```text
   <S extends T> List<S> saveAll(Iterable<S> entities);
   ```
 - Use `deleteInBatch` to delete entities
-  ```
+  ```text
   void deleteInBatch(Iterable<T> entities);
   ```
 
 ## Start application
 
-> **Note**: before starting the application, the services present in `docker-compose.yml` file must be up and running as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment)
+> **Note**: before starting the application, the services present in the `docker-compose.yml` file must be up and running as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment)
 
 - Open a terminal and navigate to the `springboot-jpa-studies` root folder;
 
 - You can use `MySQL` or `PostgreSQL`
 
   - **Using MySQL**
-    ```
+    ```bash
     ./mvnw clean spring-boot:run --projects jpa-batch -Dspring-boot.run.profiles=mysql
     ```
   
   - **Using PostgreSQL**
-    ```
+    ```bash
     ./mvnw clean spring-boot:run --projects jpa-batch -Dspring-boot.run.profiles=postgres
     ```
 
@@ -42,13 +42,13 @@ The idea of this module is to study how to insert/update/delete a set of records
 
 - **MySQL**
 
-  - Run `MySQL` interactive terminal (`mysql`) inside docker container
-    ```
+  - Run the `MySQL` interactive terminal (`mysql`) inside docker container
+    ```bash
     docker exec -it -e MYSQL_PWD=secret mysql mysql -uroot --database studiesdb
     ```
 
   - Enable log for all queries
-    ```
+    ```bash
     SET GLOBAL general_log = 'ON';
     SET global log_output = 'table';
     ```
@@ -64,27 +64,27 @@ The idea of this module is to study how to insert/update/delete a set of records
 ### Using MySQL
 
 > **Note**: In order to see the logs in `MySQL` interactive terminal, run the following `SELECT`
-> ```
+> ```sql
 > SELECT event_time, command_type, CONVERT(SUBSTRING(argument,1,150) USING UTF8) FROM mysql.general_log;
 > ```
 
 In a terminal, run the following commands:
 
 - **Create partner**
-  ```
+  ```bash
   curl -i -X POST http://localhost:8081/api/partners \
     -H "Content-Type: application/json" \
     -d '{"name": "partner1"}'
   ```
 
   It should return
-  ```
+  ```text
   HTTP/1.1 201
   {"id":1,"name":"partner1"}
   ```
 
-  Logs
-  ```
+  Log output
+  ```text
   | Query        | SET autocommit=0                                                                                                                                       |
   | Query        | insert into partners (name) values ('partner1')                                                                                                        |
   | Query        | COMMIT                                                                                                                                                 |
@@ -92,20 +92,20 @@ In a terminal, run the following commands:
   ```
 
 - **Insert 15 voucher codes to partner with id 1 (batch_size = 10)**
-  ```
+  ```bash
   curl -i -X POST http://localhost:8081/api/partners/1/insertVoucherCodes \
     -H "Content-Type: application/json" \
     -d '{ "voucherCodes": [ "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115" ]}'
   ```
 
   It should return
-  ```
+  ```text
   HTTP/1.1 201
   15
   ```
 
-  Logs
-  ```
+  Log output
+  ```text
   | Query        | SET SESSION TRANSACTION READ ONLY                                                                                                                      |
   | Query        | SET autocommit=0                                                                                                                                       |
   | Query        | select p1_0.id,p1_0.name from partners p1_0 where p1_0.id=1                                                                                            |
@@ -132,18 +132,18 @@ In a terminal, run the following commands:
   ```
 
 - **Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)**
-  ```
+  ```bash
   curl -i -X PUT http://localhost:8081/api/partners/1/softDeleteOldVoucherCodes
   ```
 
   It should return
-  ```
+  ```text
   HTTP/1.1 200
   15
   ```
 
-  Logs
-  ```
+  Log output
+  ```text
   | Query        | SET autocommit=0                                                                                                                                       |
   | Query        | select p1_0.id,p1_0.name from partners p1_0 where p1_0.id=1                                                                                            |
   | Query        | select vc1_0.id,vc1_0.code,vc1_0.deleted,vc1_0.partner_id from voucher_codes vc1_0 where vc1_0.partner_id=1                                            |
@@ -171,18 +171,18 @@ In a terminal, run the following commands:
   ```
 
 - **Hard delete voucher codes of the partner with id 1 (batch_size = 10)**
-  ```
+  ```bash
   curl -i -X DELETE http://localhost:8081/api/partners/1/hardDeleteOldVoucherCodes
   ```
 
   It should return
-  ```
+  ```text
   HTTP/1.1 200 
   15
   ```
 
-  Logs
-  ```
+  Log output
+  ```text
   | Query        | SET SESSION TRANSACTION READ ONLY                                                                                                                      |
   | Query        | SET autocommit=0                                                                                                                                       |
   | Query        | select p1_0.id,p1_0.name from partners p1_0 where p1_0.id=1                                                                                            |
@@ -200,27 +200,27 @@ In a terminal, run the following commands:
 ### Using PostgreSQL
 
 In order to see `PostgreSQL` logs, open a new terminal and run
-```
+```bash
 docker logs -f postgres
 ```
 
 In another terminal, run the following commands
 
 - **Create partner**
-  ```
+  ```bash
   curl -i -X POST http://localhost:8081/api/partners \
     -H "Content-Type: application/json" \
     -d '{"name": "partner1"}'
   ```
 
   It should return
-  ```
+  ```text
   HTTP/1.1 201
   {"id":1,"name":"partner1"}
   ```
 
-  Logs
-  ```
+  Log output
+  ```text
   [73] LOG:  execute <unnamed>: BEGIN
   [73] LOG:  execute <unnamed>: insert into partners (name) values ($1)
   RETURNING *
@@ -229,20 +229,20 @@ In another terminal, run the following commands
   ```
 
 - **Insert 15 voucher codes to partner with id 1 (batch_size = 10)**
-  ```
+  ```bash
   curl -i -X POST http://localhost:8081/api/partners/1/insertVoucherCodes \
     -H "Content-Type: application/json" \
     -d '{ "voucherCodes": [ "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115" ]}'
   ```
 
   It should return
-  ```
+  ```text
   HTTP/1.1 201
   15
   ```
 
-  Logs
-  ```
+  Log output
+  ```text
   [73] LOG:  execute <unnamed>: BEGIN READ ONLY
   [73] LOG:  execute <unnamed>: select p1_0.id,p1_0.name from partners p1_0 where p1_0.id=$1
   [73] DETAIL:  Parameters: $1 = '1'
@@ -284,18 +284,27 @@ In another terminal, run the following commands
   ```
 
 - **Soft delete (update `deleted` field to `true`) voucher codes of the partner with id 1 (batch_size = 10)**
-  ```
+  ```bash
   curl -i -X PUT http://localhost:8081/api/partners/1/softDeleteOldVoucherCodes
   ```
 
   It should return
-  ```
+  ```text
   HTTP/1.1 200
   15
   ```
 
-  Logs
-  ```
+  Log output
+  ```text
+  [73] LOG:  execute <unnamed>: BEGIN READ ONLY
+  [73] LOG:  execute <unnamed>: select p1_0.id,p1_0.name from partners p1_0 where p1_0.id=$1
+  [73] DETAIL:  Parameters: $1 = '1'
+  [73] LOG:  execute S_1: COMMIT
+  [73] LOG:  execute <unnamed>: BEGIN
+  [73] LOG:  execute <unnamed>: select vc1_0.id,vc1_0.code,vc1_0.deleted,vc1_0.partner_id from voucher_codes vc1_0 where vc1_0.partner_id=$1
+  [73] DETAIL:  Parameters: $1 = '1'
+  [73] LOG:  execute S_2: update voucher_codes set code=$1,deleted=$2,partner_id=$3 where id=$4
+  [73] DETAIL:  Parameters: $1 = '110', $2 = 't', $3 = '1', $4 = '1'
   [73] LOG:  execute <unnamed>: BEGIN
   [73] LOG:  execute <unnamed>: select p1_0.id,p1_0.name from partners p1_0 where p1_0.id=$1
   [73] DETAIL:  Parameters: $1 = '1'
@@ -335,18 +344,18 @@ In another terminal, run the following commands
   ```
 
 - **Hard delete voucher codes of the partner with id 1 (batch_size = 10)**
-  ```
+  ```bash
   curl -i -X DELETE http://localhost:8081/api/partners/1/hardDeleteOldVoucherCodes
   ```
 
   It should return
-  ```
+  ```text
   HTTP/1.1 200 
   15
   ```
 
-  Logs
-  ```
+  Log output
+  ```text
   [73] LOG:  execute <unnamed>: BEGIN READ ONLY
   [73] LOG:  execute <unnamed>: select p1_0.id,p1_0.name from partners p1_0 where p1_0.id=$1
   [73] DETAIL:  Parameters: $1 = '1'
@@ -365,13 +374,13 @@ In another terminal, run the following commands
 
 - **MySQL**
 
-  - Dumping the database structure for all tables with no data
-    ```
+  - Dump the database structure for all tables without data
+    ```bash
     docker exec -it -e MYSQL_PWD=secret mysql mysqldump --no-data -uroot studiesdb
     ```
   
   - Run `MySQL` interactive terminal (`mysql`), describe `partners` table and select all `partners`
-    ```
+    ```bash
     docker exec -it -e MYSQL_PWD=secret mysql mysql -uroot --database studiesdb
     describe partners;
     select * from partners;
@@ -381,12 +390,12 @@ In another terminal, run the following commands
 - **Postgres**
 
   - Dumping the database structure for all tables with no data
-    ```
+    ```bash
     docker exec -it postgres pg_dump -U postgres -s studiesdb;
     ```
 
   - Run `Postgres` interactive terminal (`psql`), describe `partners` table and select all `partners`
-    ```
+    ```bash
     docker exec -it postgres psql -U postgres -d studiesdb
     \d partners
     select * from partners;
@@ -406,12 +415,12 @@ In another terminal, run the following commands
 - You can use `MySQL` or `PostgreSQL`
 
   - **Using MySQL**
-    ```
+    ```bash
     ./mvnw clean test --projects jpa-batch -DargLine="-Dspring.profiles.active=mysql-test"
     ```
 
   - **Using PostgreSQL**
-    ```
+    ```bash
     ./mvnw clean test --projects jpa-batch -DargLine="-Dspring.profiles.active=postgres-test"
     ```
 

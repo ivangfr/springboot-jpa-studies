@@ -5,19 +5,19 @@ The idea of this module is to study jpa locking.
 
 ## Start application
 
-> **Note**: before starting the application, the services present in `docker-compose.yml` file must be up and running as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment)
+> **Note**: before starting the application, the services present in the `docker-compose.yml` file must be up and running as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment)
 
 - Open a terminal and navigate to the `springboot-jpa-studies` root folder;
 
 - You can use `MySQL` or `PostgreSQL`
 
   - **Using MySQL**
-    ```
+    ```bash
     ./mvnw clean spring-boot:run --projects jpa-locking -Dspring-boot.run.profiles=mysql
     ```
 
   - **Using PostgreSQL**
-    ```
+    ```bash
     ./mvnw clean spring-boot:run --projects jpa-locking -Dspring-boot.run.profiles=postgres
     ```
 
@@ -36,15 +36,15 @@ The idea of this module is to study jpa locking.
 - You can use `MySQL` or `PostgreSQL`
 
   - **Using MySQL**
-    ```
+    ```bash
     ./mvnw clean test --projects jpa-locking -DargLine="-Dspring.profiles.active=mysql-test"
     ```
   
   - **Using PostgreSQL**
-    ```
+    ```bash
     ./mvnw clean test --projects jpa-locking -DargLine="-Dspring.profiles.active=postgres-test"
     ```
 
 ## Multithreading Simulation 
 
-In order to simulate multiple players collecting stars and redeeming them for lives at the same time, you can run the script `simulation.sh` or `PlayerControllerTest` test case
+To simulate multiple players collecting stars and redeeming them for lives simultaneously, you can run the script `simulation.sh` or `PlayerControllerTest` test case

@@ -1,6 +1,6 @@
 # springboot-jpa-studies
 
-The goal of this project is to study `JPA Batch Processing` (i.e, insert/update/delete a set of records in a single command) and `JPA Locking`.
+The goal of this project is to study `JPA Batch Processing` (i.e., inserting, updating, or deleting a set of records in a single command) and `JPA Locking`.
 
 ## Proof-of-Concepts & Articles
 
@@ -13,18 +13,18 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## Prerequisites
 
-- [`Java 21+`](https://www.oracle.com/java/technologies/downloads/#java21)
-- Some containerization tool [`Docker`](https://www.docker.com), [`Podman`](https://podman.io), etc.
+- [`Java 21`](https://www.oracle.com/java/technologies/downloads/#java21) or higher;
+- A containerization tool (e.g., [`Docker`](https://www.docker.com), [`Podman`](https://podman.io), etc.)
 
 ## Start Environment
 
 - Open one terminal and inside the `springboot-jpa-studies` root folder run:
-  ```
+  ```bash
   docker compose up -d
   ```
 
 - Wait for Docker containers to be up and running. To check it, run:
-  ```
+  ```bash
   docker ps -a
   ```
 
@@ -33,7 +33,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 - **MySQL**
 
   - Run `MySQL` interactive terminal (`mysql`)
-    ```
+    ```bash
     docker exec -it -e MYSQL_PWD=secret mysql mysql -uroot --database studiesdb
     ```
     > Type `exit` to exit
@@ -41,7 +41,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 - **PostgreSQL**
 
   - Run `Postgres` interactive terminal (`psql`)
-    ```
+    ```bash
     docker exec -it postgres psql -U postgres -d studiesdb
     ```
     > Type `\q` to exit
@@ -50,8 +50,8 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - In a terminal, make sure you are inside the `springboot-jpa-studies` root folder;
 
-- To stop and remove docker compose containers, networks and volumes run:
-  ```
+- To stop and remove docker compose containers, networks and volumes, run:
+  ```bash
   docker compose down -v
   ```
 
@@ -64,11 +64,11 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
   During the tests, [`Testcontainers`](https://testcontainers.com) starts automatically Docker containers of the databases before the tests begin and shuts the containers down when the tests finish;
 
   - **Using MySQL**
-    ```
+    ```bash
     ./mvnw clean test -DargLine="-Dspring.profiles.active=mysql-test"
     ```
 
   - **Using PostgreSQL**
-    ```
+    ```bash
     ./mvnw clean test -DargLine="-Dspring.profiles.active=postgres-test"
     ```
