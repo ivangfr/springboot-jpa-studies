@@ -4,17 +4,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.mysql.MySQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
 @Slf4j
 @Testcontainers
 public abstract class AbstractTestcontainers {
 
-    private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:17.2");
+    private static final PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:18.0");
 
-    private static final MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:9.2.0")
+    private static final MySQLContainer mySQLContainer = new MySQLContainer("mysql:9.2.0")
             .withUrlParam("characterEncoding", "UTF-8")
             .withUrlParam("serverTimezone", "UTC");
 
