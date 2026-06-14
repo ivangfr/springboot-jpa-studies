@@ -27,7 +27,7 @@ public class PlayerController {
 
     @PostMapping
     public PlayerResponse createPlayer(@Valid @RequestBody CreatePlayerRequest createPlayerRequest) {
-        Player player = playerService.savePlayer(Player.from(createPlayerRequest));
+        Player player = playerService.savePlayer(createPlayerRequest.toDomain());
         return PlayerResponse.from(player);
     }
 

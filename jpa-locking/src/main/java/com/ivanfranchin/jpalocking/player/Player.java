@@ -2,7 +2,6 @@ package com.ivanfranchin.jpalocking.player;
 
 import com.ivanfranchin.jpalocking.life.Life;
 import com.ivanfranchin.jpalocking.star.StarCollection;
-import com.ivanfranchin.jpalocking.rest.dto.CreatePlayerRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -67,9 +66,4 @@ public class Player {
         updatedAt = Instant.now();
     }
 
-    public static Player from(CreatePlayerRequest createPlayerRequest) {
-        Player player = new Player();
-        player.setUsername(createPlayerRequest.username());
-        return player;
-    }
 }

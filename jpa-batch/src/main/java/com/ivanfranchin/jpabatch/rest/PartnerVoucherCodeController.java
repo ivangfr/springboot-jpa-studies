@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -45,7 +44,7 @@ public class PartnerVoucherCodeController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public PartnerResponse createPartner(@Valid @RequestBody CreatePartnerRequest createPartnerRequest) {
-        Partner partner = Partner.from(createPartnerRequest);
+        Partner partner = createPartnerRequest.toDomain();
         partner = partnerService.savePartner(partner);
         return PartnerResponse.from(partner);
     }
@@ -70,6 +69,7 @@ public class PartnerVoucherCodeController {
         }
     }
 
+    @Transactional
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{partnerId}/insertVoucherCodes")
     public int insertVoucherCodes(@PathVariable Long partnerId,
@@ -89,15 +89,10 @@ public class PartnerVoucherCodeController {
     public long softDeleteOldVoucherCodes(@PathVariable Long partnerId) {
         Partner partner = partnerService.validateAndGetPartner(partnerId);
 
-        try (Stream<VoucherCode> voucherCodes = voucherCodeService.getStreamOfVoucherCodesByPartner(partner)) {
-            List<VoucherCode> deletedVoucherCodes = new ArrayList<>();
-            voucherCodes.forEach(voucherCode -> {
-                voucherCode.setDeleted(true);
-                deletedVoucherCodes.add(voucherCode);
-            });
+        List<VoucherCode> voucherCodes = voucherCodeService.getListOfVoucherCodesByPartner(partner);
+        voucherCodes.forEach(voucherCode -> voucherCode.setDeleted(true));
 
-            return deletedVoucherCodes.size();
-        }
+        return voucherCodes.size();
     }
 
     @DeleteMapping("/{partnerId}/hardDeleteOldVoucherCodes")

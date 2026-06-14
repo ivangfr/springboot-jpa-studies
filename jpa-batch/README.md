@@ -20,7 +20,7 @@ The purpose of this module is to study how to insert, update, or delete a set of
 
 ## Start application
 
-> **Note**: before starting the application, the services present in the `docker-compose.yml` file must be up and running as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment)
+> **Note**: before starting the application, the services present in the `compose.yaml` file must be up and running as explained in the main README, see [Start Environment](https://github.com/ivangfr/springboot-jpa-studies#start-environment)
 
 - Open a terminal and navigate to the `springboot-jpa-studies` root folder;
 
@@ -57,7 +57,7 @@ The purpose of this module is to study how to insert, update, or delete a set of
 
   - Set `log_statement = 'all'` in `postgres/postgresql.conf` file
 
-  - Set `postgres/postgresql.conf` in `postgres` service in `docker-compose.yml` using volumes mapping and `config_file` parameter
+  - Set `postgres/postgresql.conf` in `postgres` service in `compose.yaml` using volumes mapping and `config_file` parameter
 
 ## Execution examples
 
