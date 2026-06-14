@@ -18,9 +18,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -59,6 +57,14 @@ class PartnerVoucherCodeControllerTest extends AbstractTestcontainers {
     }
 
     @Test
+    void testGetPartnerNotFound() {
+        String url = String.format(API_PARTNERS_PARTNER_ID_URL, 999L);
+        ResponseEntity<PartnerResponse> responseEntity = testRestTemplate.getForEntity(url, PartnerResponse.class);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
     void testCreatePartner() {
         CreatePartnerRequest createPartnerRequest = new CreatePartnerRequest("partner1");
         ResponseEntity<PartnerResponse> responseEntity = testRestTemplate.postForEntity(
@@ -69,9 +75,20 @@ class PartnerVoucherCodeControllerTest extends AbstractTestcontainers {
         assertThat(responseEntity.getBody().id()).isNotNull();
         assertThat(responseEntity.getBody().name()).isEqualTo(createPartnerRequest.name());
 
-        Optional<Partner> partnerOptional = partnerRepository.findById(responseEntity.getBody().id());
-        assertThat(partnerOptional.isPresent()).isTrue();
-        partnerOptional.ifPresent(p -> assertThat(p.getName()).isEqualTo(createPartnerRequest.name()));
+        assertThat(partnerRepository.findById(responseEntity.getBody().id()))
+                .isPresent()
+                .get()
+                .extracting(Partner::getName)
+                .isEqualTo(createPartnerRequest.name());
+    }
+
+    @Test
+    void testCreatePartnerWithBlankName() {
+        CreatePartnerRequest createPartnerRequest = new CreatePartnerRequest(" ");
+        ResponseEntity<PartnerResponse> responseEntity = testRestTemplate.postForEntity(
+                API_PARTNERS_URL, createPartnerRequest, PartnerResponse.class);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test
@@ -87,8 +104,16 @@ class PartnerVoucherCodeControllerTest extends AbstractTestcontainers {
         assertThat(responseEntity.getBody().id()).isEqualTo(partner.getId());
         assertThat(responseEntity.getBody().name()).isEqualTo(partner.getName());
 
-        Optional<Partner> partnerOptional = partnerRepository.findById(responseEntity.getBody().id());
-        assertThat(partnerOptional.isPresent()).isFalse();
+        assertThat(partnerRepository.findById(responseEntity.getBody().id())).isNotPresent();
+    }
+
+    @Test
+    void testDeletePartnerNotFound() {
+        String url = String.format(API_PARTNERS_PARTNER_ID_URL, 999L);
+        ResponseEntity<PartnerResponse> responseEntity = testRestTemplate.exchange(
+                url, HttpMethod.DELETE, null, PartnerResponse.class);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
@@ -102,19 +127,20 @@ class PartnerVoucherCodeControllerTest extends AbstractTestcontainers {
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(responseEntity.getBody()).isNotNull();
-        assertThat(responseEntity.getBody().intValue()).isEqualTo(createVoucherCodeRequest.voucherCodes().size());
+        assertThat(responseEntity.getBody()).isEqualTo(createVoucherCodeRequest.voucherCodes().size());
 
-        Optional<Partner> partnerOptional = partnerRepository.findById(partner.getId());
-        assertThat(partnerOptional.isPresent()).isTrue();
-        partnerOptional.ifPresent(p ->
-                assertThat(p.getVoucherCodes().size()).isEqualTo(createVoucherCodeRequest.voucherCodes().size()));
+        assertThat(partnerRepository.findById(partner.getId()))
+                .isPresent()
+                .get()
+                .extracting(p -> p.getVoucherCodes().size())
+                .isEqualTo(createVoucherCodeRequest.voucherCodes().size());
     }
 
     @Test
     void testSoftDeleteOldVoucherCodes() {
         Partner partner = partnerRepository.save(getDefaultPartner());
 
-        List<String> codes = Arrays.asList("111", "112");
+        List<String> codes = List.of("111", "112");
         persistPartnerVoucherCodes(partner, codes);
 
         String url = String.format(API_PARTNERS_PARTNER_ID_SOFT_DELETE_OLD_VOUCHER_CODES_URL, partner.getId());
@@ -123,23 +149,22 @@ class PartnerVoucherCodeControllerTest extends AbstractTestcontainers {
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isNotNull();
-        assertThat(responseEntity.getBody().intValue()).isEqualTo(codes.size());
+        assertThat(responseEntity.getBody()).isEqualTo(codes.size());
 
-        Optional<Partner> partnerOptional = partnerRepository.findById(partner.getId());
-        assertThat(partnerOptional.isPresent()).isTrue();
-        partnerOptional.ifPresent(p -> {
-            assertThat(p.getVoucherCodes().size()).isEqualTo(codes.size());
-            for (VoucherCode voucherCode : p.getVoucherCodes()) {
-                assertThat(voucherCode.getDeleted()).isTrue();
-            }
-        });
+        assertThat(partnerRepository.findById(partner.getId()))
+                .isPresent()
+                .get()
+                .satisfies(p -> {
+                    assertThat(p.getVoucherCodes()).hasSize(codes.size());
+                    assertThat(p.getVoucherCodes()).allMatch(v -> v.getDeleted());
+                });
     }
 
     @Test
     void testHardDeleteOldVoucherCodes() {
         Partner partner = partnerRepository.save(getDefaultPartner());
 
-        List<String> codes = Arrays.asList("111", "112", "113");
+        List<String> codes = List.of("111", "112", "113");
         persistPartnerVoucherCodes(partner, codes);
 
         String url = String.format(API_PARTNERS_PARTNER_ID_HARD_DELETE_OLD_VOUCHER_CODES_URL, partner.getId());
@@ -148,11 +173,12 @@ class PartnerVoucherCodeControllerTest extends AbstractTestcontainers {
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isNotNull();
-        assertThat(responseEntity.getBody().intValue()).isEqualTo(codes.size());
+        assertThat(responseEntity.getBody()).isEqualTo(codes.size());
 
-        Optional<Partner> partnerOptional = partnerRepository.findById(partner.getId());
-        assertThat(partnerOptional.isPresent()).isTrue();
-        partnerOptional.ifPresent(p -> assertThat(p.getVoucherCodes().isEmpty()).isTrue());
+        assertThat(partnerRepository.findById(partner.getId()))
+                .isPresent()
+                .get()
+                .satisfies(p -> assertThat(p.getVoucherCodes()).isEmpty());
     }
 
     private Partner getDefaultPartner() {
