@@ -8,18 +8,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PartnerService {
 
-    private final PartnerRepository partnerRepository;
+  private final PartnerRepository partnerRepository;
 
-    public Partner savePartner(Partner partner) {
-        return partnerRepository.save(partner);
-    }
+  public Partner savePartner(Partner partner) {
+    return partnerRepository.save(partner);
+  }
 
-    public Partner validateAndGetPartner(Long id) {
-        return partnerRepository.findById(id).orElseThrow(() -> new PartnerNotFoundException(id));
-    }
+  public Partner validateAndGetPartner(Long id) {
+    return partnerRepository.findById(id).orElseThrow(() -> new PartnerNotFoundException(id));
+  }
 
-    @Transactional
-    public void deletePartner(Partner partner) {
-        partnerRepository.delete(partner);
-    }
+  @Transactional
+  public void deletePartner(Partner partner) {
+    partnerRepository.delete(partner);
+  }
 }

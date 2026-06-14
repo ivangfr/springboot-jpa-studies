@@ -1,13 +1,16 @@
 package com.ivanfranchin.jpabatch.rest;
 
 import com.ivanfranchin.jpabatch.partner.Partner;
-import com.ivanfranchin.jpabatch.voucher.VoucherCode;
+import com.ivanfranchin.jpabatch.partner.PartnerService;
 import com.ivanfranchin.jpabatch.rest.dto.CreatePartnerRequest;
 import com.ivanfranchin.jpabatch.rest.dto.CreateVoucherCodeRequest;
 import com.ivanfranchin.jpabatch.rest.dto.PartnerResponse;
-import com.ivanfranchin.jpabatch.partner.PartnerService;
+import com.ivanfranchin.jpabatch.voucher.VoucherCode;
 import com.ivanfranchin.jpabatch.voucher.VoucherCodeService;
 import jakarta.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,86 +25,85 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/partners")
 public class PartnerVoucherCodeController {
 
-    private final PartnerService partnerService;
-    private final VoucherCodeService voucherCodeService;
+  private final PartnerService partnerService;
+  private final VoucherCodeService voucherCodeService;
 
-    @GetMapping("/{partnerId}")
-    public PartnerResponse getPartner(@PathVariable Long partnerId) {
-        Partner partner = partnerService.validateAndGetPartner(partnerId);
-        return PartnerResponse.from(partner);
+  @GetMapping("/{partnerId}")
+  public PartnerResponse getPartner(@PathVariable Long partnerId) {
+    Partner partner = partnerService.validateAndGetPartner(partnerId);
+    return PartnerResponse.from(partner);
+  }
+
+  @ResponseStatus(HttpStatus.CREATED)
+  @PostMapping
+  public PartnerResponse createPartner(
+      @Valid @RequestBody CreatePartnerRequest createPartnerRequest) {
+    Partner partner = createPartnerRequest.toDomain();
+    partner = partnerService.savePartner(partner);
+    return PartnerResponse.from(partner);
+  }
+
+  @DeleteMapping("/{partnerId}")
+  public PartnerResponse deletePartner(@PathVariable Long partnerId) {
+    Partner partner = partnerService.validateAndGetPartner(partnerId);
+    partnerService.deletePartner(partner);
+    return PartnerResponse.from(partner);
+  }
+
+  @Transactional
+  @GetMapping("/{partnerId}/getStreamVoucherCodes")
+  public List<String> getStreamVoucherCodes(@PathVariable Long partnerId) {
+    Partner partner = partnerService.validateAndGetPartner(partnerId);
+
+    try (Stream<VoucherCode> streamOfVoucherCodes =
+        voucherCodeService.getStreamOfVoucherCodesByPartner(partner)) {
+      return streamOfVoucherCodes
+          .filter(voucherCode -> !voucherCode.isDeleted())
+          .map(VoucherCode::getCode)
+          .collect(Collectors.toList());
     }
+  }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public PartnerResponse createPartner(@Valid @RequestBody CreatePartnerRequest createPartnerRequest) {
-        Partner partner = createPartnerRequest.toDomain();
-        partner = partnerService.savePartner(partner);
-        return PartnerResponse.from(partner);
-    }
+  @Transactional
+  @ResponseStatus(HttpStatus.CREATED)
+  @PostMapping("/{partnerId}/insertVoucherCodes")
+  public int insertVoucherCodes(
+      @PathVariable Long partnerId,
+      @Valid @RequestBody CreateVoucherCodeRequest createVoucherCodeRequest) {
+    Partner partner = partnerService.validateAndGetPartner(partnerId);
 
-    @DeleteMapping("/{partnerId}")
-    public PartnerResponse deletePartner(@PathVariable Long partnerId) {
-        Partner partner = partnerService.validateAndGetPartner(partnerId);
-        partnerService.deletePartner(partner);
-        return PartnerResponse.from(partner);
-    }
+    List<VoucherCode> voucherCodes =
+        createVoucherCodeRequest.voucherCodes().stream()
+            .map(code -> new VoucherCode(partner, code))
+            .collect(Collectors.toList());
 
-    @Transactional
-    @GetMapping("/{partnerId}/getStreamVoucherCodes")
-    public List<String> getStreamVoucherCodes(@PathVariable Long partnerId) {
-        Partner partner = partnerService.validateAndGetPartner(partnerId);
+    return voucherCodeService.saveVoucherCodes(voucherCodes).size();
+  }
 
-        try (Stream<VoucherCode> streamOfVoucherCodes = voucherCodeService.getStreamOfVoucherCodesByPartner(partner)) {
-            return streamOfVoucherCodes
-                    .filter(voucherCode -> !voucherCode.isDeleted())
-                    .map(VoucherCode::getCode)
-                    .collect(Collectors.toList());
-        }
-    }
+  @Transactional
+  @PutMapping("/{partnerId}/softDeleteOldVoucherCodes")
+  public long softDeleteOldVoucherCodes(@PathVariable Long partnerId) {
+    Partner partner = partnerService.validateAndGetPartner(partnerId);
 
-    @Transactional
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{partnerId}/insertVoucherCodes")
-    public int insertVoucherCodes(@PathVariable Long partnerId,
-                                  @Valid @RequestBody CreateVoucherCodeRequest createVoucherCodeRequest) {
-        Partner partner = partnerService.validateAndGetPartner(partnerId);
+    List<VoucherCode> voucherCodes = voucherCodeService.getListOfVoucherCodesByPartner(partner);
+    voucherCodes.forEach(voucherCode -> voucherCode.setDeleted(true));
 
-        List<VoucherCode> voucherCodes = createVoucherCodeRequest.voucherCodes()
-                .stream()
-                .map(code -> new VoucherCode(partner, code))
-                .collect(Collectors.toList());
+    return voucherCodes.size();
+  }
 
-        return voucherCodeService.saveVoucherCodes(voucherCodes).size();
-    }
+  @DeleteMapping("/{partnerId}/hardDeleteOldVoucherCodes")
+  public int hardDeleteOldVoucherCodes(@PathVariable Long partnerId) {
+    Partner partner = partnerService.validateAndGetPartner(partnerId);
 
-    @Transactional
-    @PutMapping("/{partnerId}/softDeleteOldVoucherCodes")
-    public long softDeleteOldVoucherCodes(@PathVariable Long partnerId) {
-        Partner partner = partnerService.validateAndGetPartner(partnerId);
+    List<VoucherCode> voucherCodes = voucherCodeService.getListOfVoucherCodesByPartner(partner);
+    voucherCodeService.deleteVoucherCodes(voucherCodes);
 
-        List<VoucherCode> voucherCodes = voucherCodeService.getListOfVoucherCodesByPartner(partner);
-        voucherCodes.forEach(voucherCode -> voucherCode.setDeleted(true));
-
-        return voucherCodes.size();
-    }
-
-    @DeleteMapping("/{partnerId}/hardDeleteOldVoucherCodes")
-    public int hardDeleteOldVoucherCodes(@PathVariable Long partnerId) {
-        Partner partner = partnerService.validateAndGetPartner(partnerId);
-
-        List<VoucherCode> voucherCodes = voucherCodeService.getListOfVoucherCodesByPartner(partner);
-        voucherCodeService.deleteVoucherCodes(voucherCodes);
-
-        return voucherCodes.size();
-    }
+    return voucherCodes.size();
+  }
 }

@@ -24,23 +24,23 @@ import lombok.Setter;
 @Table(name = "voucher_codes")
 public class VoucherCode {
 
-    @Id
-    /* If you want to use VoucherCodeBatchProcessing class instead of VoucherCodeRepository */
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @Id
+  /* If you want to use VoucherCodeBatchProcessing class instead of VoucherCodeRepository */
+  // @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "partner_id", foreignKey = @ForeignKey(name = "FK_PARTNER"))
-    private Partner partner;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "partner_id", foreignKey = @ForeignKey(name = "FK_PARTNER"))
+  private Partner partner;
 
-    @Column(nullable = false)
-    private String code;
+  @Column(nullable = false)
+  private String code;
 
-    private boolean deleted;
+  private boolean deleted;
 
-    public VoucherCode(Partner partner, String code) {
-        this.partner = partner;
-        this.code = code;
-    }
+  public VoucherCode(Partner partner, String code) {
+    this.partner = partner;
+    this.code = code;
+  }
 }

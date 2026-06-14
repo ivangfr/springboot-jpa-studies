@@ -9,13 +9,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -25,14 +24,13 @@ import java.util.Set;
 @Table(name = "partners")
 public class Partner {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<VoucherCode> voucherCodes = new LinkedHashSet<>();
+  @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<VoucherCode> voucherCodes = new LinkedHashSet<>();
 
-    @Column(nullable = false)
-    private String name;
-
+  @Column(nullable = false)
+  private String name;
 }

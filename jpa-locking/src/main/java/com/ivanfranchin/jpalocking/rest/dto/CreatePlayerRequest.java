@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 
 public record CreatePlayerRequest(@Schema(example = "ivan.franchin") @NotBlank String username) {
 
-    public Player toDomain() {
-        Player player = new Player();
-        player.setUsername(username);
-        return player;
-    }
+  public Player toDomain() {
+    Player player = new Player();
+    player.setUsername(username);
+    return player;
+  }
 }

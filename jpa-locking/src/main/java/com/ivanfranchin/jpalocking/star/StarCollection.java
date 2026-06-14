@@ -12,12 +12,11 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import java.time.Instant;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.time.Instant;
 
 @Getter
 @Setter
@@ -27,36 +26,35 @@ import java.time.Instant;
 @Table(name = "star_collections")
 public class StarCollection {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "player_id")
-    private Player player;
+  @ManyToOne
+  @JoinColumn(name = "player_id")
+  private Player player;
 
-    @Column(nullable = false)
-    private Integer numCollected;
+  @Column(nullable = false)
+  private Integer numCollected;
 
-    @Column(nullable = false)
-    private Integer numAvailable;
+  @Column(nullable = false)
+  private Integer numAvailable;
 
-    @Version
-    private Long version;
+  @Version private Long version;
 
-    @Column(nullable = false)
-    private Instant createdAt;
+  @Column(nullable = false)
+  private Instant createdAt;
 
-    @Column(nullable = false)
-    private Instant updatedAt;
+  @Column(nullable = false)
+  private Instant updatedAt;
 
-    @PrePersist
-    public void onPrePersist() {
-        createdAt = updatedAt = Instant.now();
-    }
+  @PrePersist
+  public void onPrePersist() {
+    createdAt = updatedAt = Instant.now();
+  }
 
-    @PreUpdate
-    public void onPreUpdate() {
-        updatedAt = Instant.now();
-    }
+  @PreUpdate
+  public void onPreUpdate() {
+    updatedAt = Instant.now();
+  }
 }

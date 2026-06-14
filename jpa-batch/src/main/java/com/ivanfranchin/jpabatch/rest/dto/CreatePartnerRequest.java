@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 
 public record CreatePartnerRequest(@Schema(example = "partner1") @NotBlank String name) {
 
-    public Partner toDomain() {
-        Partner partner = new Partner();
-        partner.setName(name);
-        return partner;
-    }
+  public Partner toDomain() {
+    Partner partner = new Partner();
+    partner.setName(name);
+    return partner;
+  }
 }

@@ -12,14 +12,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.time.Instant;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -29,43 +28,42 @@ import java.util.Set;
 @Table(name = "players")
 public class Player {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String username;
+  @Column(nullable = false, unique = true)
+  private String username;
 
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
-    private Set<StarCollection> stars = new LinkedHashSet<>();
+  @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+  private Set<StarCollection> stars = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
-    private Set<Life> lives = new LinkedHashSet<>();
+  @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+  private Set<Life> lives = new LinkedHashSet<>();
 
-    public void addStarCollection(StarCollection starCollection) {
-        starCollection.setPlayer(this);
-        stars.add(starCollection);
-    }
+  public void addStarCollection(StarCollection starCollection) {
+    starCollection.setPlayer(this);
+    stars.add(starCollection);
+  }
 
-    public void addLife(Life life) {
-        life.setPlayer(this);
-        lives.add(life);
-    }
+  public void addLife(Life life) {
+    life.setPlayer(this);
+    lives.add(life);
+  }
 
-    @Column(nullable = false)
-    private Instant createdAt;
+  @Column(nullable = false)
+  private Instant createdAt;
 
-    @Column(nullable = false)
-    private Instant updatedAt;
+  @Column(nullable = false)
+  private Instant updatedAt;
 
-    @PrePersist
-    public void onPrePersist() {
-        createdAt = updatedAt = Instant.now();
-    }
+  @PrePersist
+  public void onPrePersist() {
+    createdAt = updatedAt = Instant.now();
+  }
 
-    @PreUpdate
-    public void onPreUpdate() {
-        updatedAt = Instant.now();
-    }
-
+  @PreUpdate
+  public void onPreUpdate() {
+    updatedAt = Instant.now();
+  }
 }

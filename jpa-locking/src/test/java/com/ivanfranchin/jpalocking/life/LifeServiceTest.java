@@ -1,5 +1,12 @@
 package com.ivanfranchin.jpalocking.life;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,70 +14,60 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(SpringExtension.class)
 @Import(LifeService.class)
 class LifeServiceTest {
 
-    @MockitoBean
-    private LifeRepository lifeRepository;
+  @MockitoBean private LifeRepository lifeRepository;
 
-    @Autowired
-    private LifeService lifeService;
+  @Autowired private LifeService lifeService;
 
-    @Test
-    void getAllLivesShouldReturnAllLives() {
-        List<Life> lives = List.of(new Life(), new Life());
-        when(lifeRepository.findAll()).thenReturn(lives);
+  @Test
+  void getAllLivesShouldReturnAllLives() {
+    List<Life> lives = List.of(new Life(), new Life());
+    when(lifeRepository.findAll()).thenReturn(lives);
 
-        List<Life> result = lifeService.getAllLives();
+    List<Life> result = lifeService.getAllLives();
 
-        assertThat(result).hasSize(2);
-        verify(lifeRepository).findAll();
-    }
+    assertThat(result).hasSize(2);
+    verify(lifeRepository).findAll();
+  }
 
-    @Test
-    void countAvailableLivesShouldReturnCount() {
-        when(lifeRepository.countByPlayerIdIsNull()).thenReturn(3);
+  @Test
+  void countAvailableLivesShouldReturnCount() {
+    when(lifeRepository.countByPlayerIdIsNull()).thenReturn(3);
 
-        int result = lifeService.countAvailableLives();
+    int result = lifeService.countAvailableLives();
 
-        assertThat(result).isEqualTo(3);
-    }
+    assertThat(result).isEqualTo(3);
+  }
 
-    @Test
-    void saveLifeShouldDelegateToRepository() {
-        Life life = new Life();
-        when(lifeRepository.save(life)).thenReturn(life);
+  @Test
+  void saveLifeShouldDelegateToRepository() {
+    Life life = new Life();
+    when(lifeRepository.save(life)).thenReturn(life);
 
-        Life result = lifeService.saveLife(life);
+    Life result = lifeService.saveLife(life);
 
-        assertThat(result).isEqualTo(life);
-        verify(lifeRepository).save(life);
-    }
+    assertThat(result).isEqualTo(life);
+    verify(lifeRepository).save(life);
+  }
 
-    @Test
-    void getAvailableLifeWhenFoundShouldReturnLife() {
-        Life life = new Life();
-        when(lifeRepository.findFirstByPlayerIdIsNull()).thenReturn(Optional.of(life));
+  @Test
+  void getAvailableLifeWhenFoundShouldReturnLife() {
+    Life life = new Life();
+    when(lifeRepository.findFirstByPlayerIdIsNull()).thenReturn(Optional.of(life));
 
-        Life result = lifeService.getAvailableLife();
+    Life result = lifeService.getAvailableLife();
 
-        assertThat(result).isEqualTo(life);
-    }
+    assertThat(result).isEqualTo(life);
+  }
 
-    @Test
-    void getAvailableLifeWhenNotFoundShouldThrow() {
-        when(lifeRepository.findFirstByPlayerIdIsNull()).thenReturn(Optional.empty());
+  @Test
+  void getAvailableLifeWhenNotFoundShouldThrow() {
+    when(lifeRepository.findFirstByPlayerIdIsNull()).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> lifeService.getAvailableLife())
-                .isInstanceOf(AllLivesRedeemedException.class);
-    }
+    assertThatThrownBy(() -> lifeService.getAvailableLife())
+        .isInstanceOf(AllLivesRedeemedException.class);
+  }
 }
