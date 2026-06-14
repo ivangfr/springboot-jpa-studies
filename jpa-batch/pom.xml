@@ -11,14 +11,4 @@
     <artifactId>jpa-batch</artifactId>
     <name>jpa-batch</name>
     <description>Demo project for Spring Boot</description>
-    <properties>
-        <guava.version>33.6.0-jre</guava.version>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
-    </dependencies>
 </project>

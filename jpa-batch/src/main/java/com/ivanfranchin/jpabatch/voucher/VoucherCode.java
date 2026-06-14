@@ -11,12 +11,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(exclude = "partner")
 @Entity
 @Table(name = "voucher_codes")
@@ -35,7 +37,7 @@ public class VoucherCode {
     @Column(nullable = false)
     private String code;
 
-    private Boolean deleted = false;
+    private boolean deleted;
 
     public VoucherCode(Partner partner, String code) {
         this.partner = partner;

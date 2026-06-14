@@ -1,14 +1,29 @@
 package com.ivanfranchin.jpalocking.life;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
-public interface LifeService {
+@RequiredArgsConstructor
+@Service
+public class LifeService {
 
-    List<Life> getAllLives();
+    private final LifeRepository lifeRepository;
 
-    int countAvailableLives();
+    public List<Life> getAllLives() {
+        return lifeRepository.findAll();
+    }
 
-    Life saveLife(Life life);
+    public int countAvailableLives() {
+        return lifeRepository.countByPlayerIdIsNull();
+    }
 
-    Life getAvailableLife();
+    public Life saveLife(Life life) {
+        return lifeRepository.save(life);
+    }
+
+    public Life getAvailableLife() {
+        return lifeRepository.findFirstByPlayerIdIsNull().orElseThrow(AllLivesRedeemedException::new);
+    }
 }

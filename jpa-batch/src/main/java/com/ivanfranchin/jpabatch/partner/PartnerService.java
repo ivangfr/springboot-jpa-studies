@@ -1,10 +1,25 @@
 package com.ivanfranchin.jpabatch.partner;
 
-public interface PartnerService {
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-    Partner savePartner(Partner partner);
+@RequiredArgsConstructor
+@Service
+public class PartnerService {
 
-    Partner validateAndGetPartner(Long id);
+    private final PartnerRepository partnerRepository;
 
-    void deletePartner(Partner partner);
+    public Partner savePartner(Partner partner) {
+        return partnerRepository.save(partner);
+    }
+
+    public Partner validateAndGetPartner(Long id) {
+        return partnerRepository.findById(id).orElseThrow(() -> new PartnerNotFoundException(id));
+    }
+
+    @Transactional
+    public void deletePartner(Partner partner) {
+        partnerRepository.delete(partner);
+    }
 }

@@ -13,13 +13,15 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.time.Instant;
 
-@Data
+@Getter
+@Setter
 @ToString(exclude = "player")
 @EqualsAndHashCode(exclude = "player")
 @Entity

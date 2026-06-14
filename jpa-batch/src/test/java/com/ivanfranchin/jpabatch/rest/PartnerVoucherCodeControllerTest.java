@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.TestRestTemplate;
+
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -129,11 +130,44 @@ class PartnerVoucherCodeControllerTest extends AbstractTestcontainers {
         assertThat(responseEntity.getBody()).isNotNull();
         assertThat(responseEntity.getBody()).isEqualTo(createVoucherCodeRequest.voucherCodes().size());
 
-        assertThat(partnerRepository.findById(partner.getId()))
+        assertThat(partnerRepository.findByIdWithVoucherCodes(partner.getId()))
                 .isPresent()
                 .get()
                 .extracting(p -> p.getVoucherCodes().size())
                 .isEqualTo(createVoucherCodeRequest.voucherCodes().size());
+    }
+
+    @Test
+    void testGetStreamVoucherCodes() {
+        Partner partner = partnerRepository.save(getDefaultPartner());
+        List<String> codes = List.of("111", "112", "113");
+        persistPartnerVoucherCodes(partner, codes);
+
+        String url = String.format(API_PARTNERS_PARTNER_ID_GET_STREAM_VOUCHER_CODES_URL, partner.getId());
+        ResponseEntity<List> responseEntity = testRestTemplate.getForEntity(url, List.class);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody()).containsExactlyElementsOf(codes);
+    }
+
+    @Test
+    void testGetStreamVoucherCodesShouldExcludeDeleted() {
+        Partner partner = partnerRepository.save(getDefaultPartner());
+        persistPartnerVoucherCodes(partner, List.of("111", "112", "113"));
+
+        List<VoucherCode> savedCodes = voucherCodeRepository.findByPartner(partner);
+        VoucherCode toDelete = savedCodes.get(0);
+        toDelete.setDeleted(true);
+        voucherCodeRepository.save(toDelete);
+
+        String url = String.format(API_PARTNERS_PARTNER_ID_GET_STREAM_VOUCHER_CODES_URL, partner.getId());
+        ResponseEntity<List> responseEntity = testRestTemplate.getForEntity(url, List.class);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody()).doesNotContain(toDelete.getCode());
+        assertThat(responseEntity.getBody()).hasSize(2);
     }
 
     @Test
@@ -151,12 +185,12 @@ class PartnerVoucherCodeControllerTest extends AbstractTestcontainers {
         assertThat(responseEntity.getBody()).isNotNull();
         assertThat(responseEntity.getBody()).isEqualTo(codes.size());
 
-        assertThat(partnerRepository.findById(partner.getId()))
+        assertThat(partnerRepository.findByIdWithVoucherCodes(partner.getId()))
                 .isPresent()
                 .get()
                 .satisfies(p -> {
                     assertThat(p.getVoucherCodes()).hasSize(codes.size());
-                    assertThat(p.getVoucherCodes()).allMatch(v -> v.getDeleted());
+                    assertThat(p.getVoucherCodes()).allMatch(v -> v.isDeleted());
                 });
     }
 
@@ -175,7 +209,7 @@ class PartnerVoucherCodeControllerTest extends AbstractTestcontainers {
         assertThat(responseEntity.getBody()).isNotNull();
         assertThat(responseEntity.getBody()).isEqualTo(codes.size());
 
-        assertThat(partnerRepository.findById(partner.getId()))
+        assertThat(partnerRepository.findByIdWithVoucherCodes(partner.getId()))
                 .isPresent()
                 .get()
                 .satisfies(p -> assertThat(p.getVoucherCodes()).isEmpty());
@@ -199,4 +233,5 @@ class PartnerVoucherCodeControllerTest extends AbstractTestcontainers {
     private static final String API_PARTNERS_PARTNER_ID_INSERT_VOUCHER_CODES_URL = "/api/partners/%s/insertVoucherCodes";
     private static final String API_PARTNERS_PARTNER_ID_SOFT_DELETE_OLD_VOUCHER_CODES_URL = "/api/partners/%s/softDeleteOldVoucherCodes";
     private static final String API_PARTNERS_PARTNER_ID_HARD_DELETE_OLD_VOUCHER_CODES_URL = "/api/partners/%s/hardDeleteOldVoucherCodes";
+    private static final String API_PARTNERS_PARTNER_ID_GET_STREAM_VOUCHER_CODES_URL = "/api/partners/%s/getStreamVoucherCodes";
 }

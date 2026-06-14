@@ -63,7 +63,7 @@ public class PartnerVoucherCodeController {
 
         try (Stream<VoucherCode> streamOfVoucherCodes = voucherCodeService.getStreamOfVoucherCodesByPartner(partner)) {
             return streamOfVoucherCodes
-                    .filter(voucherCode -> !voucherCode.getDeleted())
+                    .filter(voucherCode -> !voucherCode.isDeleted())
                     .map(VoucherCode::getCode)
                     .collect(Collectors.toList());
         }

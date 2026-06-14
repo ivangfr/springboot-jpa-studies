@@ -42,10 +42,6 @@ spring:
 spring:
   config:
     activate.on-profile: mysql-test
-  jpa:
-    properties:
-      hibernate:
-        enable_lazy_load_no_trans: true
   datasource:
     url:      # \
     username: #  ) they will be set dynamically by AbstractTestcontainers
@@ -55,10 +51,6 @@ spring:
 spring:
   config:
     activate.on-profile: postgres-test
-  jpa:
-    properties:
-      hibernate:
-        enable_lazy_load_no_trans: true
   datasource:
     url:      # \
     username: #  ) they will be set dynamically by AbstractTestcontainers
