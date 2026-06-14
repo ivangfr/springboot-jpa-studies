@@ -10,7 +10,10 @@ services:
       - 'MYSQL_ROOT_PASSWORD=secret'
       - 'MYSQL_DATABASE=studiesdb'
     healthcheck:
-      test: 'mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}'
+      test: ["CMD", "mysqladmin", "ping", "-u", "root", "--password=$$MYSQL_ROOT_PASSWORD"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
 
   postgres:
     image: 'postgres:18.3'
@@ -28,4 +31,7 @@ services:
     command: 'postgres -c config_file=/etc/postgresql.conf'
     # --
     healthcheck:
-      test: 'pg_isready -U postgres'
+      test: [ "CMD", "pg_isready", "-U", "postgres", "-d", "studiesdb" ]
+      interval: 3s
+      timeout: 3s
+      retries: 5

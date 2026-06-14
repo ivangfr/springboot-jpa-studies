@@ -1,7 +1,7 @@
 # springboot-jpa-studies
 ## `> jpa-batch`
 
-The purpose of this module is to study how to insert, update, or delete a set of records in batch (bulk)
+The purpose of this module is to study how to insert, update, or delete a set of records in batch (bulk).
 
 ## Spring JPA Hibernate - JpaRepository (Batch)
 
@@ -57,7 +57,7 @@ The purpose of this module is to study how to insert, update, or delete a set of
 
   - Set `log_statement = 'all'` in `postgres/postgresql.conf` file
 
-  - Set `postgres/postgresql.conf` in `postgres` service in `compose.yaml` using volumes mapping and `config_file` parameter
+  - Set the `postgres/postgresql.conf` file for the `postgres` service in `compose.yaml` using volume mapping and the `config_file` parameter
 
 ## Execution examples
 

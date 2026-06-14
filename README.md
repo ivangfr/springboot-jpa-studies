@@ -1,5 +1,8 @@
 # springboot-jpa-studies
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ivan.franchin-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/ivan.franchin)
+
 The goal of this project is to study `JPA Batch Processing` (i.e., inserting, updating, or deleting a set of records in a single command) and `JPA Locking`.
 
 ## Proof-of-Concepts & Articles
@@ -18,15 +21,10 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## Start Environment
 
-- Open one terminal and inside the `springboot-jpa-studies` root folder run:
-  ```bash
-  docker compose up -d
-  ```
-
-- Wait for Docker containers to be up and running. To check it, run:
-  ```bash
-  docker ps -a
-  ```
+Open one terminal and inside the `springboot-jpa-studies` root folder run:
+```bash
+docker compose up -d
+```
 
 ## Useful Commands
 
@@ -61,7 +59,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - The commands below will run the test cases of all modules. In order to run just the tests of a specific module check the module README;
 
-  During the tests, [`Testcontainers`](https://testcontainers.com) starts automatically Docker containers of the databases before the tests begin and shuts the containers down when the tests finish;
+  During the tests, [`Testcontainers`](https://testcontainers.com) automatically starts Docker containers of the databases before the tests begin and shuts the containers down when the tests finish;
 
   - **Using MySQL**
     ```bash
@@ -72,3 +70,13 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
     ```bash
     ./mvnw clean test -DargLine="-Dspring.profiles.active=postgres-test"
     ```
+
+## Support
+
+If you find this useful, consider buying me a coffee:
+
+<a href="https://buymeacoffee.com/ivan.franchin"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50"></a>
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).

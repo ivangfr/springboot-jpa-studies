@@ -1,7 +1,7 @@
 # springboot-jpa-studies
 ## `> jpa-locking`
 
-The idea of this module is to study jpa locking.
+The idea of this module is to study JPA locking.
 
 ## Start application
 
@@ -45,6 +45,6 @@ The idea of this module is to study jpa locking.
     ./mvnw clean test --projects jpa-locking -DargLine="-Dspring.profiles.active=postgres-test"
     ```
 
-## Multithreading Simulation 
+## Multithreading Simulation
 
-To simulate multiple players collecting stars and redeeming them for lives simultaneously, you can run the script `simulation.sh` or `PlayerControllerTest` test case
+To simulate multiple players collecting stars and redeeming them for lives simultaneously, you can run the script `simulation.sh` or the `PlayerControllerTest` test case.
