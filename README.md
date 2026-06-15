@@ -9,10 +9,66 @@ The goal of this project is to study `JPA Batch Processing` (i.e., inserting, up
 
 On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-Concepts (PoCs) and articles. You can easily search for the technology you are interested in by using the filter. Who knows, perhaps I have already implemented a PoC or written an article about what you are looking for.
 
+## Project Overview
+
+```mermaid
+graph TB
+    subgraph "springboot-jpa-studies"
+        JpaBatch["jpa-batch<br/>(Port 8081)"]
+        JpaLocking["jpa-locking<br/>(Port 8082)"]
+    end
+    subgraph "Compose"
+        MySQL[(MySQL)]
+        PostgreSQL[(PostgreSQL)]
+    end
+    JpaBatch --> MySQL
+    JpaBatch --> PostgreSQL
+    JpaLocking --> MySQL
+    JpaLocking --> PostgreSQL
+```
+
 ## Modules
 
 - ### [jpa-batch](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-batch#jpa-batch)
+
+  ```mermaid
+  erDiagram
+      Partner ||--o{ VoucherCode : has
+      Partner {
+          Long id PK
+          String name
+      }
+      VoucherCode {
+          Long id PK
+          String code
+          boolean deleted
+          Long partner_id FK
+      }
+  ```
+
 - ### [jpa-locking](https://github.com/ivangfr/springboot-jpa-studies/tree/master/jpa-locking#jpa-locking)
+
+  ```mermaid
+  erDiagram
+      Player ||--o{ StarCollection : collects
+      StarCollection {
+          Long id PK
+          Integer numCollected
+          Integer numAvailable
+          Long version
+          Long player_id FK
+      }
+      Player ||--o{ Life : claims
+      Player {
+          Long id PK
+          String username
+      }
+      Life {
+          Long id PK
+          Long version
+          Long player_id FK "nullable"
+      }
+  ```
 
 ## Prerequisites
 

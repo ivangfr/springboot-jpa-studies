@@ -47,4 +47,14 @@ The idea of this module is to study JPA locking.
 
 ## Multithreading Simulation
 
-To simulate multiple players collecting stars and redeeming them for lives simultaneously, you can run the script `simulation.sh` or the `PlayerControllerTest` test case.
+To simulate multiple players collecting stars and redeeming them for lives simultaneously:
+
+- **Shell script**: After starting the application (see [Start application](#start-application)), open **another terminal** in the root folder and run:
+
+  ```bash
+  ./jpa-locking/simulation.sh
+  ```
+
+  > **Note**: [`jq`](https://jqlang.org/) must be installed.
+
+- **Test class**: Run `PlayerControllerTest` as described in [Running Tests](#running-tests).

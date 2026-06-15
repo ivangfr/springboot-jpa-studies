@@ -8,14 +8,15 @@ The purpose of this module is to study how to insert, update, or delete a set of
 ### What to configure
 
 - Add `spring.jpa.properties.hibernate.jdbc.batch_size: 10` to `application.yml`
-- Append `&rewriteBatchedStatements=true` to the `spring.datasource.url`
+- Append `&rewriteBatchedStatements=true` to the `spring.datasource.url` (MySQL only)
+- Set `spring.jpa.properties.hibernate.order_inserts: true` and `spring.jpa.properties.hibernate.order_updates: true` — without these, Hibernate won't reorder statements, and interleaved entity types break batching
 - Use `saveAll` to save entities
   ```text
   <S extends T> List<S> saveAll(Iterable<S> entities);
   ```
-- Use `deleteInBatch` to delete entities
+- Use `deleteAllInBatch` to delete entities
   ```text
-  void deleteInBatch(Iterable<T> entities);
+  void deleteAllInBatch(Iterable<T> entities);
   ```
 
 ## Start application
