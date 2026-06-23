@@ -9,6 +9,10 @@ The goal of this project is to study `JPA Batch Processing` (i.e., inserting, up
 
 On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-Concepts (PoCs) and articles. You can easily search for the technology you are interested in by using the filter. Who knows, perhaps I have already implemented a PoC or written an article about what you are looking for.
 
+## Additional Readings
+
+- \[**Medium**\] [**Batch Processing with JPA and Hibernate**](https://medium.com/itnext/batch-processing-with-jpa-and-hibernate-0831e219586c)
+
 ## Project Overview
 
 ```mermaid
