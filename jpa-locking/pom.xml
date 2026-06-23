@@ -10,5 +10,5 @@
     </parent>
     <artifactId>jpa-locking</artifactId>
     <name>jpa-locking</name>
-    <description>Demo project for Spring Boot</description>
+    <description/>
 </project>

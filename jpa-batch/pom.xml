@@ -10,5 +10,5 @@
     </parent>
     <artifactId>jpa-batch</artifactId>
     <name>jpa-batch</name>
-    <description>Demo project for Spring Boot</description>
+    <description/>
 </project>
