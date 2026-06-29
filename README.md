@@ -11,7 +11,8 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## Additional Readings
 
-- \[**Medium**\] [**Batch Processing with JPA and Hibernate**](https://medium.com/itnext/batch-processing-with-jpa-and-hibernate-0831e219586c)
+- \[**Medium**\] [**Batch Processing with JPA and Hibernate**](https://medium.com/@ivangfr/batch-processing-with-jpa-and-hibernate-0831e219586c)
+- \[**Medium**\] [**JPA Optimistic vs Pessimistic Locking in Practice**](https://medium.com/@ivangfr/jpa-optimistic-vs-pessimistic-locking-in-practice-f6dd100eddb2)
 
 ## Project Overview
 
