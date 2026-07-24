@@ -13,10 +13,10 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 public abstract class AbstractTestcontainers {
 
   private static final PostgreSQLContainer postgreSQLContainer =
-      new PostgreSQLContainer("postgres:18.3");
+      new PostgreSQLContainer("postgres:18.4");
 
   private static final MySQLContainer mySQLContainer =
-      new MySQLContainer("mysql:9.6.0")
+      new MySQLContainer("mysql:9.7.1")
           .withUrlParam("characterEncoding", "UTF-8")
           .withUrlParam("serverTimezone", "UTC");
 
